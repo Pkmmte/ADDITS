@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.additstest.R;
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
+import com.pk.addits.R;
 
 
 public class SampleFragment extends Fragment {

@@ -17,8 +17,6 @@ package navdrawerfadebar;
  */
 
 
-import com.example.additstest.R;
-
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -32,6 +30,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.pk.addits.R;
 
 public class NavigationDrawerActivity extends FragmentActivity implements AdapterView.OnItemClickListener {
 
