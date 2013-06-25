@@ -17,23 +17,23 @@ package navdrawerfadebar;
  */
 
 
+import com.example.additstest.R;
+
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
-import com.example.additstest.R;
-
-public class NavigationDrawerActivity extends SherlockFragmentActivity implements AdapterView.OnItemClickListener {
+public class NavigationDrawerActivity extends FragmentActivity implements AdapterView.OnItemClickListener {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -68,8 +68,8 @@ public class NavigationDrawerActivity extends SherlockFragmentActivity implement
         mDrawerList.setOnItemClickListener(this);
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the sliding drawer and the action bar app icon
@@ -81,11 +81,11 @@ public class NavigationDrawerActivity extends SherlockFragmentActivity implement
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
             public void onDrawerClosed(View view) {
-                getSupportActionBar().setTitle(mTitle);
+                getActionBar().setTitle(mTitle);
             }
 
             public void onDrawerOpened(View drawerView) {
-                getSupportActionBar().setTitle(mDrawerTitle);
+                getActionBar().setTitle(mDrawerTitle);
             }
         };
 
@@ -142,6 +142,6 @@ public class NavigationDrawerActivity extends SherlockFragmentActivity implement
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
+        getActionBar().setTitle(mTitle);
     }
 }

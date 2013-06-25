@@ -17,6 +17,8 @@ package navdrawerfadebar;/*
 
 import java.lang.reflect.Method;
 
+import android.R;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -25,8 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.actionbarsherlock.R;
-import com.actionbarsherlock.app.ActionBar;
 
 /**
  * This class encapsulates some awful hacks.
@@ -111,8 +111,8 @@ class ActionBarDrawerToggleSherlock {
             View home = activity.findViewById(homeRes);
 
             if (home == null) {
-                home = activity.findViewById(R.id.abs__home);
-                homeRes = R.id.abs__home;
+                home = activity.findViewById(homeRes);
+                homeRes = android.R.id.home;
             }
             final ViewGroup parent = (ViewGroup) home.getParent();
             final int childCount = parent.getChildCount();

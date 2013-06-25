@@ -17,12 +17,16 @@ package navdrawerfadebar;/*
 
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.graphics.Region;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
-import com.actionbarsherlock.view.MenuItem;
 
 /**
  * This class provides a handy way to tie together the functionality of
