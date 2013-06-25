@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="drawer_items">
+        <item>Home</item>
+        <item>Theme Reviews</item>
+        <item>Store</item>
+        <item>About</item>
+    </string-array>
+    <array name="city_images">
+        <item>@drawable/banner1</item>
+        <item>@drawable/banner2</item>
+        <item>@drawable/banner3</item>
+        <item>@drawable/banner4</item>
+    </array>
+</resources>
