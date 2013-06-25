@@ -12,7 +12,7 @@ import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
 import com.pk.addits.R;
 
 
-public class SampleFragment extends Fragment {
+public class FragmentHome extends Fragment {
     private FadingActionBarHelper mFadingHelper;
     private Bundle mArguments;
 

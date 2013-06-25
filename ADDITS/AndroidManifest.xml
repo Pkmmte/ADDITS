@@ -13,14 +13,13 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="navdrawerfadebar.NavigationDrawerActivity"
+            android:name="navdrawerfadebar.ActivityMain"
             android:icon="@drawable/ic_ab_logo"
-            android:label="@string/choose_item"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.TranslucentActionBar" >
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
