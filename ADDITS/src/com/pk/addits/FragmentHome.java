@@ -25,11 +25,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.koushikdutta.ion.Ion;
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelperHome;
 import com.squareup.picasso.Picasso;
 
@@ -456,7 +456,9 @@ public class FragmentHome extends Fragment
 			holder.txtCategory.setText(entry.getCategory());
 
 			//holder.imgPreview.setScaleType(ScaleType.FIT_XY);
-			Picasso.with(context).load(entry.getImage()).fit().into(holder.imgPreview);
+			//Picasso.with(context).load(entry.getImage()).fit().into(holder.imgPreview);
+			//Ion.with(context, entry.getImage()).withBitmap().intoImageView(holder.imgPreview);
+			Ion.with(holder.imgPreview).load(entry.getImage());
 			
 			return view;
 		}
