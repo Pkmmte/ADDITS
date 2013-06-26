@@ -45,7 +45,7 @@ public final class R {
         public static final int left_drawer=0x7f080002;
     }
     public static final class layout {
-        public static final int activity_navigation_drawer=0x7f030000;
+        public static final int activity_main=0x7f030000;
         public static final int activity_scrollview=0x7f030001;
         public static final int drawer_list_item=0x7f030002;
         public static final int fab__header_container=0x7f030003;
