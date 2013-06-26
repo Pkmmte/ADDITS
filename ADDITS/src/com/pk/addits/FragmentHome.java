@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -126,6 +127,7 @@ public class FragmentHome extends Fragment
 		mFadingHelper.initActionBar(activity);
 	}
 	
+	@SuppressLint("Recycle")
 	public static void populateSlide()
 	{
 		fragSlide = FragmentHomeSlider.newInstance(Slides, currentSlide);
