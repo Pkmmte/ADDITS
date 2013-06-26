@@ -1,11 +1,14 @@
 package com.pk.addits;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,18 +22,27 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelperHome;
 
 public class FragmentHome extends Fragment
 {
 	static View view;
+	static GridView grid;
+	static FrameLayout frame;
 	static FadingActionBarHelperHome mFadingHelper;
+	
+	List<FeedItem> feedList = new ArrayList<FeedItem>();;
+	FeedItem[] NewsFeed;
 	
 	static SlideItem[] Slides;
 	static int currentSlide;
@@ -42,20 +54,15 @@ public class FragmentHome extends Fragment
 	static FragmentManager fm;
 	static FragmentTransaction transaction;
 	
-	// DEBUG
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		view = mFadingHelper.createView(inflater);
 		
-		// if (mArguments != null)
-		// {
-		// ImageView img = (ImageView) view.findViewById(R.id.image_header);
-		// img.setImageResource(mArguments.getInt(ARG_IMAGE_RES));
-		// }
-		
-		
+		grid = (GridView) view.findViewById(R.id.GridView);
+		frame = (FrameLayout) view.findViewById(R.id.slideContent);
+		frame.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.4)));
+		currentSlide = 1;
 		
 		return view;
 	}
@@ -64,8 +71,8 @@ public class FragmentHome extends Fragment
 	public void onStart()
 	{
 		super.onStart();
-		Toast.makeText(getActivity(), "TADAH!!", Toast.LENGTH_SHORT).show();
 		fm = getChildFragmentManager();
+		NewsFeed = Data.generateDummyFeed();
 		
 		timer = new Timer();
 		timeHandler = new Handler(new Callback()
@@ -90,20 +97,16 @@ public class FragmentHome extends Fragment
 		if (dir.exists())
 			timer.schedule(new firstTask(), 5000, 7000);
 		
-		//Dummy Data
-		Slides = new SlideItem[9];
-		Slides[0] = new SlideItem("Dummy Title", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[1] = new SlideItem("Dummy Title 2 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[2] = new SlideItem("Dummy Title 3 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[3] = new SlideItem("Dummy Title4 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[4] = new SlideItem("Dummy Title5 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[5] = new SlideItem("Dummy Title 6", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[6] = new SlideItem("Dummy Title 7", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[7] = new SlideItem("Dummy Title 8", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[8] = new SlideItem("Dummy Title 9", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		currentSlide = 1;
+		// Dummy Data
+		Slides = Data.generateDummySlides();
 		
 		populateSlide();
+		for (int x = 0; x < NewsFeed.length; x++)
+			feedList.add(new FeedItem(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL()));
+		
+		FeedAdapter adapter = new FeedAdapter(getActivity(), feedList);
+		grid.setAdapter(adapter);
+		Utility.setListViewHeightBasedOnChildren(grid);
 	}
 	
 	@Override
@@ -120,10 +123,7 @@ public class FragmentHome extends Fragment
 	{
 		super.onAttach(activity);
 		
-		mFadingHelper = new FadingActionBarHelperHome()
-		.actionBarBackground(R.drawable.ab_background)
-		.withContext(getActivity())
-		.contentLayout(R.layout.fragment_home);
+		mFadingHelper = new FadingActionBarHelperHome().actionBarBackground(R.drawable.ab_background).withContext(getActivity()).contentLayout(R.layout.fragment_home);
 		mFadingHelper.initActionBar(activity);
 	}
 	
@@ -399,6 +399,77 @@ public class FragmentHome extends Fragment
 		}
 	}
 	
+	public class FeedAdapter extends BaseAdapter
+	{
+		private Context context;
+		
+		private List<FeedItem> listItem;
+		
+		public FeedAdapter(Context context, List<FeedItem> listItem)
+		{
+			this.context = context;
+			this.listItem = listItem;
+		}
+		
+		public int getCount()
+		{
+			return listItem.size();
+		}
+		
+		public Object getItem(int position)
+		{
+			return listItem.get(position);
+		}
+		
+		public long getItemId(int position)
+		{
+			return position;
+		}
+		
+		public View getView(int position, View view, ViewGroup viewGroup)
+		{
+			ViewHolder holder;
+			FeedItem entry = listItem.get(position);
+			if (view == null)
+			{
+				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater.inflate(R.layout.feed_item, null);
+				
+				holder = new ViewHolder();
+				holder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+				holder.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
+				holder.txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
+				holder.txtDate = (TextView) view.findViewById(R.id.txtDate);
+				holder.txtCategory = (TextView) view.findViewById(R.id.txtCategory);
+				holder.imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
+				
+				view.setTag(holder);
+			}
+			else
+			{
+				holder = (ViewHolder) view.getTag();
+			}
+			
+			holder.txtTitle.setText(entry.getTitle());
+			holder.txtDescription.setText(entry.getDescription());
+			holder.txtAuthor.setText(entry.getAuthor());
+			holder.txtDate.setText(entry.getDate());
+			holder.txtCategory.setText(entry.getCategory());
+			
+			return view;
+		}
+	}
+	
+	private static class ViewHolder
+	{
+		public TextView txtTitle;
+		public TextView txtDescription;
+		public TextView txtAuthor;
+		public TextView txtDate;
+		public TextView txtCategory;
+		public ImageView imgPreview;
+	}
+	
 	public static class SlideItem
 	{
 		String Text;
@@ -432,6 +503,88 @@ public class FragmentHome extends Fragment
 		public String getURL()
 		{
 			return URL;
+		}
+	}
+	
+	public static class FeedItem
+	{
+		String Title;
+		String Description;
+		String Author;
+		String Date;
+		String Category;
+		String Image;
+		String URL;
+		
+		public FeedItem(String Title, String Description, String Author, String Date, String Category, String Image, String URL)
+		{
+			this.Title = Title;
+			this.Description = Description;
+			this.Author = Author;
+			this.Date = Date;
+			this.Category = Category;
+			this.Image = Image;
+			this.URL = URL;
+		}
+		
+		public String getTitle()
+		{
+			return Title;
+		}
+		
+		public String getDescription()
+		{
+			return Description;
+		}
+		
+		public String getAuthor()
+		{
+			return Author;
+		}
+		
+		public String getDate()
+		{
+			return Date;
+		}
+		
+		public String getCategory()
+		{
+			return Category;
+		}
+		
+		public String getImage()
+		{
+			return Image;
+		}
+		
+		public String getURL()
+		{
+			return URL;
+		}
+	}
+	
+	public static class Utility
+	{
+		public static void setListViewHeightBasedOnChildren(GridView gridView)
+		{
+			ListAdapter listAdapter = gridView.getAdapter();
+			if (listAdapter == null)
+			{
+				// pre-condition
+				return;
+			}
+			
+			int totalHeight = 0;
+			for (int i = 0; i < listAdapter.getCount(); i++)
+			{
+				View listItem = listAdapter.getView(i, null, gridView);
+				listItem.measure(0, 0);
+				totalHeight += listItem.getMeasuredHeight();
+			}
+			
+			ViewGroup.LayoutParams params = gridView.getLayoutParams();
+			params.height = totalHeight;
+			gridView.setLayoutParams(params);
 		}
 	}
 }
