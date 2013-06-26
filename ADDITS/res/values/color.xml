@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="cyan">#8833b5e5</color>
     <color name="holo_blue_bright">#ff00ddff</color>
     <color name="holo_blue_light">#ff33b5e5</color>
     <color name="holo_blue_light_transparent">#4433b5e5</color>
+    <color name="holo_blue_light_transparent2">#8833b5e5</color>
     <color name="holo_blue_dark">#ff0099cc</color>
     <color name="holo_blue_dark2">#ff0055ff</color>
     <color name="holo_blue_darker">#ff0077aa</color>
@@ -23,4 +25,5 @@
     <color name="transparent">#00000000</color>
     <color name="black_trans">#aa000000</color>
     <color name="black_transparent">#cc000000</color>
+
 </resources>

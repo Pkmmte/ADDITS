@@ -24,20 +24,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelperHome;
+import com.squareup.picasso.Picasso;
 
 public class FragmentHome extends Fragment
 {
 	static View view;
-	static GridView grid;
+	static ScrollGridView grid;
 	static FrameLayout frame;
 	static FadingActionBarHelperHome mFadingHelper;
 	
@@ -59,7 +58,7 @@ public class FragmentHome extends Fragment
 	{
 		view = mFadingHelper.createView(inflater);
 		
-		grid = (GridView) view.findViewById(R.id.GridView);
+		grid = (ScrollGridView) view.findViewById(R.id.GridView);
 		frame = (FrameLayout) view.findViewById(R.id.slideContent);
 		frame.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.4)));
 		currentSlide = 1;
@@ -91,22 +90,22 @@ public class FragmentHome extends Fragment
 			}
 		});
 		
+		// Dummy Data
+		Slides = Data.generateDummySlides();
+		populateSlide();
+		
 		File sdCard = Environment.getExternalStorageDirectory();
 		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/com.pk.addits/slides.xml");
 		startTime = System.currentTimeMillis();
-		if (dir.exists())
-			timer.schedule(new firstTask(), 5000, 7000);
+		// if (dir.exists())
+		timer.schedule(new firstTask(), 5000, 7000);
 		
-		// Dummy Data
-		Slides = Data.generateDummySlides();
-		
-		populateSlide();
 		for (int x = 0; x < NewsFeed.length; x++)
 			feedList.add(new FeedItem(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL()));
 		
 		FeedAdapter adapter = new FeedAdapter(getActivity(), feedList);
 		grid.setAdapter(adapter);
-		Utility.setListViewHeightBasedOnChildren(grid);
+		grid.setExpanded(true);
 	}
 	
 	@Override
@@ -452,9 +451,12 @@ public class FragmentHome extends Fragment
 			
 			holder.txtTitle.setText(entry.getTitle());
 			holder.txtDescription.setText(entry.getDescription());
-			holder.txtAuthor.setText(entry.getAuthor());
+			holder.txtAuthor.setText("Posted by " + entry.getAuthor());
 			holder.txtDate.setText(entry.getDate());
 			holder.txtCategory.setText(entry.getCategory());
+
+			//holder.imgPreview.setScaleType(ScaleType.FIT_XY);
+			Picasso.with(context).load(entry.getImage()).fit().into(holder.imgPreview);
 			
 			return view;
 		}
@@ -560,31 +562,6 @@ public class FragmentHome extends Fragment
 		public String getURL()
 		{
 			return URL;
-		}
-	}
-	
-	public static class Utility
-	{
-		public static void setListViewHeightBasedOnChildren(GridView gridView)
-		{
-			ListAdapter listAdapter = gridView.getAdapter();
-			if (listAdapter == null)
-			{
-				// pre-condition
-				return;
-			}
-			
-			int totalHeight = 0;
-			for (int i = 0; i < listAdapter.getCount(); i++)
-			{
-				View listItem = listAdapter.getView(i, null, gridView);
-				listItem.measure(0, 0);
-				totalHeight += listItem.getMeasuredHeight();
-			}
-			
-			ViewGroup.LayoutParams params = gridView.getLayoutParams();
-			params.height = totalHeight;
-			gridView.setLayoutParams(params);
 		}
 	}
 }

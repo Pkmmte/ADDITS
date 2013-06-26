@@ -19,29 +19,30 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int black=0x7f060011;
-        public static final int black_trans=0x7f060015;
-        public static final int black_transparent=0x7f060016;
+        public static final int black=0x7f060012;
+        public static final int black_trans=0x7f060016;
+        public static final int black_transparent=0x7f060017;
         public static final int cyan=0x7f060000;
-        public static final int divider=0x7f060013;
-        public static final int gray=0x7f060012;
+        public static final int divider=0x7f060014;
+        public static final int gray=0x7f060013;
         public static final int holo_blue_bright=0x7f060001;
-        public static final int holo_blue_dark=0x7f060004;
-        public static final int holo_blue_dark2=0x7f060005;
-        public static final int holo_blue_darker=0x7f060006;
+        public static final int holo_blue_dark=0x7f060005;
+        public static final int holo_blue_dark2=0x7f060006;
+        public static final int holo_blue_darker=0x7f060007;
         public static final int holo_blue_light=0x7f060002;
         public static final int holo_blue_light_transparent=0x7f060003;
-        public static final int holo_green_dark=0x7f060008;
-        public static final int holo_green_light=0x7f060007;
-        public static final int holo_orange_dark=0x7f06000f;
-        public static final int holo_orange_light=0x7f06000e;
-        public static final int holo_purple=0x7f06000b;
-        public static final int holo_purple_dark=0x7f06000d;
-        public static final int holo_purple_light=0x7f06000c;
-        public static final int holo_red_dark=0x7f06000a;
-        public static final int holo_red_light=0x7f060009;
-        public static final int transparent=0x7f060014;
-        public static final int white=0x7f060010;
+        public static final int holo_blue_light_transparent2=0x7f060004;
+        public static final int holo_green_dark=0x7f060009;
+        public static final int holo_green_light=0x7f060008;
+        public static final int holo_orange_dark=0x7f060010;
+        public static final int holo_orange_light=0x7f06000f;
+        public static final int holo_purple=0x7f06000c;
+        public static final int holo_purple_dark=0x7f06000e;
+        public static final int holo_purple_light=0x7f06000d;
+        public static final int holo_red_dark=0x7f06000b;
+        public static final int holo_red_light=0x7f06000a;
+        public static final int transparent=0x7f060015;
+        public static final int white=0x7f060011;
     }
     public static final class dimen {
         public static final int abs__action_bar_default_height=0x7f070000;
@@ -65,8 +66,11 @@ public final class R {
         public static final int next_white=0x7f02000f;
         public static final int previous_white=0x7f020010;
         public static final int radial=0x7f020011;
-        public static final int slider_error=0x7f020012;
-        public static final int slider_loading=0x7f020013;
+        public static final int shadow_extended_vertical_90=0x7f020012;
+        public static final int shadow_vertical_90=0x7f020013;
+        public static final int slider_error=0x7f020014;
+        public static final int slider_loading=0x7f020015;
+        public static final int transparent_selector=0x7f020016;
     }
     public static final class id {
         public static final int Content=0x7f0a0012;
@@ -83,7 +87,7 @@ public final class R {
         public static final int fab__listview_background=0x7f0a0005;
         public static final int fab__scroll_view=0x7f0a0006;
         public static final int image_header=0x7f0a0020;
-        public static final int imgPreview=0x7f0a000c;
+        public static final int imgPreview=0x7f0a000d;
         public static final int left_drawer=0x7f0a0002;
         public static final int slide1=0x7f0a0017;
         public static final int slide2=0x7f0a0018;
@@ -95,13 +99,13 @@ public final class R {
         public static final int slide8=0x7f0a001e;
         public static final int slide9=0x7f0a001f;
         public static final int slideContent=0x7f0a000f;
-        public static final int txtAuthor=0x7f0a000a;
+        public static final int txtAuthor=0x7f0a000e;
         public static final int txtCategory=0x7f0a0009;
-        public static final int txtDate=0x7f0a000b;
-        public static final int txtDescription=0x7f0a000e;
+        public static final int txtDate=0x7f0a000a;
+        public static final int txtDescription=0x7f0a000c;
         public static final int txtSubText=0x7f0a0014;
         public static final int txtText=0x7f0a0013;
-        public static final int txtTitle=0x7f0a000d;
+        public static final int txtTitle=0x7f0a000b;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
