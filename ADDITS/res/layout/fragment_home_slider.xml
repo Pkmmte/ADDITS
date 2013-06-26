@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:ignore="NestedWeights" >
+
+    <ImageView
+        android:id="@+id/Image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/slider_loading"
+        android:contentDescription="@string/placeholder" />
+
+    <LinearLayout
+        android:id="@+id/Content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/button_black_transparent_selector"
+        android:clickable="true"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/txtText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="5.0dip"
+            android:layout_marginTop="5.0dip"
+            android:maxLines="1"
+            android:text="@string/placeholder"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/txtSubText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="5.0dip"
+            android:maxLines="2"
+            android:text="@string/placeholder"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/btnPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:clickable="true"
+        android:paddingRight="10.0dip" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_blue_semitransparent2_selector"
+            android:contentDescription="@string/placeholder"
+            android:padding="10.0dip"
+            android:src="@drawable/previous_white" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/btnNext"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:clickable="true"
+        android:paddingLeft="10.0dip" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_blue_semitransparent2_selector"
+            android:contentDescription="@string/placeholder"
+            android:padding="10.0dip"
+            android:src="@drawable/next_white" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10.0dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" >
+
+        <View
+            android:layout_width="0.0dip"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2.5dip"
+            android:layout_marginRight="2.5dip"
+            android:layout_marginTop="5.0dip"
+            android:layout_weight="1.0" />
+
+        <LinearLayout
+            android:layout_width="0.0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="9.0" >
+
+            <View
+                android:id="@+id/slide1"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+
+            <View
+                android:id="@+id/slide2"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+
+            <View
+                android:id="@+id/slide3"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+
+            <View
+                android:id="@+id/slide4"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+
+            <View
+                android:id="@+id/slide5"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+
+            <View
+                android:id="@+id/slide6"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+
+            <View
+                android:id="@+id/slide7"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+
+            <View
+                android:id="@+id/slide8"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+
+            <View
+                android:id="@+id/slide9"
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5.0dip"
+                android:layout_marginRight="5.0dip"
+                android:layout_marginTop="5.0dip"
+                android:layout_weight="1.0"
+                android:background="@color/holo_blue_light" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0.0dip"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2.5dip"
+            android:layout_marginRight="2.5dip"
+            android:layout_marginTop="5.0dip"
+            android:layout_weight="1.0" />
+    </LinearLayout>
+
+</RelativeLayout>

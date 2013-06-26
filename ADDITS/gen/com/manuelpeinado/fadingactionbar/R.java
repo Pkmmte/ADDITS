@@ -8,16 +8,16 @@ package com.manuelpeinado.fadingactionbar;
 
 public final class R {
 	public static final class drawable {
-		public static final int fab__gradient = 0x7f020008;
-		public static final int fab__gradient_light = 0x7f020009;
+		public static final int fab__gradient = 0x7f02000a;
+		public static final int fab__gradient_light = 0x7f02000b;
 	}
 	public static final class id {
-		public static final int fab__container = 0x7f080007;
-		public static final int fab__content_top_margin = 0x7f080008;
-		public static final int fab__gradient = 0x7f080004;
-		public static final int fab__header_container = 0x7f080003;
-		public static final int fab__listview_background = 0x7f080005;
-		public static final int fab__scroll_view = 0x7f080006;
+		public static final int fab__container = 0x7f0a0007;
+		public static final int fab__content_top_margin = 0x7f0a0008;
+		public static final int fab__gradient = 0x7f0a0004;
+		public static final int fab__header_container = 0x7f0a0003;
+		public static final int fab__listview_background = 0x7f0a0005;
+		public static final int fab__scroll_view = 0x7f0a0006;
 	}
 	public static final class layout {
 		public static final int fab__header_container = 0x7f030003;
