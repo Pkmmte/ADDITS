@@ -200,6 +200,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						showP = new showProgress("NewsFeed[" + x + "]\n" + 
 								"Title: " + NewsFeed[x].getTitle() + "\n" +
 								"Category: " + NewsFeed[x].getCategory() + "\n" +
+								"Comment Feed: " + NewsFeed[x].getCommentFeed() + "\n" +
+								"Comments: " + NewsFeed[x].getComments() + "\n" +
 								"Author: " + NewsFeed[x].getAuthor() + "\n" +
 								"Image: " + NewsFeed[x].getImage() + "\n" + 
 								"Date: " + NewsFeed[x].getDate() + "\n" +

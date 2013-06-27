@@ -23,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,10 +35,11 @@ public class FragmentHome extends Fragment
 {
 	static View view;
 	static ScrollGridView grid;
-	static FrameLayout frame;
+	static RelativeLayout frame;
+	static View shadow;
 	static FadingActionBarHelperHome mFadingHelper;
 	
-	List<FeedItem> feedList = new ArrayList<FeedItem>();
+	List<FeedItem> feedList;
 	FeedItem[] NewsFeed;
 	
 	static SlideItem[] Slides;
@@ -57,9 +57,12 @@ public class FragmentHome extends Fragment
 	{
 		view = mFadingHelper.createView(inflater);
 		
+		feedList = new ArrayList<FeedItem>();
 		grid = (ScrollGridView) view.findViewById(R.id.GridView);
-		frame = (FrameLayout) view.findViewById(R.id.slideContent);
+		frame = (RelativeLayout) view.findViewById(R.id.slider);
+		shadow = view.findViewById(R.id.sliderShadow);
 		frame.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.4)));
+		shadow.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.125)));
 		currentSlide = 1;
 		
 		return view;
@@ -100,7 +103,7 @@ public class FragmentHome extends Fragment
 		timer.schedule(new firstTask(), 5000, 7000);
 		
 		for (int x = 0; x < NewsFeed.length; x++)
-			feedList.add(new FeedItem(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL()));
+			feedList.add(new FeedItem(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isRead()));
 		
 		FeedAdapter adapter = new FeedAdapter(getActivity(), feedList);
 		grid.setAdapter(adapter);
@@ -441,21 +444,29 @@ public class FragmentHome extends Fragment
 	{
 		String Title;
 		String Description;
+		String Content;
+		String CommentFeed;
 		String Author;
 		String Date;
 		String Category;
 		String Image;
 		String URL;
+		int Comments;
+		boolean Read;
 		
-		public FeedItem(String Title, String Description, String Author, String Date, String Category, String Image, String URL)
+		public FeedItem(String Title, String Description, String Content, String CommentFeed, String Author, String Date, String Category, String Image, String URL, int Comments, boolean Read)
 		{
 			this.Title = Title;
 			this.Description = Description;
+			this.Content = Content;
+			this.CommentFeed = CommentFeed;
 			this.Author = Author;
 			this.Date = Date;
 			this.Category = Category;
 			this.Image = Image;
 			this.URL = URL;
+			this.Comments = Comments;
+			this.Read = Read;
 		}
 		
 		public String getTitle()
@@ -466,6 +477,16 @@ public class FragmentHome extends Fragment
 		public String getDescription()
 		{
 			return Description;
+		}
+		
+		public String getContent()
+		{
+			return Content;
+		}
+		
+		public String getCommentFeed()
+		{
+			return CommentFeed;
 		}
 		
 		public String getAuthor()
@@ -491,6 +512,21 @@ public class FragmentHome extends Fragment
 		public String getURL()
 		{
 			return URL;
+		}
+		
+		public int getComments()
+		{
+			return Comments;
+		}
+		
+		public boolean isRead()
+		{
+			return Read;
+		}
+		
+		public void setRead(boolean b)
+		{
+			Read = b;
 		}
 	}
 }

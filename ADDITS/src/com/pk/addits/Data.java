@@ -56,13 +56,13 @@ public class Data
 	public static FeedItem[] generateDummyFeed()
 	{
 		FeedItem[] Feeeeedz = new FeedItem[7];
-		Feeeeedz[0] = new FeedItem("Dumb Title", "Blah blah blah blah blah blajsaasdsdasdasdas", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/");
-		Feeeeedz[1] = new FeedItem("Dumber Title", "Lorem ipsum stuff", "Cliff Wade", "June 22, 2013", "GAME REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/ManOfSteelHeader.jpg", "http://addits.androiddissected.com/2013/06/22/man-of-steel-i-loved-the-movie-can-the-android-game-match-it/");
-		Feeeeedz[2] = new FeedItem("Retard Title", "sdfsdfiounwsdei3wne iwnr f dsfdsdasdasdas", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/");
-		Feeeeedz[3] = new FeedItem("Dummy Title", "Blah blah blah blah blah", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/");
-		Feeeeedz[4] = new FeedItem("Smart Title", "Insert something smart here", "Roberto Mezquia Jr", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/");
-		Feeeeedz[5] = new FeedItem("titllle", "A preview of your article will appear here", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/");
-		Feeeeedz[6] = new FeedItem("Title", "Description", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/");
+		Feeeeedz[0] = new FeedItem("Dumb Title", "Blah blah blah blah blah blajsaasdsdasdasdas", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[1] = new FeedItem("Dumber Title", "Lorem ipsum stuff", "Content", "FEED", "Cliff Wade", "June 22, 2013", "GAME REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/ManOfSteelHeader.jpg", "http://addits.androiddissected.com/2013/06/22/man-of-steel-i-loved-the-movie-can-the-android-game-match-it/", 0, false);
+		Feeeeedz[2] = new FeedItem("Retard Title", "sdfsdfiounwsdei3wne iwnr f dsfdsdasdasdas", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[3] = new FeedItem("Dummy Title", "Blah blah blah blah blah", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[4] = new FeedItem("Smart Title", "Insert something smart here", "Content", "FEED", "Roberto Mezquia Jr", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[5] = new FeedItem("titllle", "A preview of your article will appear here", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[6] = new FeedItem("Title", "Description", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
 		
 		return Feeeeedz;
 	}
@@ -158,6 +158,9 @@ public class Data
 			String Category = "";
 			String Image = "";
 			String Description = "";
+			String Content = "";
+			String CommentFeed = "";
+			int Comments = 0;
 			
 			// Flags
 			boolean itemActive = false;
@@ -206,12 +209,30 @@ public class Data
 							Image = pullLinks(xrp.getText());
 						}
 					}
+					else if (itemActive && elemName.equals("content:encoded"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+						{
+							String con = android.text.Html.fromHtml(xrp.getText()).toString();
+							Content = con.substring(3, con.length());
+						}
+					}
+					else if (itemActive && elemName.equals("wfw:commentRss"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+							CommentFeed = xrp.getText();
+					}
+					else if (itemActive && elemName.equals("slash:comments"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+							Comments = Integer.parseInt(xrp.getText());
+					}
 				}
 				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
 				{
 					itemActive = false;
 					
-					Feeeeedz[feedCount] = new FeedItem(Title, Description, Author, Date, Category, Image, URL);
+					Feeeeedz[feedCount] = new FeedItem(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, false);
 					feedCount++;
 				}
 				eventType = xrp.next();
@@ -229,26 +250,35 @@ public class Data
 	
 	private static String pullLinks(String text)
 	{
-		ArrayList links = new ArrayList();
+		ArrayList<String> links = new ArrayList<String>();
 		String link = "";
-		
-		String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(text);
-		while (m.find())
+		try
 		{
-			String urlStr = m.group();
-			if (urlStr.startsWith("(") && urlStr.endsWith(")"))
+			String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+			Pattern p = Pattern.compile(regex);
+			Matcher m = p.matcher(text);
+			while (m.find())
 			{
-				urlStr = urlStr.substring(1, urlStr.length() - 1);
+				String urlStr = m.group();
+				if (urlStr.startsWith("(") && urlStr.endsWith(")"))
+				{
+					urlStr = urlStr.substring(1, urlStr.length() - 1);
+				}
+				String format = urlStr.substring(urlStr.length() - 4);
+				if (format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".gif"))
+					links.add(urlStr);
 			}
-			String format = urlStr.substring(urlStr.length() - 4);
-			if(format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".gif"))
-				links.add(urlStr);
+		}
+		catch (Exception e)
+		{
+			Log.w("ImageFeed URL Parse Error", e);
 		}
 		
-		link = links.get(0).toString();
-		link = link.replace("[", "").replace("]", "");
+		if (links.size() > 0)
+		{
+			link = links.get(0).toString();
+			link = link.replace("[", "").replace("]", "");
+		}
 		return link;
 	}
 }
