@@ -20,11 +20,12 @@ public final class R {
     }
     public static final class color {
         public static final int black=0x7f060012;
-        public static final int black_trans=0x7f060016;
-        public static final int black_transparent=0x7f060017;
+        public static final int black_light=0x7f060013;
+        public static final int black_trans=0x7f060017;
+        public static final int black_transparent=0x7f060018;
         public static final int cyan=0x7f060000;
-        public static final int divider=0x7f060014;
-        public static final int gray=0x7f060013;
+        public static final int divider=0x7f060015;
+        public static final int gray=0x7f060014;
         public static final int holo_blue_bright=0x7f060001;
         public static final int holo_blue_dark=0x7f060005;
         public static final int holo_blue_dark2=0x7f060006;
@@ -41,7 +42,7 @@ public final class R {
         public static final int holo_purple_light=0x7f06000d;
         public static final int holo_red_dark=0x7f06000b;
         public static final int holo_red_light=0x7f06000a;
-        public static final int transparent=0x7f060015;
+        public static final int transparent=0x7f060016;
         public static final int white=0x7f060011;
     }
     public static final class dimen {
@@ -67,7 +68,7 @@ public final class R {
         public static final int no_image_banner=0x7f020010;
         public static final int previous_white=0x7f020011;
         public static final int radial=0x7f020012;
-        public static final int shadow_extended_vertical_90=0x7f020013;
+        public static final int shadow_author=0x7f020013;
         public static final int shadow_vertical_270=0x7f020014;
         public static final int shadow_vertical_90=0x7f020015;
         public static final int slider_error=0x7f020016;
@@ -75,11 +76,11 @@ public final class R {
         public static final int transparent_selector=0x7f020018;
     }
     public static final class id {
-        public static final int Content=0x7f0a0014;
-        public static final int GridView=0x7f0a0012;
-        public static final int Image=0x7f0a0013;
-        public static final int btnNext=0x7f0a0018;
-        public static final int btnPrevious=0x7f0a0017;
+        public static final int Content=0x7f0a0015;
+        public static final int GridView=0x7f0a0013;
+        public static final int Image=0x7f0a0014;
+        public static final int btnNext=0x7f0a0019;
+        public static final int btnPrevious=0x7f0a0018;
         public static final int content_frame=0x7f0a0001;
         public static final int drawer_layout=0x7f0a0000;
         public static final int fab__container=0x7f0a0007;
@@ -88,14 +89,15 @@ public final class R {
         public static final int fab__header_container=0x7f0a0003;
         public static final int fab__listview_background=0x7f0a0005;
         public static final int fab__scroll_view=0x7f0a0006;
-        public static final int image_header=0x7f0a001e;
+        public static final int image_header=0x7f0a001f;
         public static final int imgPreview=0x7f0a000d;
         public static final int left_drawer=0x7f0a0002;
-        public static final int slide1=0x7f0a0019;
-        public static final int slide2=0x7f0a001a;
-        public static final int slide3=0x7f0a001b;
-        public static final int slide4=0x7f0a001c;
-        public static final int slide5=0x7f0a001d;
+        public static final int loadingNews=0x7f0a0012;
+        public static final int slide1=0x7f0a001a;
+        public static final int slide2=0x7f0a001b;
+        public static final int slide3=0x7f0a001c;
+        public static final int slide4=0x7f0a001d;
+        public static final int slide5=0x7f0a001e;
         public static final int slideContent=0x7f0a0010;
         public static final int slider=0x7f0a000f;
         public static final int sliderShadow=0x7f0a0011;
@@ -103,8 +105,8 @@ public final class R {
         public static final int txtCategory=0x7f0a0009;
         public static final int txtDate=0x7f0a000a;
         public static final int txtDescription=0x7f0a000c;
-        public static final int txtSubText=0x7f0a0016;
-        public static final int txtText=0x7f0a0015;
+        public static final int txtSubText=0x7f0a0017;
+        public static final int txtText=0x7f0a0016;
         public static final int txtTitle=0x7f0a000b;
     }
     public static final class layout {

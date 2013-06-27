@@ -15,10 +15,24 @@
         android:orientation="vertical"
         android:paddingBottom="10.0dip" >
 
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="15.0dip"
-            android:background="@drawable/shadow_vertical_90" />
+            android:layout_height="5.0dip"
+            android:layout_marginTop="10.0dip"
+            android:background="@color/black_light"
+            android:orientation="horizontal" >
+
+            <View
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/holo_orange_dark" />
+
+            <View
+                android:layout_width="0.0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="5" />
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -77,8 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="@string/placeholder"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:text="@string/placeholder" />
 
                     <TextView
                         android:id="@+id/txtDescription"
@@ -86,6 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
+                        android:fontFamily="sans-serif-light"
                         android:text="@string/placeholder" />
 
                     <RelativeLayout
@@ -101,19 +115,18 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/shadow_extended_vertical_90"
-                            android:layout_alignParentBottom="true" >
+                            android:layout_alignParentBottom="true"
+                            android:background="@drawable/shadow_author" >
 
                             <TextView
                                 android:id="@+id/txtAuthor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="7dp"
-                                android:layout_marginTop="10dp"
+                                android:layout_marginTop="15dp"
                                 android:fontFamily="sans-serif-light"
                                 android:text="@string/placeholder"
                                 android:textColor="@color/white" />
-
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>

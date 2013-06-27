@@ -1,7 +1,5 @@
 package com.pk.addits;
 
-import com.pk.addits.FragmentHome.FeedItem;
-
 import android.app.ActionBar;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -27,7 +25,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public Thread feedThread;
 	static Handler mHandler;
 	public showProgress showP;
-	FeedItem[] NewsFeed;
+	static Feed[] NewsFeed;
 	static String currentFragment;
 	
 	private DrawerLayout mDrawerLayout;
@@ -170,6 +168,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setTitle(mTitle);
 	}
 	
+	public static Feed[] getFeed()
+	{
+		return NewsFeed;
+	}
+	
 	public void initializeFeedThread()
 	{
 		feedThread = new Thread()
@@ -195,19 +198,22 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					"Count: " + NewsFeed.length);
 					mHandler.post(showP);
 					
-					for(int x = 0; x < NewsFeed.length; x++)
-					{
-						showP = new showProgress("NewsFeed[" + x + "]\n" + 
-								"Title: " + NewsFeed[x].getTitle() + "\n" +
-								"Category: " + NewsFeed[x].getCategory() + "\n" +
-								"Comment Feed: " + NewsFeed[x].getCommentFeed() + "\n" +
-								"Comments: " + NewsFeed[x].getComments() + "\n" +
-								"Author: " + NewsFeed[x].getAuthor() + "\n" +
-								"Image: " + NewsFeed[x].getImage() + "\n" + 
-								"Date: " + NewsFeed[x].getDate() + "\n" +
-								"Description: " + NewsFeed[x].getDescription());
-						mHandler.post(showP);
-					}
+					//for(int x = 0; x < NewsFeed.length; x++)
+					//{
+					//	showP = new showProgress("NewsFeed[" + x + "]\n" + 
+					//			"Title: " + NewsFeed[x].getTitle() + "\n" +
+					//			"Category: " + NewsFeed[x].getCategory() + "\n" +
+					//			"Comment Feed: " + NewsFeed[x].getCommentFeed() + "\n" +
+					//			"Comments: " + NewsFeed[x].getComments() + "\n" +
+					//			"Author: " + NewsFeed[x].getAuthor() + "\n" +
+					//			"Image: " + NewsFeed[x].getImage() + "\n" + 
+					//			"Date: " + NewsFeed[x].getDate() + "\n" +
+					//			"Description: " + NewsFeed[x].getDescription());
+					//	mHandler.post(showP);
+					//}
+					
+					if(currentFragment.equals("Home"))
+						FragmentHome.updateState();
 					
 					// Remove these during production
 				}

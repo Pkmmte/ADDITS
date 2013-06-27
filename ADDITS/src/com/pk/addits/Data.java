@@ -22,7 +22,6 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 
-import com.pk.addits.FragmentHome.FeedItem;
 import com.pk.addits.FragmentHome.SlideItem;
 
 public class Data
@@ -53,16 +52,16 @@ public class Data
 		return Slides;
 	}
 	
-	public static FeedItem[] generateDummyFeed()
+	public static Feed[] generateDummyFeed()
 	{
-		FeedItem[] Feeeeedz = new FeedItem[7];
-		Feeeeedz[0] = new FeedItem("Dumb Title", "Blah blah blah blah blah blajsaasdsdasdasdas", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[1] = new FeedItem("Dumber Title", "Lorem ipsum stuff", "Content", "FEED", "Cliff Wade", "June 22, 2013", "GAME REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/ManOfSteelHeader.jpg", "http://addits.androiddissected.com/2013/06/22/man-of-steel-i-loved-the-movie-can-the-android-game-match-it/", 0, false);
-		Feeeeedz[2] = new FeedItem("Retard Title", "sdfsdfiounwsdei3wne iwnr f dsfdsdasdasdas", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[3] = new FeedItem("Dummy Title", "Blah blah blah blah blah", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[4] = new FeedItem("Smart Title", "Insert something smart here", "Content", "FEED", "Roberto Mezquia Jr", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[5] = new FeedItem("titllle", "A preview of your article will appear here", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[6] = new FeedItem("Title", "Description", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feed[] Feeeeedz = new Feed[7];
+		Feeeeedz[0] = new Feed("Dumb Title", "Blah blah blah blah blah blajsaasdsdasdasdas", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[1] = new Feed("Dumber Title", "Lorem ipsum stuff", "Content", "FEED", "Cliff Wade", "June 22, 2013", "GAME REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/ManOfSteelHeader.jpg", "http://addits.androiddissected.com/2013/06/22/man-of-steel-i-loved-the-movie-can-the-android-game-match-it/", 0, false);
+		Feeeeedz[2] = new Feed("Retard Title", "sdfsdfiounwsdei3wne iwnr f dsfdsdasdasdas", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[3] = new Feed("Dummy Title", "Blah blah blah blah blah", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[4] = new Feed("Smart Title", "Insert something smart here", "Content", "FEED", "Roberto Mezquia Jr", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[5] = new Feed("titllle", "A preview of your article will appear here", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
+		Feeeeedz[6] = new Feed("Title", "Description", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
 		
 		return Feeeeedz;
 	}
@@ -102,7 +101,7 @@ public class Data
 		}
 	}
 	
-	public static FeedItem[] retrieveFeed()
+	public static Feed[] retrieveFeed()
 	{
 		int count = 0;
 		
@@ -135,7 +134,7 @@ public class Data
 			Log.w("[Feed Count] XML Parse Error", e);
 		}
 		
-		FeedItem[] Feeeeedz = new FeedItem[count];
+		Feed[] Feeeeedz = new Feed[count];
 		
 		try
 		{
@@ -232,7 +231,7 @@ public class Data
 				{
 					itemActive = false;
 					
-					Feeeeedz[feedCount] = new FeedItem(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, false);
+					Feeeeedz[feedCount] = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, false);
 					feedCount++;
 				}
 				eventType = xrp.next();

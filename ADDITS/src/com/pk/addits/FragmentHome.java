@@ -35,12 +35,14 @@ public class FragmentHome extends Fragment
 {
 	static View view;
 	static ScrollGridView grid;
+	static LinearLayout loading;
 	static RelativeLayout frame;
 	static View shadow;
+	static FeedAdapter adapter;
 	static FadingActionBarHelperHome mFadingHelper;
 	
-	List<FeedItem> feedList;
-	FeedItem[] NewsFeed;
+	static List<Feed> feedList;
+	static Feed[] NewsFeed;
 	
 	static SlideItem[] Slides;
 	static int currentSlide;
@@ -57,13 +59,17 @@ public class FragmentHome extends Fragment
 	{
 		view = mFadingHelper.createView(inflater);
 		
-		feedList = new ArrayList<FeedItem>();
+		feedList = new ArrayList<Feed>();
 		grid = (ScrollGridView) view.findViewById(R.id.GridView);
+		loading = (LinearLayout) view.findViewById(R.id.loadingNews);
 		frame = (RelativeLayout) view.findViewById(R.id.slider);
 		shadow = view.findViewById(R.id.sliderShadow);
 		frame.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.4)));
 		shadow.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.125)));
 		currentSlide = 1;
+		adapter = new FeedAdapter(getActivity(), feedList);
+		grid.setAdapter(adapter);
+		grid.setExpanded(true);
 		
 		return view;
 	}
@@ -73,7 +79,7 @@ public class FragmentHome extends Fragment
 	{
 		super.onStart();
 		fm = getChildFragmentManager();
-		NewsFeed = Data.generateDummyFeed();
+		NewsFeed = ActivityMain.getFeed();
 		
 		timer = new Timer();
 		timeHandler = new Handler(new Callback()
@@ -102,12 +108,7 @@ public class FragmentHome extends Fragment
 		// if (dir.exists())
 		timer.schedule(new firstTask(), 5000, 7000);
 		
-		for (int x = 0; x < NewsFeed.length; x++)
-			feedList.add(new FeedItem(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isRead()));
-		
-		FeedAdapter adapter = new FeedAdapter(getActivity(), feedList);
-		grid.setAdapter(adapter);
-		grid.setExpanded(true);
+		updateState();
 	}
 	
 	@Override
@@ -126,6 +127,26 @@ public class FragmentHome extends Fragment
 		
 		mFadingHelper = new FadingActionBarHelperHome().actionBarBackground(R.drawable.ab_background).withContext(getActivity()).contentLayout(R.layout.fragment_home);
 		mFadingHelper.initActionBar(activity);
+	}
+	
+	public static void updateState()
+	{
+		if(NewsFeed == null)
+		{
+			grid.setVisibility(View.GONE);
+			loading.setVisibility(View.VISIBLE);
+			feedList.clear();
+		}
+		else
+		{
+			grid.setVisibility(View.VISIBLE);
+			loading.setVisibility(View.GONE);
+			
+			for (int x = 0; x < NewsFeed.length; x++)
+				feedList.add(new Feed(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isRead()));
+			
+			adapter.notifyDataSetChanged();
+		}
 	}
 	
 	@SuppressLint("Recycle")
@@ -332,9 +353,9 @@ public class FragmentHome extends Fragment
 	{
 		private Context context;
 		
-		private List<FeedItem> listItem;
+		private List<Feed> listItem;
 		
-		public FeedAdapter(Context context, List<FeedItem> listItem)
+		public FeedAdapter(Context context, List<Feed> listItem)
 		{
 			this.context = context;
 			this.listItem = listItem;
@@ -358,7 +379,7 @@ public class FragmentHome extends Fragment
 		public View getView(int position, View view, ViewGroup viewGroup)
 		{
 			ViewHolder holder;
-			FeedItem entry = listItem.get(position);
+			Feed entry = listItem.get(position);
 			if (view == null)
 			{
 				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -438,96 +459,6 @@ public class FragmentHome extends Fragment
 		public String getURL()
 		{
 			return URL;
-		}
-	}
-	
-	public static class FeedItem
-	{
-		String Title;
-		String Description;
-		String Content;
-		String CommentFeed;
-		String Author;
-		String Date;
-		String Category;
-		String Image;
-		String URL;
-		int Comments;
-		boolean Read;
-		
-		public FeedItem(String Title, String Description, String Content, String CommentFeed, String Author, String Date, String Category, String Image, String URL, int Comments, boolean Read)
-		{
-			this.Title = Title;
-			this.Description = Description;
-			this.Content = Content;
-			this.CommentFeed = CommentFeed;
-			this.Author = Author;
-			this.Date = Date;
-			this.Category = Category;
-			this.Image = Image;
-			this.URL = URL;
-			this.Comments = Comments;
-			this.Read = Read;
-		}
-		
-		public String getTitle()
-		{
-			return Title;
-		}
-		
-		public String getDescription()
-		{
-			return Description;
-		}
-		
-		public String getContent()
-		{
-			return Content;
-		}
-		
-		public String getCommentFeed()
-		{
-			return CommentFeed;
-		}
-		
-		public String getAuthor()
-		{
-			return Author;
-		}
-		
-		public String getDate()
-		{
-			return Date;
-		}
-		
-		public String getCategory()
-		{
-			return Category;
-		}
-		
-		public String getImage()
-		{
-			return Image;
-		}
-		
-		public String getURL()
-		{
-			return URL;
-		}
-		
-		public int getComments()
-		{
-			return Comments;
-		}
-		
-		public boolean isRead()
-		{
-			return Read;
-		}
-		
-		public void setRead(boolean b)
-		{
-			Read = b;
 		}
 	}
 }
