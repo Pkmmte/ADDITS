@@ -193,8 +193,17 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					"Count: " + NewsFeed.length);
 					mHandler.post(showP);
 					
-					//showP = new showProgress("NewsFeed[0]\nTitle: " + NewsFeed[0].getTitle());
-					//mHandler.post(showP);
+					for(int x = 0; x < NewsFeed.length; x++)
+					{
+						showP = new showProgress("NewsFeed[" + x + "]\n" + 
+								"Title: " + NewsFeed[x].getTitle() + "\n" +
+								"Category: " + NewsFeed[x].getCategory() + "\n" +
+								"Author: " + NewsFeed[x].getAuthor() + "\n" +
+								"Image: " + NewsFeed[x].getImage() + "\n" + 
+								"Date: " + NewsFeed[x].getDate() + "\n" +
+								"Description: " + NewsFeed[x].getDescription());
+						mHandler.post(showP);
+					}
 					
 					// Remove these during production
 				}
@@ -229,17 +238,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		public void run()
 		{
 			Toast.makeText(ActivityMain.this, Progress, Toast.LENGTH_SHORT).show();
-			
-			if(NewsFeed == null)
-				Toast.makeText(ActivityMain.this, "Null...", Toast.LENGTH_SHORT).show();
-			else
-			{
-				Toast.makeText(ActivityMain.this, "Not Null!", Toast.LENGTH_SHORT).show();
-				if(NewsFeed[0] == null)
-					Toast.makeText(ActivityMain.this, "First element is null", Toast.LENGTH_SHORT).show();
-				else
-					Toast.makeText(ActivityMain.this, "First element NOT null", Toast.LENGTH_SHORT).show();
-			}
 		}
 	}
 }

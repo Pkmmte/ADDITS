@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.util.ByteArrayBuffer;
 import org.xmlpull.v1.XmlPullParser;
@@ -172,37 +175,42 @@ public class Data
 					if (!itemActive && elemName.equals("item"))
 					{
 						itemActive = true;
-
-						Feeeeedz[feedCount] = new FeedItem(Title, Description, Author, Date, Category, Image, URL);
-						feedCount++;
 					}
-					else if(itemActive && elemName.equals("title"))
+					else if (itemActive && elemName.equals("title"))
 					{
-						Title = xrp.getText();
-					}/*
-					else if(itemActive && elemName.equals("link"))
-					{
-						URL = xrp.getText();
+						if (xrp.next() == XmlPullParser.TEXT)
+							Title = xrp.getText();
 					}
-					else if(itemActive && elemName.equals("pubDate"))
+					else if (itemActive && elemName.equals("link"))
 					{
-						Date = xrp.getText();
+						if (xrp.next() == XmlPullParser.TEXT)
+							URL = xrp.getText();
 					}
-					else if(itemActive && elemName.equals("dc:creator"))
+					else if (itemActive && elemName.equals("pubDate"))
 					{
-						Author = xrp.getText();
+						if (xrp.next() == XmlPullParser.TEXT)
+							Date = xrp.getText();
 					}
-					else if(itemActive && elemName.equals("description"))
+					else if (itemActive && elemName.equals("dc:creator"))
 					{
-						Description= xrp.getText();
-					}*/
-					else if (eventType == XmlPullParser.END_TAG && elemName.equals("item"))
-					{
-						itemActive = false;
-
-						Feeeeedz[feedCount] = new FeedItem("LIEEZZZZ!!!!!", Description, Author, Date, Category, Image, URL);
-						feedCount++;
+						if (xrp.next() == XmlPullParser.TEXT)
+							Author = xrp.getText();
 					}
+					else if (itemActive && elemName.equals("description"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+						{
+							Description = xrp.getText();
+							Image = pullLinks(xrp.getText());
+						}
+					}
+				}
+				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
+				{
+					itemActive = false;
+					
+					Feeeeedz[feedCount] = new FeedItem(Title, Description, Author, Date, Category, Image, URL);
+					feedCount++;
 				}
 				eventType = xrp.next();
 			}
@@ -215,5 +223,28 @@ public class Data
 		
 		// Return Combination
 		return Feeeeedz;
+	}
+	
+	private static String pullLinks(String text)
+	{
+		ArrayList links = new ArrayList();
+		
+		String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(text);
+		while (m.find())
+		{
+			String urlStr = m.group();
+			if (urlStr.startsWith("(") && urlStr.endsWith(")"))
+			{
+				urlStr = urlStr.substring(1, urlStr.length() - 1);
+			}
+			links.add(urlStr);
+		}
+		
+		String link = links.toString();
+		link = link.replace("[", "");
+		link = link.replace("]", "");
+		return link;
 	}
 }
