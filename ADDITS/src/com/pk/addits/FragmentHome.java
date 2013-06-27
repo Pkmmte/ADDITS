@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -131,6 +132,8 @@ public class FragmentHome extends Fragment
 	
 	public static void updateState()
 	{
+		NewsFeed = ActivityMain.getFeed();
+		
 		if(NewsFeed == null)
 		{
 			grid.setVisibility(View.GONE);
@@ -406,7 +409,7 @@ public class FragmentHome extends Fragment
 			holder.txtDate.setText(entry.getDate());
 			holder.txtCategory.setText(entry.getCategory());
 			
-			// holder.imgPreview.setScaleType(ScaleType.FIT_XY);
+			holder.imgPreview.setScaleType(ScaleType.FIT_XY);
 			if(entry.getImage().length() > 0)
 				Picasso.with(context).load(entry.getImage()).fit().into(holder.imgPreview);
 			else

@@ -212,8 +212,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					//	mHandler.post(showP);
 					//}
 					
-					if(currentFragment.equals("Home"))
-						FragmentHome.updateState();
+					//if(currentFragment.equals("Home"))
+					showP = new showProgress("Finish");
+					mHandler.post(showP);
 					
 					// Remove these during production
 				}
@@ -248,6 +249,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		public void run()
 		{
 			Toast.makeText(ActivityMain.this, Progress, Toast.LENGTH_SHORT).show();
+			
+			if(Progress.equals("Finish"))
+				FragmentHome.updateState();
 		}
 	}
 }
