@@ -64,14 +64,15 @@ public final class R {
         public static final int ic_drawer=0x7f02000d;
         public static final int ic_launcher=0x7f02000e;
         public static final int next_white=0x7f02000f;
-        public static final int previous_white=0x7f020010;
-        public static final int radial=0x7f020011;
-        public static final int shadow_extended_vertical_90=0x7f020012;
-        public static final int shadow_vertical_270=0x7f020013;
-        public static final int shadow_vertical_90=0x7f020014;
-        public static final int slider_error=0x7f020015;
-        public static final int slider_loading=0x7f020016;
-        public static final int transparent_selector=0x7f020017;
+        public static final int no_image_banner=0x7f020010;
+        public static final int previous_white=0x7f020011;
+        public static final int radial=0x7f020012;
+        public static final int shadow_extended_vertical_90=0x7f020013;
+        public static final int shadow_vertical_270=0x7f020014;
+        public static final int shadow_vertical_90=0x7f020015;
+        public static final int slider_error=0x7f020016;
+        public static final int slider_loading=0x7f020017;
+        public static final int transparent_selector=0x7f020018;
     }
     public static final class id {
         public static final int Content=0x7f0a0014;

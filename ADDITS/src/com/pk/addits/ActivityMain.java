@@ -188,7 +188,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					showP = new showProgress("Updated!");
 					mHandler.post(showP);
 					
-					NewsFeed = Data.retrieveFeed();
+					NewsFeed = Data.retrieveFeed().clone();
 
 					/** Feed Downloaded **/
 					showP = new showProgress("Retrieved!!!!!!\n" + 
