@@ -1,8 +1,22 @@
 package com.pk.addits;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.apache.http.util.ByteArrayBuffer;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Display;
 
 import com.pk.addits.FragmentHome.FeedItem;
@@ -10,6 +24,11 @@ import com.pk.addits.FragmentHome.SlideItem;
 
 public class Data
 {
+	public static final String PREFS_TAG = "AndroidDissectedPreferences";
+	public static final String PACKAGE_TAG = "com.pk.addits";
+	public static final String FEED_TAG = "feed.xml";
+	public static final String FEED_URL = "http://addits.androiddissected.com/feed/";
+	
 	public static int getHeightByPercent(Context context, double percent)
 	{
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
@@ -46,6 +65,155 @@ public class Data
 		Feeeeedz[5] = new FeedItem("titllle", "A preview of your article will appear here", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/");
 		Feeeeedz[6] = new FeedItem("Title", "Description", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/");
 		
+		return Feeeeedz;
+	}
+	
+	public static void downloadFeed()
+	{
+		File sdCard = Environment.getExternalStorageDirectory();
+		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
+		dir.mkdirs();
+		File file = new File(dir, FEED_TAG);
+		
+		// Establish Connection
+		try
+		{
+			URL updateURL = new URL(FEED_URL);
+			URLConnection conn = updateURL.openConnection();
+			InputStream is = conn.getInputStream();
+			is = conn.getInputStream();
+			BufferedInputStream bis = new BufferedInputStream(is);
+			ByteArrayBuffer baf = new ByteArrayBuffer(50);
+			
+			int current = 0;
+			while ((current = bis.read()) != -1)
+			{
+				baf.append((byte) current);
+			}
+			
+			final String s = new String(baf.toByteArray());
+			
+			FileOutputStream f = new FileOutputStream(file);
+			f.write(s.getBytes());
+			f.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public static FeedItem[] retrieveFeed()
+	{
+		int count = 0;
+		
+		try
+		{
+			File sdCard = Environment.getExternalStorageDirectory();
+			File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
+			FileInputStream istr = new FileInputStream(dir);
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(false);
+			
+			XmlPullParser xrp = factory.newPullParser();
+			xrp.setInput(istr, "UTF-8");
+			xrp.next();
+			int eventType = xrp.getEventType();
+			
+			while (eventType != XmlPullParser.END_DOCUMENT)
+			{
+				if (eventType == XmlPullParser.START_TAG)
+				{
+					String elemName = xrp.getName();
+					if (elemName.equals("item"))
+						count++;
+				}
+				eventType = xrp.next();
+			}
+		}
+		catch (Exception e)
+		{
+			Log.w("[Feed Count] XML Parse Error", e);
+		}
+		
+		FeedItem[] Feeeeedz = new FeedItem[count];
+		
+		try
+		{
+			File sdCard = Environment.getExternalStorageDirectory();
+			File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
+			FileInputStream istr = new FileInputStream(dir);
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(false);
+			
+			XmlPullParser xrp = factory.newPullParser();
+			xrp.setInput(istr, "UTF-8");
+			xrp.next();
+			int eventType = xrp.getEventType();
+			
+			// Attributes
+			String Title = "DEFAULT";
+			String URL = "";
+			String Date = "";
+			String Author = "";
+			String Category = "App Reviewz";
+			String Image = "http://addits.androiddissected.com/wp-content/uploads/2013/06/ManOfSteelHeader.jpg"; // TEMP
+			String Description = "";
+			
+			// Flags
+			boolean itemActive = false;
+			int feedCount = 0;
+			
+			while (eventType != XmlPullParser.END_DOCUMENT)
+			{
+				if (eventType == XmlPullParser.START_TAG)
+				{
+					String elemName = xrp.getName();
+					if (!itemActive && elemName.equals("item"))
+					{
+						itemActive = true;
+
+						Feeeeedz[feedCount] = new FeedItem(Title, Description, Author, Date, Category, Image, URL);
+						feedCount++;
+					}
+					else if(itemActive && elemName.equals("title"))
+					{
+						Title = xrp.getText();
+					}/*
+					else if(itemActive && elemName.equals("link"))
+					{
+						URL = xrp.getText();
+					}
+					else if(itemActive && elemName.equals("pubDate"))
+					{
+						Date = xrp.getText();
+					}
+					else if(itemActive && elemName.equals("dc:creator"))
+					{
+						Author = xrp.getText();
+					}
+					else if(itemActive && elemName.equals("description"))
+					{
+						Description= xrp.getText();
+					}*/
+					else if (eventType == XmlPullParser.END_TAG && elemName.equals("item"))
+					{
+						itemActive = false;
+
+						Feeeeedz[feedCount] = new FeedItem("LIEEZZZZ!!!!!", Description, Author, Date, Category, Image, URL);
+						feedCount++;
+					}
+				}
+				eventType = xrp.next();
+			}
+			
+		}
+		catch (Exception e)
+		{
+			Log.w("[Feed] XML Parse Error", e);
+		}
+		
+		// Return Combination
 		return Feeeeedz;
 	}
 }

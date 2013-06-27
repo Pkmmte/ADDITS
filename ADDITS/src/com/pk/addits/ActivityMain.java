@@ -1,24 +1,33 @@
 package com.pk.addits;
 
+import com.pk.addits.FragmentHome.FeedItem;
+
 import android.app.ActionBar;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
 {
 	ActionBar actionBar;
+	public Thread feedThread;
+	static Handler mHandler;
+	public showProgress showP;
+	FeedItem[] NewsFeed;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -55,7 +64,13 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		initializeNavigationDrawer();
 		
 		if (savedInstanceState == null)
+		{
 			selectItem(0);
+			
+			mHandler = new Handler();
+			initializeFeedThread();
+			feedThread.start();
+		}
 	}
 	
 	@Override
@@ -151,5 +166,80 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		mTitle = title;
 		actionBar.setTitle(mTitle);
+	}
+	
+	public void initializeFeedThread()
+	{
+		feedThread = new Thread()
+		{
+			public void run()
+			{
+				try
+				{
+					/** Fetch Server Data **/
+					showP = new showProgress("Checking for updates...");
+					mHandler.post(showP);
+					
+					Data.downloadFeed();
+
+					/** Feed Downloaded **/
+					showP = new showProgress("Updated!");
+					mHandler.post(showP);
+					
+					NewsFeed = Data.retrieveFeed();
+
+					/** Feed Downloaded **/
+					showP = new showProgress("Retrieved!!!!!!\n" + 
+					"Count: " + NewsFeed.length);
+					mHandler.post(showP);
+					
+					//showP = new showProgress("NewsFeed[0]\nTitle: " + NewsFeed[0].getTitle());
+					//mHandler.post(showP);
+					
+					// Remove these during production
+				}
+				catch (Exception e)
+				{
+					Log.v("DownloadFile", "ERROR: " + e.getMessage());
+				}
+				
+				stopThread(this);
+			}
+		};
+	}
+	
+	public static synchronized void stopThread(Thread theThread)
+	{
+		if (theThread != null)
+		{
+			theThread = null;
+		}
+	}
+	
+	public class showProgress implements Runnable
+	{
+		String Progress;
+		
+		public showProgress(String p)
+		{
+			this.Progress = p;
+		}
+		
+		@Override
+		public void run()
+		{
+			Toast.makeText(ActivityMain.this, Progress, Toast.LENGTH_SHORT).show();
+			
+			if(NewsFeed == null)
+				Toast.makeText(ActivityMain.this, "Null...", Toast.LENGTH_SHORT).show();
+			else
+			{
+				Toast.makeText(ActivityMain.this, "Not Null!", Toast.LENGTH_SHORT).show();
+				if(NewsFeed[0] == null)
+					Toast.makeText(ActivityMain.this, "First element is null", Toast.LENGTH_SHORT).show();
+				else
+					Toast.makeText(ActivityMain.this, "First element NOT null", Toast.LENGTH_SHORT).show();
+			}
+		}
 	}
 }
