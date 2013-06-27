@@ -28,6 +28,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	static Handler mHandler;
 	public showProgress showP;
 	FeedItem[] NewsFeed;
+	static String currentFragment;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -158,6 +159,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(position, true);
 		setTitle(mListNames[position]);
+		currentFragment = mListNames[position];
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 	

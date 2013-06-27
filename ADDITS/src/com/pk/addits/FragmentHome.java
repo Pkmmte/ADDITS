@@ -78,7 +78,7 @@ public class FragmentHome extends Fragment
 			@Override
 			public boolean handleMessage(Message msg)
 			{
-				if (currentSlide == 9)
+				if (currentSlide == 5)
 					currentSlide = 1;
 				else
 					currentSlide++;
@@ -142,7 +142,7 @@ public class FragmentHome extends Fragment
 		timer.purge();
 		
 		if (currentSlide == 1)
-			currentSlide = 9;
+			currentSlide = 5;
 		else
 			currentSlide--;
 		
@@ -154,7 +154,7 @@ public class FragmentHome extends Fragment
 		timer.cancel();
 		timer.purge();
 		
-		if (currentSlide == 9)
+		if (currentSlide == 5)
 			currentSlide = 1;
 		else
 			currentSlide++;
@@ -191,10 +191,6 @@ public class FragmentHome extends Fragment
 		View s3;
 		View s4;
 		View s5;
-		View s6;
-		View s7;
-		View s8;
-		View s9;
 		
 		public static final FragmentHomeSlider newInstance(SlideItem[] Slides, int slide)
 		{
@@ -226,10 +222,6 @@ public class FragmentHome extends Fragment
 			s3 = view.findViewById(R.id.slide3);
 			s4 = view.findViewById(R.id.slide4);
 			s5 = view.findViewById(R.id.slide5);
-			s6 = view.findViewById(R.id.slide6);
-			s7 = view.findViewById(R.id.slide7);
-			s8 = view.findViewById(R.id.slide8);
-			s9 = view.findViewById(R.id.slide9);
 			
 			return view;
 		}
@@ -293,10 +285,6 @@ public class FragmentHome extends Fragment
 					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					break;
 				case 2:
 					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
@@ -304,10 +292,6 @@ public class FragmentHome extends Fragment
 					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					break;
 				case 3:
 					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
@@ -315,10 +299,6 @@ public class FragmentHome extends Fragment
 					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
 					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					break;
 				case 4:
 					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
@@ -326,10 +306,6 @@ public class FragmentHome extends Fragment
 					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
 					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					break;
 				case 5:
 					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
@@ -337,54 +313,6 @@ public class FragmentHome extends Fragment
 					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
 					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					break;
-				case 6:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					break;
-				case 7:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					break;
-				case 8:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					break;
-				case 9:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s6.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s7.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s8.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s9.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
 					break;
 				default:
 					break;

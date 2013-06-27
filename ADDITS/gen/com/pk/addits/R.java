@@ -86,7 +86,7 @@ public final class R {
         public static final int fab__header_container=0x7f0a0003;
         public static final int fab__listview_background=0x7f0a0005;
         public static final int fab__scroll_view=0x7f0a0006;
-        public static final int image_header=0x7f0a0020;
+        public static final int image_header=0x7f0a001c;
         public static final int imgPreview=0x7f0a000d;
         public static final int left_drawer=0x7f0a0002;
         public static final int slide1=0x7f0a0017;
@@ -94,10 +94,6 @@ public final class R {
         public static final int slide3=0x7f0a0019;
         public static final int slide4=0x7f0a001a;
         public static final int slide5=0x7f0a001b;
-        public static final int slide6=0x7f0a001c;
-        public static final int slide7=0x7f0a001d;
-        public static final int slide8=0x7f0a001e;
-        public static final int slide9=0x7f0a001f;
         public static final int slideContent=0x7f0a000f;
         public static final int txtAuthor=0x7f0a000e;
         public static final int txtCategory=0x7f0a0009;

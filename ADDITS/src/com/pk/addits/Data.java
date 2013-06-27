@@ -43,16 +43,12 @@ public class Data
 	
 	public static SlideItem[] generateDummySlides()
 	{
-		SlideItem[] Slides = new SlideItem[9];
+		SlideItem[] Slides = new SlideItem[5];
 		Slides[0] = new SlideItem("Dummy Title", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
 		Slides[1] = new SlideItem("Dummy Title 2 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
 		Slides[2] = new SlideItem("Dummy Title 3 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
 		Slides[3] = new SlideItem("Dummy Title4 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
 		Slides[4] = new SlideItem("Dummy Title5 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[5] = new SlideItem("Dummy Title 6", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[6] = new SlideItem("Dummy Title 7", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[7] = new SlideItem("Dummy Title 8", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[8] = new SlideItem("Dummy Title 9", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
 		
 		return Slides;
 	}
@@ -155,12 +151,12 @@ public class Data
 			int eventType = xrp.getEventType();
 			
 			// Attributes
-			String Title = "DEFAULT";
+			String Title = "";
 			String URL = "";
 			String Date = "";
 			String Author = "";
-			String Category = "App Reviewz";
-			String Image = "http://addits.androiddissected.com/wp-content/uploads/2013/06/ManOfSteelHeader.jpg"; // TEMP
+			String Category = "";
+			String Image = "";
 			String Description = "";
 			
 			// Flags
@@ -186,6 +182,11 @@ public class Data
 						if (xrp.next() == XmlPullParser.TEXT)
 							URL = xrp.getText();
 					}
+					else if (itemActive && elemName.equals("category"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+							Category = xrp.getText();
+					}
 					else if (itemActive && elemName.equals("pubDate"))
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
@@ -200,7 +201,8 @@ public class Data
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
 						{
-							Description = xrp.getText();
+							String des = android.text.Html.fromHtml(xrp.getText()).toString();
+							Description = des.substring(3, des.length());
 							Image = pullLinks(xrp.getText());
 						}
 					}
@@ -228,6 +230,7 @@ public class Data
 	private static String pullLinks(String text)
 	{
 		ArrayList links = new ArrayList();
+		String link = "";
 		
 		String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
 		Pattern p = Pattern.compile(regex);
@@ -239,12 +242,13 @@ public class Data
 			{
 				urlStr = urlStr.substring(1, urlStr.length() - 1);
 			}
-			links.add(urlStr);
+			String format = urlStr.substring(urlStr.length() - 4);
+			if(format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".gif"))
+				links.add(urlStr);
 		}
 		
-		String link = links.toString();
-		link = link.replace("[", "");
-		link = link.replace("]", "");
+		link = links.get(0).toString();
+		link = link.replace("[", "").replace("]", "");
 		return link;
 	}
 }

@@ -85,16 +85,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="10.0dip"
+        android:layout_height="15.0dip"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" >
 
         <View
             android:layout_width="0.0dip"
             android:layout_height="match_parent"
-            android:layout_marginLeft="2.5dip"
-            android:layout_marginRight="2.5dip"
-            android:layout_marginTop="5.0dip"
+            android:layout_margin="5.0dip"
             android:layout_weight="1.0" />
 
         <LinearLayout
@@ -106,9 +104,7 @@
                 android:id="@+id/slide1"
                 android:layout_width="0.0dip"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
+                android:layout_margin="5.0dip"
                 android:layout_weight="1.0"
                 android:background="@color/holo_blue_light" />
 
@@ -116,9 +112,7 @@
                 android:id="@+id/slide2"
                 android:layout_width="0.0dip"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
+                android:layout_margin="5.0dip"
                 android:layout_weight="1.0"
                 android:background="@color/holo_blue_light" />
 
@@ -126,9 +120,7 @@
                 android:id="@+id/slide3"
                 android:layout_width="0.0dip"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
+                android:layout_margin="5.0dip"
                 android:layout_weight="1.0"
                 android:background="@color/holo_blue_light" />
 
@@ -136,9 +128,7 @@
                 android:id="@+id/slide4"
                 android:layout_width="0.0dip"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
+                android:layout_margin="5.0dip"
                 android:layout_weight="1.0"
                 android:background="@color/holo_blue_light" />
 
@@ -146,49 +136,7 @@
                 android:id="@+id/slide5"
                 android:layout_width="0.0dip"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
-                android:layout_weight="1.0"
-                android:background="@color/holo_blue_light" />
-
-            <View
-                android:id="@+id/slide6"
-                android:layout_width="0.0dip"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
-                android:layout_weight="1.0"
-                android:background="@color/holo_blue_light" />
-
-            <View
-                android:id="@+id/slide7"
-                android:layout_width="0.0dip"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
-                android:layout_weight="1.0"
-                android:background="@color/holo_blue_light" />
-
-            <View
-                android:id="@+id/slide8"
-                android:layout_width="0.0dip"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
-                android:layout_weight="1.0"
-                android:background="@color/holo_blue_light" />
-
-            <View
-                android:id="@+id/slide9"
-                android:layout_width="0.0dip"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="5.0dip"
-                android:layout_marginRight="5.0dip"
-                android:layout_marginTop="5.0dip"
+                android:layout_margin="5.0dip"
                 android:layout_weight="1.0"
                 android:background="@color/holo_blue_light" />
         </LinearLayout>
@@ -196,9 +144,7 @@
         <View
             android:layout_width="0.0dip"
             android:layout_height="match_parent"
-            android:layout_marginLeft="2.5dip"
-            android:layout_marginRight="2.5dip"
-            android:layout_marginTop="5.0dip"
+            android:layout_margin="5.0dip"
             android:layout_weight="1.0" />
     </LinearLayout>
 
