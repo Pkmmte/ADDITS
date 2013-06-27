@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +32,7 @@ public class Data
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";
 	public static final String FEED_URL = "http://addits.androiddissected.com/feed/";
+	public static final String MAIN_URL = "http://addits.androiddissected.com/";
 	
 	public static int getHeightByPercent(Context context, double percent)
 	{
@@ -40,14 +43,31 @@ public class Data
 		return height;
 	}
 	
-	public static SlideItem[] generateDummySlides()
+	public static SlideItem[] generateSlides(Feed[] Feeeeedz)
 	{
 		SlideItem[] Slides = new SlideItem[5];
-		Slides[0] = new SlideItem("Dummy Title", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[1] = new SlideItem("Dummy Title 2 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[2] = new SlideItem("Dummy Title 3 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[3] = new SlideItem("Dummy Title4 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
-		Slides[4] = new SlideItem("Dummy Title5 ", "Dummy Sub", "Meh", "http://addits.androiddissected.com/");
+		List<Integer> usedArticles = new ArrayList<Integer>();
+		
+		if(Feeeeedz == null)
+		{
+			for(int x = 0; x < Slides.length; x++)
+				Slides[x] = new SlideItem("", "", "", MAIN_URL);
+		}
+		else
+		{
+			int count = 0;
+			while(count < Slides.length)
+			{
+				Random generator = new Random();
+				int r = generator.nextInt(Slides.length);
+				if(!usedArticles.contains(r))
+				{
+					Slides[count] = new SlideItem(Feeeeedz[r].getTitle(), Feeeeedz[r].getDescription(), Feeeeedz[r].getImage(), Feeeeedz[r].getURL());
+					usedArticles.add(r);
+					count++;
+				}
+			}
+		}
 		
 		return Slides;
 	}

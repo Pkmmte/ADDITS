@@ -100,13 +100,8 @@ public class FragmentHome extends Fragment
 		});
 		
 		// Dummy Data
-		Slides = Data.generateDummySlides();
+		Slides = Data.generateSlides(NewsFeed);
 		populateSlide();
-		
-		File sdCard = Environment.getExternalStorageDirectory();
-		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/com.pk.addits/slides.xml");
-		startTime = System.currentTimeMillis();
-		// if (dir.exists())
 		timer.schedule(new firstTask(), 5000, 7000);
 		
 		updateState();
@@ -149,6 +144,9 @@ public class FragmentHome extends Fragment
 				feedList.add(new Feed(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isRead()));
 			
 			adapter.notifyDataSetChanged();
+			
+			Slides = Data.generateSlides(NewsFeed);
+			populateSlide();
 		}
 	}
 	
@@ -204,6 +202,7 @@ public class FragmentHome extends Fragment
 		int Slide;
 		String Text;
 		String SubText;
+		String ImageURL;
 		String URL;
 		
 		ImageView imgImage;
@@ -222,11 +221,12 @@ public class FragmentHome extends Fragment
 		public static final FragmentHomeSlider newInstance(SlideItem[] Slides, int slide)
 		{
 			FragmentHomeSlider f = new FragmentHomeSlider();
-			Bundle bdl = new Bundle(4);
+			Bundle bdl = new Bundle(5);
 			
 			bdl.putInt("Slide", slide);
 			bdl.putString("Text", Slides[slide - 1].getText());
 			bdl.putString("SubText", Slides[slide - 1].getSubText());
+			bdl.putString("ImageURL", Slides[slide - 1].getImageURL());
 			bdl.putString("URL", Slides[slide - 1].getURL());
 			
 			f.setArguments(bdl);
@@ -299,6 +299,7 @@ public class FragmentHome extends Fragment
 			Slide = args.getInt("Slide");
 			Text = args.getString("Text");
 			SubText = args.getString("SubText");
+			ImageURL = args.getString("ImageURL");
 			URL = args.getString("URL");
 		}
 		
@@ -348,7 +349,11 @@ public class FragmentHome extends Fragment
 		
 		public void setImage()
 		{
-			// TODO Add Image Later...
+			imgImage.setScaleType(ScaleType.FIT_XY);
+			if(ImageURL.length() > 0)
+				Picasso.with(getActivity()).load(ImageURL).fit().into(imgImage);
+			else
+				Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgImage);
 		}
 	}
 	
@@ -409,7 +414,7 @@ public class FragmentHome extends Fragment
 			holder.txtDate.setText(entry.getDate());
 			holder.txtCategory.setText(entry.getCategory());
 			
-			holder.imgPreview.setScaleType(ScaleType.FIT_XY);
+			holder.imgPreview.setScaleType(ScaleType.CENTER_INSIDE);
 			if(entry.getImage().length() > 0)
 				Picasso.with(context).load(entry.getImage()).fit().into(holder.imgPreview);
 			else
