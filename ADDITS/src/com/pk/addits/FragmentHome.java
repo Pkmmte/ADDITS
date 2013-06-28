@@ -20,12 +20,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelperHome;
 import com.squareup.picasso.Picasso;
@@ -103,6 +106,28 @@ public class FragmentHome extends Fragment
 		timer.schedule(new firstTask(), 5000, 7000);
 		
 		updateState();
+		grid.setOnItemClickListener(new OnItemClickListener()
+		{
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
+			{
+				String Title = feedList.get(position).getTitle();
+				String Description = feedList.get(position).getDescription();
+				String Content = feedList.get(position).getContent();
+				String CommentFeed = feedList.get(position).getCommentFeed();
+				String Author = feedList.get(position).getAuthor();
+				String Date = feedList.get(position).getDate();
+				String Category = feedList.get(position).getCategory();
+				String Image = feedList.get(position).getImage();
+				String URL = feedList.get(position).getURL();
+				int Comments = feedList.get(position).getComments();
+				boolean Read = feedList.get(position).isRead();
+				
+				Feed Article = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Read);
+				ActivityMain.callArticle(getActivity(), Article);
+				Toast.makeText(getActivity(), Title, Toast.LENGTH_SHORT).show();
+			}
+		});
 	}
 	
 	@Override

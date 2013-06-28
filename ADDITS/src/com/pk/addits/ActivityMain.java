@@ -1,6 +1,7 @@
 package com.pk.addits;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -166,6 +167,14 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		mTitle = title;
 		actionBar.setTitle(mTitle);
+	}
+	
+	public static void callArticle(Context context, Feed article)
+	{
+		Fragment fragment = FragmentArticle.newInstance(article);
+		
+		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	}
 	
 	public static Feed[] getFeed()
