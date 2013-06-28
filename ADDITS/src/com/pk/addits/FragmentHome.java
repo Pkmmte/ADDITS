@@ -374,7 +374,7 @@ public class FragmentHome extends Fragment
 		{
 			imgImage.setScaleType(ScaleType.FIT_XY);
 			if(ImageURL.length() > 0)
-				Picasso.with(getActivity()).load(ImageURL).fit().into(imgImage);
+				Picasso.with(getActivity()).load(ImageURL).error(R.drawable.no_image_banner).fit().into(imgImage);
 			else
 				Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgImage);
 		}
@@ -439,7 +439,7 @@ public class FragmentHome extends Fragment
 			
 			holder.imgPreview.setScaleType(ScaleType.CENTER_INSIDE);
 			if(entry.getImage().length() > 0)
-				Picasso.with(context).load(entry.getImage()).fit().into(holder.imgPreview);
+				Picasso.with(context).load(entry.getImage()).error(R.drawable.no_image_banner).fit().into(holder.imgPreview);
 			else
 				Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
 			

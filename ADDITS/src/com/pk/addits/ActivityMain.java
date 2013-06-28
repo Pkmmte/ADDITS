@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +29,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public showProgress showP;
 	static Feed[] NewsFeed;
 	static String currentFragment;
+	static boolean articleShowing;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -96,6 +98,28 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	}
 	
 	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		if (keyCode == KeyEvent.KEYCODE_BACK)
+		{
+			if (currentFragment.equals("Home") && articleShowing)
+			{
+				Fragment fragment = new FragmentHome();
+				mTitle = "Home";
+				articleShowing = false;
+				
+				FragmentManager fragmentManager = getSupportFragmentManager();
+				fragmentManager.beginTransaction().setCustomAnimations(R.anim.out_to_right, R.anim.fade_into, R.anim.fade_away, R.anim.in_from_right).replace(R.id.content_frame, fragment).commit();
+				
+				return true;
+			}
+			else
+				finish();
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
 		selectItem(position);
@@ -159,6 +183,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		mDrawerList.setItemChecked(position, true);
 		setTitle(mListNames[position]);
 		currentFragment = mListNames[position];
+		articleShowing = false;
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 	
@@ -173,9 +198,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		Fragment fragment = FragmentArticle.newInstance(article);
 		mTitle = article.getTitle();
+		articleShowing = true;
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.fade_away, R.anim.fade_into, R.anim.out_to_right).replace(R.id.content_frame, fragment).commit();
 	}
 	
 	public static Feed[] getFeed()
