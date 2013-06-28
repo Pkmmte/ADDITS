@@ -10,15 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="20.0dip"
-        android:layout_marginRight="20.0dip"
-        android:orientation="vertical"
-        android:paddingBottom="10.0dip" >
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="5.0dip"
-            android:layout_marginTop="10.0dip"
+            android:layout_marginTop="5dip"
             android:background="@color/black_light"
             android:orientation="horizontal" >
 
@@ -99,6 +98,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
+   						android:maxLines="3"
                         android:fontFamily="sans-serif-light"
                         android:text="@string/placeholder" />
 
@@ -110,7 +110,9 @@
                             android:id="@+id/imgPreview"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:contentDescription="@string/placeholder" />
+                            android:contentDescription="@string/placeholder"
+                            android:src="@drawable/no_image_banner"
+                            android:scaleType="centerInside" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
