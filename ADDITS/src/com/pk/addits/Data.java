@@ -24,6 +24,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 
+import com.pk.addits.FragmentArticle.CommentFeed;
 import com.pk.addits.FragmentHome.SlideItem;
 
 public class Data
@@ -33,6 +34,7 @@ public class Data
 	public static final String FEED_TAG = "feed.xml";
 	public static final String FEED_URL = "http://addits.androiddissected.com/feed/";
 	public static final String MAIN_URL = "http://addits.androiddissected.com/";
+	public static final String TEMP_TAG = "temporary.xml";
 	
 	public static int getHeightByPercent(Context context, double percent)
 	{
@@ -70,20 +72,6 @@ public class Data
 		}
 		
 		return Slides;
-	}
-	
-	public static Feed[] generateDummyFeed()
-	{
-		Feed[] Feeeeedz = new Feed[7];
-		Feeeeedz[0] = new Feed("Dumb Title", "Blah blah blah blah blah blajsaasdsdasdasdas", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[1] = new Feed("Dumber Title", "Lorem ipsum stuff", "Content", "FEED", "Cliff Wade", "June 22, 2013", "GAME REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/ManOfSteelHeader.jpg", "http://addits.androiddissected.com/2013/06/22/man-of-steel-i-loved-the-movie-can-the-android-game-match-it/", 0, false);
-		Feeeeedz[2] = new Feed("Retard Title", "sdfsdfiounwsdei3wne iwnr f dsfdsdasdasdas", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[3] = new Feed("Dummy Title", "Blah blah blah blah blah", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[4] = new Feed("Smart Title", "Insert something smart here", "Content", "FEED", "Roberto Mezquia Jr", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[5] = new Feed("titllle", "A preview of your article will appear here", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		Feeeeedz[6] = new Feed("Title", "Description", "Content", "FEED", "Cliff Wade", "June 22, 2013", "APP REVIEWS", "http://addits.androiddissected.com/wp-content/uploads/2013/06/Filmgrain.png", "http://addits.androiddissected.com/2013/06/22/meet-my-new-movie-companion-filmgrain/", 0, false);
-		
-		return Feeeeedz;
 	}
 	
 	public static void downloadFeed()
@@ -265,6 +253,110 @@ public class Data
 		
 		// Return Combination
 		return Feeeeedz;
+	}
+	
+	public static void downloadCommentFeed(String feedURL)
+	{
+		File sdCard = Environment.getExternalStorageDirectory();
+		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
+		dir.mkdirs();
+		File file = new File(dir, TEMP_TAG);
+		
+		// Establish Connection
+		try
+		{
+			URL updateURL = new URL(feedURL);
+			URLConnection conn = updateURL.openConnection();
+			InputStream is = conn.getInputStream();
+			is = conn.getInputStream();
+			BufferedInputStream bis = new BufferedInputStream(is);
+			ByteArrayBuffer baf = new ByteArrayBuffer(50);
+			
+			int current = 0;
+			while ((current = bis.read()) != -1)
+			{
+				baf.append((byte) current);
+			}
+			
+			final String s = new String(baf.toByteArray());
+			
+			FileOutputStream f = new FileOutputStream(file);
+			f.write(s.getBytes());
+			f.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public static List<CommentFeed> retrieveCommentFeed()
+	{
+		List<CommentFeed> comments = new ArrayList<CommentFeed>();
+		
+		try
+		{
+			File sdCard = Environment.getExternalStorageDirectory();
+			File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + TEMP_TAG);
+			FileInputStream istr = new FileInputStream(dir);
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(false);
+			
+			XmlPullParser xrp = factory.newPullParser();
+			xrp.setInput(istr, "UTF-8");
+			xrp.next();
+			int eventType = xrp.getEventType();
+			
+			// Attributes
+			String Creator = "";
+			String Content = "";
+			String Date = "";
+			
+			// Flags
+			boolean itemActive = false;
+			
+			while (eventType != XmlPullParser.END_DOCUMENT)
+			{
+				if (eventType == XmlPullParser.START_TAG)
+				{
+					String elemName = xrp.getName();
+					if (!itemActive && elemName.equals("item"))
+					{
+						itemActive = true;
+					}
+					else if (itemActive && elemName.equals("dc:creator"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+							Creator = xrp.getText();
+					}
+					else if (itemActive && elemName.equals("content:encoded"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+							Content = android.text.Html.fromHtml(xrp.getText()).toString();
+					}
+					else if (itemActive && elemName.equals("pubDate"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+							Date = xrp.getText();
+					}
+				}
+				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
+				{
+					itemActive = false;
+					
+					comments.add(new CommentFeed(Creator, Content, Date));
+				}
+				eventType = xrp.next();
+			}
+			
+		}
+		catch (Exception e)
+		{
+			Log.w("[CommentFeed] XML Parse Error", e);
+		}
+		
+		// Return Combination
+		return comments;
 	}
 	
 	private static String pullLinks(String text)

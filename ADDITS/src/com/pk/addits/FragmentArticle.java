@@ -1,16 +1,22 @@
 package com.pk.addits;
 
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,6 +34,10 @@ public class FragmentArticle extends Fragment
 	View view;
 	static FadingActionBarHelper mFadingHelper;
 	Feed Article;
+	private Thread loadCommentsThread;
+	private Handler mHandler;
+	private List<CommentFeed> commentList;
+	private CommentFeedAdapter adapter;
 	
 	ImageView imgHeader;
 	TextView txtTitle;
@@ -89,9 +99,10 @@ public class FragmentArticle extends Fragment
 		
 		actionBar = getActivity().getActionBar();
 		retrieveArguments();
+		mHandler = new Handler();
 		
 		actionBar.setTitle(Article.getTitle());
-		if(Article.getImage().length() > 0)
+		if (Article.getImage().length() > 0)
 			Picasso.with(getActivity()).load(Article.getImage()).error(R.drawable.no_image_banner).fit().into(imgHeader);
 		else
 			Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgHeader);
@@ -101,7 +112,7 @@ public class FragmentArticle extends Fragment
 		txtDate.setText(Article.getDate());
 		txtContent.setText(Article.getContent());
 		
-		if(Article.getComments() > 0)
+		if (Article.getComments() > 0)
 		{
 			txtLoadComments.setText("Load " + Article.getComments() + " Comments");
 			commentCard.setOnClickListener(new View.OnClickListener()
@@ -112,6 +123,17 @@ public class FragmentArticle extends Fragment
 					progressBar.setVisibility(View.VISIBLE);
 					txtLoadComments.setText("Loading " + Article.getComments() + " Comments...");
 					commentCard.setClickable(false);
+					
+					if (loadCommentsThread == null)
+					{
+						initializeLoadCommentsThread();
+						loadCommentsThread.start();
+					}
+					else if (!loadCommentsThread.isAlive())
+					{
+						initializeLoadCommentsThread();
+						loadCommentsThread.start();
+					}
 				}
 			});
 		}
@@ -168,5 +190,140 @@ public class FragmentArticle extends Fragment
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
 		if (mShareActionProvider != null)
 			mShareActionProvider.setShareIntent(shareIntent);
+	}
+	
+	private void initializeLoadCommentsThread()
+	{
+		loadCommentsThread = new Thread()
+		{
+			public void run()
+			{
+				try
+				{
+					Data.downloadCommentFeed(Article.getCommentFeed());
+					commentList = Data.retrieveCommentFeed();
+					mHandler.post(loadComments);
+				}
+				catch (Exception e)
+				{
+					Log.v("Download Comments", "ERROR: " + e.getMessage());
+				}
+				
+				stopThread(this);
+			}
+		};
+	}
+	
+	private synchronized void stopThread(Thread theThread)
+	{
+		if (theThread != null)
+		{
+			theThread = null;
+		}
+	}
+	
+	Runnable loadComments = new Runnable()
+	{
+		public void run()
+		{
+			adapter = new CommentFeedAdapter(getActivity(), commentList);
+			comments.setAdapter(adapter);
+			adapter.notifyDataSetChanged();
+			
+			txtLoadComments.setVisibility(View.GONE);
+			progressBar.setVisibility(View.GONE);
+		}
+	};
+	
+	public class CommentFeedAdapter extends BaseAdapter
+	{
+		private Context context;
+		
+		private List<CommentFeed> listItem;
+		
+		public CommentFeedAdapter(Context context, List<CommentFeed> listItem)
+		{
+			this.context = context;
+			this.listItem = listItem;
+		}
+		
+		public int getCount()
+		{
+			return listItem.size();
+		}
+		
+		public Object getItem(int position)
+		{
+			return listItem.get(position);
+		}
+		
+		public long getItemId(int position)
+		{
+			return position;
+		}
+		
+		public View getView(int position, View view, ViewGroup viewGroup)
+		{
+			ViewHolder holder;
+			CommentFeed entry = listItem.get(position);
+			if (view == null)
+			{
+				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater.inflate(R.layout.commentfeed_item, null);
+				
+				holder = new ViewHolder();
+				holder.txtCreator = (TextView) view.findViewById(R.id.txtCreator);
+				holder.txtContent = (TextView) view.findViewById(R.id.txtContent);
+				holder.txtDate = (TextView) view.findViewById(R.id.txtDate);
+				
+				view.setTag(holder);
+			}
+			else
+			{
+				holder = (ViewHolder) view.getTag();
+			}
+			
+			holder.txtCreator.setText(entry.getCreator());
+			holder.txtContent.setText(entry.getContent());
+			holder.txtDate.setText("Posted by " + entry.getDate());
+			
+			return view;
+		}
+	}
+	
+	private static class ViewHolder
+	{
+		public TextView txtCreator;
+		public TextView txtContent;
+		public TextView txtDate;
+	}
+	
+	public static class CommentFeed
+	{
+		String Creator;
+		String Content;
+		String Date;
+		
+		public CommentFeed(String Creator, String Content, String Date)
+		{
+			this.Creator = Creator;
+			this.Content = Content;
+			this.Date = Date;
+		}
+		
+		public String getCreator()
+		{
+			return Creator;
+		}
+		
+		public String getContent()
+		{
+			return Content;
+		}
+		
+		public String getDate()
+		{
+			return Date;
+		}
 	}
 }
