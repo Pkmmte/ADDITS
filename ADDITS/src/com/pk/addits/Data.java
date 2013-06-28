@@ -296,7 +296,7 @@ public class Data
 		if (links.size() > 0)
 		{
 			link = links.get(0).toString();
-			link = link.replace("[", "").replace("]", "");
+			link = link.replace("[", "").replace("]", "").replace("-150x150", "");
 		}
 		return link;
 	}
