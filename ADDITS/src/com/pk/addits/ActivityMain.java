@@ -34,7 +34,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private ActionBarDrawerToggle mDrawerToggle;
 	
 	private CharSequence mDrawerTitle;
-	private CharSequence mTitle;
+	private static CharSequence mTitle;
 	private String[] mListNames;
 	private int[] mListImages;
 	
@@ -172,6 +172,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public static void callArticle(Context context, Feed article)
 	{
 		Fragment fragment = FragmentArticle.newInstance(article);
+		mTitle = article.getTitle();
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
