@@ -7,8 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
+import com.squareup.picasso.Picasso;
 
 public class FragmentArticle extends Fragment
 {
@@ -16,6 +19,12 @@ public class FragmentArticle extends Fragment
 	View view;
 	static FadingActionBarHelper mFadingHelper;
 	Feed Article;
+	
+	ImageView imgHeader;
+	TextView txtTitle;
+	TextView txtAuthor;
+	TextView txtDate;
+	TextView txtContent;
 	
 	public static FragmentArticle newInstance(Feed article)
 	{
@@ -44,6 +53,12 @@ public class FragmentArticle extends Fragment
 	{
 		view = mFadingHelper.createView(inflater);
 		
+		imgHeader = (ImageView) view.findViewById(R.id.image_header);
+		txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
+		txtDate = (TextView) view.findViewById(R.id.txtDate);
+		txtContent = (TextView) view.findViewById(R.id.txtContent);
+		
 		return view;
 	}
 	
@@ -54,7 +69,13 @@ public class FragmentArticle extends Fragment
 		
 		actionBar = getActivity().getActionBar();
 		retrieveArguments();
+		
 		actionBar.setTitle(Article.getTitle());
+		Picasso.with(getActivity()).load(Article.getImage()).fit().into(imgHeader);
+		txtTitle.setText(Article.getTitle());
+		txtAuthor.setText(Article.getAuthor());
+		txtDate.setText(Article.getDate());
+		txtContent.setText(Article.getContent());
 	}
 	
 	@Override
@@ -62,7 +83,7 @@ public class FragmentArticle extends Fragment
 	{
 		super.onAttach(activity);
 		
-		mFadingHelper = new FadingActionBarHelper().actionBarBackground(R.drawable.ab_background).headerLayout(R.layout.header_light).contentLayout(R.layout.activity_scrollview).lightActionBar(false);
+		mFadingHelper = new FadingActionBarHelper().actionBarBackground(R.drawable.ab_background).headerLayout(R.layout.header_light).contentLayout(R.layout.fragment_article).lightActionBar(false);
 		mFadingHelper.initActionBar(activity);
 	}
 	
