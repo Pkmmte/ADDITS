@@ -3,21 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
+    android:background="@drawable/app_bg"
     android:orientation="vertical"
     tools:ignore="UselessParent" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:orientation="vertical" >
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:orientation="vertical"
+        android:background="@drawable/card_bg" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="5.0dip"
-            android:layout_marginTop="5dip"
             android:background="@color/black_light"
             android:orientation="horizontal" >
 
@@ -59,11 +59,11 @@
                             android:id="@+id/txtCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+   							android:textSize="15sp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:fontFamily="sans-serif-light"
                             android:text="@string/placeholder"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="@color/white" />
                     </LinearLayout>
 
@@ -71,6 +71,7 @@
                         android:id="@+id/txtDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+   						android:textSize="13sp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="5dp"
                         android:fontFamily="sans-serif-light"
@@ -90,7 +91,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:text="@string/placeholder" />
+   						android:maxLines="2"
+   						android:textSize="19sp"
+                        android:text="@string/dummy_title" />
 
                     <TextView
                         android:id="@+id/txtDescription"
@@ -99,8 +102,9 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
    						android:maxLines="3"
+   						android:textSize="13sp"
                         android:fontFamily="sans-serif-light"
-                        android:text="@string/placeholder" />
+                        android:text="@string/dummy_desc" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -124,8 +128,10 @@
                                 android:id="@+id/txtAuthor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+   								android:textSize="13sp"
                                 android:layout_marginLeft="7dp"
                                 android:layout_marginTop="15dp"
+                                android:layout_marginBottom="3dp"
                                 android:fontFamily="sans-serif-light"
                                 android:text="@string/placeholder"
                                 android:textColor="@color/white" />

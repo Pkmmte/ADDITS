@@ -2,9 +2,11 @@
 <resources>
     <string-array name="drawer_items">
         <item>Home</item>
-        <item>Theme Reviews</item>
-        <item>Store</item>
-        <item>About</item>
+        <item>Customization</item>
+        <item>Developer Focus</item>
+        <item>Merchandise</item>
+        <item>Reviews</item>
+        <item>Tutorials</item>
     </string-array>
     <array name="city_images">
         <item>@drawable/banner1</item>
