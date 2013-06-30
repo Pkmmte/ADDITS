@@ -119,9 +119,10 @@ public class FragmentHome extends Fragment
 				String Image = feedList.get(position).getImage();
 				String URL = feedList.get(position).getURL();
 				int Comments = feedList.get(position).getComments();
+				boolean Favorite = feedList.get(position).isFavorite();
 				boolean Read = feedList.get(position).isRead();
 				
-				Feed Article = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Read);
+				Feed Article = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
 				ActivityMain.callArticle(getActivity(), Article);
 				Toast.makeText(getActivity(), Title, Toast.LENGTH_SHORT).show();
 			}
@@ -162,7 +163,7 @@ public class FragmentHome extends Fragment
 			loading.setVisibility(View.GONE);
 			
 			for (int x = 0; x < NewsFeed.length; x++)
-				feedList.add(new Feed(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isRead()));
+				feedList.add(new Feed(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
 			adapter.notifyDataSetChanged();
 			

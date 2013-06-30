@@ -1,10 +1,15 @@
 package com.pk.addits;
 
+import java.io.File;
+
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -23,30 +28,32 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
 {
-	ActionBar actionBar;
-	public Thread feedThread;
-	static Handler mHandler;
-	public showProgress showP;
-	static Feed[] NewsFeed;
-	static String currentFragment;
-	static boolean articleShowing;
+	private ActionBar actionBar;
+	private SharedPreferences prefs;
+	private Thread feedThread;
+	private Handler mHandler;
+	private showProgress showP;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
+	
+	public static Feed[] NewsFeed;
+	public static String currentFragment;
+	public static boolean articleShowing;
 	
 	private CharSequence mDrawerTitle;
 	private static CharSequence mTitle;
 	private String[] mListNames;
 	private int[] mListImages;
 	
-	// Loading purposes
-	LinearLayout Loading;
-	TextView LoadingText;
+	private LinearLayout Loading;
+	private TextView LoadingText;
+	private long lastUpdateCheckTime;
+	private int updateCheckInterval = 0;//6 * 60 * 60 * 1000; // Comment out to 0 if you want to test it.
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -57,6 +64,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
+		actionBar.setIcon(R.drawable.ic_ab_logo);
+		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
+		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -81,7 +91,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			
 			mHandler = new Handler();
 			initializeFeedThread();
-			feedThread.start();
+			checkNewFeed();
 		}
 	}
 	
@@ -219,7 +229,29 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		return NewsFeed;
 	}
 	
-	public void initializeFeedThread()
+	private void checkNewFeed()
+	{
+		if (lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.isNetworkConnected(ActivityMain.this))
+		{
+			lastUpdateCheckTime = System.currentTimeMillis();
+			Editor editor = prefs.edit();
+			editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
+			editor.commit();
+			
+			if (feedThread == null)
+			{
+				initializeFeedThread();
+				feedThread.start();
+			}
+			else if (!feedThread.isAlive())
+			{
+				initializeFeedThread();
+				feedThread.start();
+			}
+		}
+	}
+	
+	private void initializeFeedThread()
 	{
 		feedThread = new Thread()
 		{
@@ -227,25 +259,46 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			{
 				try
 				{
-					/** Fetch Server Data **/
-					showP = new showProgress("Checking for updates...", true, true);
+					/** Checking If It Already Contains File **/
+					File sdCard = Environment.getExternalStorageDirectory();
+					File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG);
+					dir.mkdirs();
+					File file = new File(dir, Data.FEED_TAG);
+					
+					/** Fetch Website Data **/
+					showP = new showProgress("Checking for new content...", true, true);
 					mHandler.post(showP);
 					
 					Data.downloadFeed();
+					boolean NewFeed = false;
+					if(file.exists())
+						NewFeed = Data.compareFeed();
+					else
+						Data.writeFeed();
 					
-					/** Feed Downloaded **/
-					showP = new showProgress("Updated!", true, false);
-					mHandler.post(showP);
-					
-					NewsFeed = Data.retrieveFeed().clone();
-					
-					/** Feed Downloaded **/
-					showP = new showProgress("Retrieved!", true, false);
-					mHandler.post(showP);
-					
-					// if(currentFragment.equals("Home"))
-					showP = new showProgress("Retrieved!", false, true);
-					mHandler.post(showP);
+					if(NewFeed) // New Stuff Found
+					{
+						/** New Stuff Found **/
+						showP = new showProgress("Updating content...", true, false);
+						mHandler.post(showP);
+						
+						NewsFeed = Data.retrieveFeed(true).clone();
+						Data.deleteTempFile();
+						
+						/** Cache Images **/
+						showP = new showProgress("Caching content...", true, false);
+						mHandler.post(showP);
+						
+						//Data.cacheFeedImages(NewsFeed);
+					}
+					else // Nothing New
+					{
+						showP = new showProgress("Everything is up to date!", false, true);
+						mHandler.post(showP);
+						
+						NewsFeed = Data.retrieveFeed(true).clone();
+						Data.deleteTempFile();
+					}
 					
 					showP = new showProgress("", false, false);
 					mHandler.post(showP);
@@ -260,7 +313,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		};
 	}
 	
-	public static synchronized void stopThread(Thread theThread)
+	private synchronized void stopThread(Thread theThread)
 	{
 		if (theThread != null)
 		{

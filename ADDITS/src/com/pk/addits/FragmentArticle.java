@@ -65,6 +65,7 @@ public class FragmentArticle extends Fragment
 		bundle.putString("Image", article.getImage());
 		bundle.putString("URL", article.getURL());
 		bundle.putInt("Comments", article.getComments());
+		bundle.putBoolean("Favorite", article.isFavorite());
 		bundle.putBoolean("Read", article.isRead());
 		
 		f.setArguments(bundle);
@@ -177,9 +178,10 @@ public class FragmentArticle extends Fragment
 		String Image = args.getString("Image");
 		String URL = args.getString("URL");
 		int Comments = args.getInt("Comments");
+		boolean Favorite = args.getBoolean("Favorite");
 		boolean Read = args.getBoolean("Read");
 		
-		Article = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Read);
+		Article = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
 	}
 	
 	public void configureShare()

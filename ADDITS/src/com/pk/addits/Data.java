@@ -20,6 +20,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
@@ -30,6 +32,7 @@ import com.pk.addits.FragmentHome.SlideItem;
 public class Data
 {
 	public static final String PREFS_TAG = "AndroidDissectedPreferences";
+	public static final String PREF_TAG_LAST_UPDATE_CHECK_TIME = "Last Update Check Time";
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";
 	public static final String FEED_URL = "http://addits.androiddissected.com/feed/";
@@ -50,19 +53,19 @@ public class Data
 		SlideItem[] Slides = new SlideItem[5];
 		List<Integer> usedArticles = new ArrayList<Integer>();
 		
-		if(Feeeeedz == null)
+		if (Feeeeedz == null)
 		{
-			for(int x = 0; x < Slides.length; x++)
+			for (int x = 0; x < Slides.length; x++)
 				Slides[x] = new SlideItem("", "", "", MAIN_URL);
 		}
 		else
 		{
 			int count = 0;
-			while(count < Slides.length)
+			while (count < Slides.length)
 			{
 				Random generator = new Random();
 				int r = generator.nextInt(Slides.length);
-				if(!usedArticles.contains(r))
+				if (!usedArticles.contains(r))
 				{
 					Slides[count] = new SlideItem(Feeeeedz[r].getTitle(), Feeeeedz[r].getDescription(), Feeeeedz[r].getImage(), Feeeeedz[r].getURL());
 					usedArticles.add(r);
@@ -79,7 +82,7 @@ public class Data
 		File sdCard = Environment.getExternalStorageDirectory();
 		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
 		dir.mkdirs();
-		File file = new File(dir, FEED_TAG);
+		File file = new File(dir, TEMP_TAG);
 		
 		// Establish Connection
 		try
@@ -109,14 +112,69 @@ public class Data
 		}
 	}
 	
-	public static Feed[] retrieveFeed()
+	public static void writeFeed()
+	{
+		File sdCard = Environment.getExternalStorageDirectory();
+		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
+		dir.mkdirs();
+		File tempFile = new File(dir, TEMP_TAG);
+		
+		dir.mkdirs();
+		File file = new File(dir, FEED_TAG);
+		tempFile.renameTo(file);
+	}
+	
+	public static boolean compareFeed()
+	{
+		Feed[] tempFeed = retrieveFeed(false).clone();
+		Feed[] realFeed = retrieveFeed(true).clone();
+		
+		if (tempFeed.length != realFeed.length)
+			return true;
+		
+		for (int x = 0; x < tempFeed.length; x++)
+		{
+			if(compareFeedItem(tempFeed[x], realFeed[x]))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public static boolean compareFeedItem(Feed f1, Feed f2)
+	{
+		if (!f1.getAuthor().equalsIgnoreCase(f2.getAuthor()))
+			return true;
+		if (!f1.getCategory().equalsIgnoreCase(f2.getCategory()))
+			return true;
+		if (!f1.getCommentFeed().equalsIgnoreCase(f2.getCommentFeed()))
+			return true;
+		if (!f1.getContent().equalsIgnoreCase(f2.getContent()))
+			return true;
+		if (!f1.getDescription().equalsIgnoreCase(f2.getDescription()))
+			return true;
+		if (!f1.getImage().equalsIgnoreCase(f2.getImage()))
+			return true;
+		if (!f1.getTitle().equalsIgnoreCase(f2.getTitle()))
+			return true;
+		if (!f1.getURL().equalsIgnoreCase(f2.getURL()))
+			return true;
+		
+		return false;
+	}
+	
+	public static Feed[] retrieveFeed(boolean realFeed)
 	{
 		int count = 0;
 		
 		try
 		{
 			File sdCard = Environment.getExternalStorageDirectory();
-			File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
+			File dir = null;
+			if (realFeed)
+				dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
+			else
+				dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + TEMP_TAG);
 			FileInputStream istr = new FileInputStream(dir);
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			factory.setNamespaceAware(false);
@@ -147,7 +205,11 @@ public class Data
 		try
 		{
 			File sdCard = Environment.getExternalStorageDirectory();
-			File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
+			File dir = null;
+			if (realFeed)
+				dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
+			else
+				dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + TEMP_TAG);
 			FileInputStream istr = new FileInputStream(dir);
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			factory.setNamespaceAware(false);
@@ -168,6 +230,8 @@ public class Data
 			String Content = "";
 			String CommentFeed = "";
 			int Comments = 0;
+			boolean Favorite = false;
+			boolean Read = false;
 			
 			// Flags
 			boolean itemActive = false;
@@ -234,12 +298,22 @@ public class Data
 						if (xrp.next() == XmlPullParser.TEXT)
 							Comments = Integer.parseInt(xrp.getText());
 					}
+					else if (itemActive && elemName.equals("favorite"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+							Comments = Integer.parseInt(xrp.getText());
+					}
+					else if (itemActive && elemName.equals("read"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+							Comments = Integer.parseInt(xrp.getText());
+					}
 				}
 				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
 				{
 					itemActive = false;
 					
-					Feeeeedz[feedCount] = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, false);
+					Feeeeedz[feedCount] = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
 					feedCount++;
 				}
 				eventType = xrp.next();
@@ -253,6 +327,11 @@ public class Data
 		
 		// Return Combination
 		return Feeeeedz;
+	}
+	
+	public static void cacheFeedImages(Feed[] Feeeedz)
+	{
+		
 	}
 	
 	public static void downloadCommentFeed(String feedURL)
@@ -391,5 +470,26 @@ public class Data
 			link = link.replace("[", "").replace("]", "").replace("-150x150", "");
 		}
 		return link;
+	}
+	
+	public static boolean isNetworkConnected(Context context)
+	{
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		if (ni == null)
+		{
+			return false;
+		}
+		else
+			return true;
+	}
+	
+	public static void deleteTempFile()
+	{
+		File sdCard = Environment.getExternalStorageDirectory();
+		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
+		File file = new File(dir, TEMP_TAG);
+		
+		file.delete();
 	}
 }
