@@ -53,7 +53,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private LinearLayout Loading;
 	private TextView LoadingText;
 	private long lastUpdateCheckTime;
-	private int updateCheckInterval = 0;//6 * 60 * 60 * 1000; // Comment out to 0 if you want to test it.
+	private int updateCheckInterval = 0;// 6 * 60 * 60 * 1000; // Comment out to 0 if you want to test it.
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -264,6 +264,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG);
 					dir.mkdirs();
 					File file = new File(dir, Data.FEED_TAG);
+					boolean fileExists = file.exists();
 					
 					/** Fetch Website Data **/
 					showP = new showProgress("Checking for new content...", true, true);
@@ -271,12 +272,12 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					
 					Data.downloadFeed();
 					boolean NewFeed = false;
-					if(file.exists())
+					if (fileExists)
 						NewFeed = Data.compareFeed();
 					else
 						Data.writeFeed();
 					
-					if(NewFeed) // New Stuff Found
+					if (NewFeed) // New Stuff Found
 					{
 						/** New Stuff Found **/
 						showP = new showProgress("Updating content...", true, false);
@@ -289,15 +290,28 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						showP = new showProgress("Caching content...", true, false);
 						mHandler.post(showP);
 						
-						//Data.cacheFeedImages(NewsFeed);
-					}
-					else // Nothing New
-					{
+						Data.cacheFeedImages(NewsFeed);
+						
 						showP = new showProgress("Everything is up to date!", false, true);
 						mHandler.post(showP);
-						
+					}
+					else
+					// Nothing New
+					{
 						NewsFeed = Data.retrieveFeed(true).clone();
 						Data.deleteTempFile();
+						
+						if (!fileExists)
+						{
+							/** Cache Images **/
+							showP = new showProgress("Caching content...", true, false);
+							mHandler.post(showP);
+							
+							Data.cacheFeedImages(NewsFeed);
+						}
+						
+						showP = new showProgress("Everything is up to date!", false, true);
+						mHandler.post(showP);
 					}
 					
 					showP = new showProgress("", false, false);

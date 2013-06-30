@@ -8,8 +8,8 @@ package com.manuelpeinado.fadingactionbar;
 
 public final class R {
 	public static final class drawable {
-		public static final int fab__gradient = 0x7f02000c;
-		public static final int fab__gradient_light = 0x7f02000d;
+		public static final int fab__gradient = 0x7f02000d;
+		public static final int fab__gradient_light = 0x7f02000e;
 	}
 	public static final class id {
 		public static final int fab__container = 0x7f0b000c;

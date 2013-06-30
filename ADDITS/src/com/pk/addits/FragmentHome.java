@@ -1,5 +1,6 @@
 package com.pk.addits;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -10,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -109,6 +111,7 @@ public class FragmentHome extends Fragment
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 			{
+				int ID = feedList.get(position).getID();
 				String Title = feedList.get(position).getTitle();
 				String Description = feedList.get(position).getDescription();
 				String Content = feedList.get(position).getContent();
@@ -122,7 +125,7 @@ public class FragmentHome extends Fragment
 				boolean Favorite = feedList.get(position).isFavorite();
 				boolean Read = feedList.get(position).isRead();
 				
-				Feed Article = new Feed(Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
+				Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
 				ActivityMain.callArticle(getActivity(), Article);
 				Toast.makeText(getActivity(), Title, Toast.LENGTH_SHORT).show();
 			}
@@ -163,7 +166,7 @@ public class FragmentHome extends Fragment
 			loading.setVisibility(View.GONE);
 			
 			for (int x = 0; x < NewsFeed.length; x++)
-				feedList.add(new Feed(NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
+				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
 			adapter.notifyDataSetChanged();
 			
@@ -436,8 +439,13 @@ public class FragmentHome extends Fragment
 			holder.txtCategory.setText(entry.getCategory());
 			
 			holder.imgPreview.setScaleType(ScaleType.CENTER_INSIDE);
-			if(entry.getImage().length() > 0)
-				Picasso.with(context).load(entry.getImage()).error(R.drawable.no_image_banner).fit().into(holder.imgPreview);
+			if (entry.getImage().length() > 0)
+			{
+				String format = entry.getImage().substring(entry.getImage().length() - 4);
+				File sdCard = Environment.getExternalStorageDirectory();
+				File file = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG + "/files/FeedIMG-" + entry.getID() + format);
+				Picasso.with(context).load(file).error(R.drawable.no_image_banner).fit().into(holder.imgPreview);
+			}
 			else
 				Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
 			

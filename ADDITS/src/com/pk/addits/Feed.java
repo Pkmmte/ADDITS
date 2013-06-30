@@ -2,6 +2,7 @@ package com.pk.addits;
 
 public class Feed
 {
+	int ID;
 	String Title;
 	String Description;
 	String Content;
@@ -15,8 +16,9 @@ public class Feed
 	boolean Favorite;
 	boolean Read;
 	
-	public Feed(String Title, String Description, String Content, String CommentFeed, String Author, String Date, String Category, String Image, String URL, int Comments, boolean Favorite, boolean Read)
+	public Feed(int ID, String Title, String Description, String Content, String CommentFeed, String Author, String Date, String Category, String Image, String URL, int Comments, boolean Favorite, boolean Read)
 	{
+		this.ID = ID;
 		this.Title = Title;
 		this.Description = Description;
 		this.Content = Content;
@@ -29,6 +31,11 @@ public class Feed
 		this.Comments = Comments;
 		this.Favorite = Favorite;
 		this.Read = Read;
+	}
+	
+	public int getID()
+	{
+		return ID;
 	}
 	
 	public String getTitle()
