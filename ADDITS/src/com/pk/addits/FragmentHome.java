@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -54,7 +53,6 @@ public class FragmentHome extends Fragment
 	
 	static Fragment fragSlide;
 	static FragmentManager fm;
-	static FragmentTransaction transaction;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -173,15 +171,14 @@ public class FragmentHome extends Fragment
 		}
 	}
 	
-	@SuppressLint("Recycle")
 	public static void populateSlide()
 	{
 		fragSlide = FragmentHomeSlider.newInstance(Slides, currentSlide);
 		
-		transaction = fm.beginTransaction();
-		transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
-		transaction.replace(R.id.slideContent, fragSlide);
-		transaction.commit();
+		FragmentTransaction trans = fm.beginTransaction();
+		trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
+		trans.replace(R.id.slideContent, fragSlide);
+		trans.commit();
 	}
 	
 	public static void previousSlide()

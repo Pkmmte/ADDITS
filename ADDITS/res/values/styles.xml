@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Widget.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-    </style>
-	
-    <style name="Widget.Light.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid">
-    </style>
+    <style name="Widget.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid.Inverse"></style>
+
+    <style name="Widget.Light.ActionBar" parent="android:style/Widget.Holo.Light.ActionBar.Solid"></style>
 
     <style name="Widget.ActionBar.Transparent">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+    
+    <style name="CustomProgressBarHorizontal" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@android:drawable/progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal_holo</item>
+        <item name="android:minHeight">10dip</item>
+        <item name="android:maxHeight">20dip</item>
     </style>
 
     <style name="Widget.Light.ActionBar.Transparent">
         <item name="android:background">@android:color/transparent</item>
     </style>
-    
+
 </resources>

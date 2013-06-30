@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_bg"
+    android:background="@drawable/app_bg_pattern"
     android:orientation="vertical"
     tools:ignore="UselessParent" >
 
@@ -93,7 +93,7 @@
                         android:layout_marginRight="10dp"
    						android:maxLines="2"
    						android:textSize="19sp"
-                        android:text="@string/dummy_title" />
+                        android:text="@string/placeholder" />
 
                     <TextView
                         android:id="@+id/txtDescription"
@@ -104,7 +104,7 @@
    						android:maxLines="3"
    						android:textSize="13sp"
                         android:fontFamily="sans-serif-light"
-                        android:text="@string/dummy_desc" />
+                        android:text="@string/placeholder" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"

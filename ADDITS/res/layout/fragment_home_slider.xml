@@ -9,8 +9,7 @@
         android:id="@+id/Image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/placeholder"
-        android:src="@drawable/slider_loading" />
+        android:contentDescription="@string/placeholder" />
 
     <LinearLayout
         android:id="@+id/Content"

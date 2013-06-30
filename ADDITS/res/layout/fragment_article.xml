@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_bg"
+    android:background="@drawable/app_bg_pattern"
     android:orientation="vertical"
     tools:ignore="UselessParent" >
 
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:fontFamily="sans-serif-thin"
-                android:text="@string/dummy_title"
+                android:text="@string/placeholder"
                 android:textSize="19sp" />
 
             <RelativeLayout
@@ -90,7 +90,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:fontFamily="sans-serif-thin"
-        android:text="@string/dummy_desc"
+        android:text="@string/placeholder"
         android:textSize="15sp" />
 	</LinearLayout>
     <LinearLayout

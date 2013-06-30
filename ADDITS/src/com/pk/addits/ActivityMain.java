@@ -16,9 +16,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
@@ -40,6 +44,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private String[] mListNames;
 	private int[] mListImages;
 	
+	// Loading purposes
+	LinearLayout Loading;
+	TextView LoadingText;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -52,6 +60,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		Loading = (LinearLayout) findViewById(R.id.loading);
+		LoadingText = (TextView) findViewById(R.id.loadingText);
 		
 		mTitle = mDrawerTitle = getTitle();
 		mListNames = getResources().getStringArray(R.array.drawer_items);
@@ -162,7 +172,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		// update the main content by replacing fragments
 		Fragment fragment = null;
 		
-		switch(position)
+		switch (position)
 		{
 			case 0:
 				fragment = new FragmentHome();
@@ -218,41 +228,27 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				try
 				{
 					/** Fetch Server Data **/
-					showP = new showProgress("Checking for updates...");
+					showP = new showProgress("Checking for updates...", true, true);
 					mHandler.post(showP);
 					
 					Data.downloadFeed();
-
+					
 					/** Feed Downloaded **/
-					showP = new showProgress("Updated!");
+					showP = new showProgress("Updated!", true, false);
 					mHandler.post(showP);
 					
 					NewsFeed = Data.retrieveFeed().clone();
-
+					
 					/** Feed Downloaded **/
-					showP = new showProgress("Retrieved!!!!!!\n" + 
-					"Count: " + NewsFeed.length);
+					showP = new showProgress("Retrieved!", true, false);
 					mHandler.post(showP);
 					
-					//for(int x = 0; x < NewsFeed.length; x++)
-					//{
-					//	showP = new showProgress("NewsFeed[" + x + "]\n" + 
-					//			"Title: " + NewsFeed[x].getTitle() + "\n" +
-					//			"Category: " + NewsFeed[x].getCategory() + "\n" +
-					//			"Comment Feed: " + NewsFeed[x].getCommentFeed() + "\n" +
-					//			"Comments: " + NewsFeed[x].getComments() + "\n" +
-					//			"Author: " + NewsFeed[x].getAuthor() + "\n" +
-					//			"Image: " + NewsFeed[x].getImage() + "\n" + 
-					//			"Date: " + NewsFeed[x].getDate() + "\n" +
-					//			"Description: " + NewsFeed[x].getDescription());
-					//	mHandler.post(showP);
-					//}
-					
-					//if(currentFragment.equals("Home"))
-					showP = new showProgress("Finish");
+					// if(currentFragment.equals("Home"))
+					showP = new showProgress("Retrieved!", false, true);
 					mHandler.post(showP);
 					
-					// Remove these during production
+					showP = new showProgress("", false, false);
+					mHandler.post(showP);
 				}
 				catch (Exception e)
 				{
@@ -274,19 +270,44 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	public class showProgress implements Runnable
 	{
+		boolean Active;
+		boolean Animate;
 		String Progress;
 		
-		public showProgress(String p)
+		public showProgress(String p, boolean a, boolean aa)
 		{
+			this.Active = a;
+			this.Animate = aa;
 			this.Progress = p;
 		}
 		
 		@Override
 		public void run()
 		{
-			Toast.makeText(ActivityMain.this, Progress, Toast.LENGTH_SHORT).show();
-			
-			if(Progress.equals("Finish"))
+			if (Progress.length() > 0)
+			{
+				LoadingText.setText(Progress);
+				
+				if (Active)
+				{
+					Loading.setVisibility(View.VISIBLE);
+					if (Animate)
+					{
+						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.slide_up);
+						Loading.startAnimation(a);
+					}
+				}
+				else
+				{
+					Loading.setVisibility(View.GONE);
+					if (Animate)
+					{
+						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.slide_down);
+						Loading.startAnimation(a);
+					}
+				}
+			}
+			else
 				FragmentHome.updateState();
 		}
 	}
