@@ -112,7 +112,6 @@ public class FragmentArticle extends Fragment
 		txtAuthor.setText("Published by " + Article.getAuthor());
 		txtDate.setText(Article.getDate());
 		txtContent.setText(Article.getContent());
-		//Ion.with(imgHeader).error(R.drawable.no_image_banner).load(Article.getImage());
 		
 		if (Article.getComments() > 0)
 		{
@@ -163,6 +162,7 @@ public class FragmentArticle extends Fragment
 		
 		MenuItem shareItem = menu.findItem(R.id.Share_Label);
 		mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
+		configureShare();
 	}
 	
 	public void retrieveArguments()

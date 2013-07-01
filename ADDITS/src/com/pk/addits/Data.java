@@ -7,7 +7,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -278,7 +281,7 @@ public class Data
 					else if (itemActive && elemName.equals("pubDate"))
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
-							Date = xrp.getText();
+							Date = parseDate(xrp.getText());
 					}
 					else if (itemActive && elemName.equals("dc:creator"))
 					{
@@ -425,7 +428,7 @@ public class Data
 					else if (itemActive && elemName.equals("pubDate"))
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
-							Date = xrp.getText();
+							Date = parseDate(xrp.getText());
 					}
 				}
 				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
@@ -500,5 +503,44 @@ public class Data
 		File file = new File(dir, TEMP_TAG);
 		
 		file.delete();
+	}
+	
+	public static String parseDate(String mDate)
+	{
+		String date = "";
+		SimpleDateFormat tFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+		Date date1 = new Date();
+		Date date2 = new Date();
+		try
+		{
+			date2 = tFormat.parse(mDate);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		
+		long difference = date1.getTime() - date2.getTime();
+		int seconds = (int) (difference / 100);
+		int minutes = seconds / 60;
+		int hours = minutes / 60;
+		int days = hours / 24;
+		int weeks = days / 7;
+		int months = weeks / 4;
+		
+		if(seconds <= 60)
+			date = seconds + " seconds ago";
+		else if(minutes <= 60)
+			date = minutes + " minutes ago";
+		else if(hours <= 24) 
+			date = hours + " hours ago";
+		else if(days <= 7)
+			date = days + " days ago";
+		else if(weeks <= 4)
+			date = weeks + " weeks ago";
+		else
+			date = months + " months ago";
+		
+		return date;
 	}
 }

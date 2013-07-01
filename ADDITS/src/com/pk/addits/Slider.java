@@ -1,8 +1,6 @@
 package com.pk.addits;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pk.addits.FragmentHome.SlideItem;
@@ -30,8 +27,6 @@ public class Slider extends Fragment
 	TextView txtText;
 	TextView txtSubText;
 	LinearLayout Content;
-	RelativeLayout btnPrevious;
-	RelativeLayout btnNext;
 	
 	View s1;
 	View s2;
@@ -63,8 +58,6 @@ public class Slider extends Fragment
 		txtText = (TextView) view.findViewById(R.id.txtText);
 		txtSubText = (TextView) view.findViewById(R.id.txtSubText);
 		Content = (LinearLayout) view.findViewById(R.id.Content);
-		btnPrevious = (RelativeLayout) view.findViewById(R.id.btnPrevious);
-		btnNext = (RelativeLayout) view.findViewById(R.id.btnNext);
 		s1 = view.findViewById(R.id.slide1);
 		s2 = view.findViewById(R.id.slide2);
 		s3 = view.findViewById(R.id.slide3);
@@ -83,32 +76,6 @@ public class Slider extends Fragment
 		
 		txtText.setText(Text);
 		txtSubText.setText(SubText);
-		btnPrevious.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				FragmentHome.previousSlide();
-			}
-		});
-		btnNext.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				FragmentHome.nextSlide();
-			}
-		});
-		Content.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse(URL));
-				getActivity().startActivity(i);
-			}
-		});
 		
 		setIndicator();
 		setImage();

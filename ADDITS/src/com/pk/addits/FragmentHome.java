@@ -20,13 +20,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.pk.addits.fadingactionbar.FadingActionBarHelperHome;
+import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
 
 public class FragmentHome extends Fragment
@@ -34,10 +34,9 @@ public class FragmentHome extends Fragment
 	static View view;
 	static ScrollGridView grid;
 	static LinearLayout loading;
-	static RelativeLayout frame;
-	static View shadow;
+	static FrameLayout frame;
 	static FeedAdapter adapter;
-	static FadingActionBarHelperHome mFadingHelper;
+	static FadingActionBarHelperHome2 mFadingHelper;
 	
 	static List<Feed> feedList;
 	static Feed[] NewsFeed;
@@ -59,10 +58,7 @@ public class FragmentHome extends Fragment
 		feedList = new ArrayList<Feed>();
 		grid = (ScrollGridView) view.findViewById(R.id.GridView);
 		loading = (LinearLayout) view.findViewById(R.id.loadingNews);
-		frame = (RelativeLayout) view.findViewById(R.id.slider);
-		shadow = view.findViewById(R.id.sliderShadow);
-		frame.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.4)));
-		shadow.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.125)));
+		//frame = (RelativeLayout) view.findViewById(R.id.slider);
 		currentSlide = 1;
 		adapter = new FeedAdapter(getActivity(), feedList);
 		grid.setAdapter(adapter);
@@ -140,7 +136,12 @@ public class FragmentHome extends Fragment
 	{
 		super.onAttach(activity);
 		
-		mFadingHelper = new FadingActionBarHelperHome().actionBarBackground(R.drawable.ab_background).withContext(getActivity()).contentLayout(R.layout.fragment_home);
+		frame = new FrameLayout(activity);
+		FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(activity, 0.4));
+		frame.setLayoutParams(layoutParams);
+		frame.setId(R.id.slider_content);
+		frame.setClickable(true);
+		mFadingHelper = new FadingActionBarHelperHome2().actionBarBackground(R.drawable.ab_background).headerView(frame).contentLayout(R.layout.fragment_home);
 		mFadingHelper.initActionBar(activity);
 	}
 	
@@ -175,7 +176,7 @@ public class FragmentHome extends Fragment
 		
 		FragmentTransaction trans = fm.beginTransaction();
 		trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
-		trans.replace(R.id.slideContent, fragSlide);
+		trans.replace(R.id.slider_content, fragSlide);
 		trans.commit();
 	}
 	

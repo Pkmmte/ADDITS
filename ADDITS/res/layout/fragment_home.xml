@@ -4,22 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/slider"
-        android:layout_width="match_parent"
-        android:layout_height="200.0dip" >
-
-        <FrameLayout
-            android:id="@+id/slideContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <View
-            android:id="@+id/sliderShadow"
-            android:layout_width="match_parent"
-            android:layout_height="50.0dip"
-            android:background="@drawable/shadow_vertical_270" />
-    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/loadingNews"
