@@ -1,17 +1,18 @@
 package com.pk.addits;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -154,7 +155,7 @@ public class FragmentHome extends Fragment
 	{
 		NewsFeed = ActivityMain.getFeed();
 		
-		if(NewsFeed == null)
+		if (NewsFeed == null)
 		{
 			grid.setVisibility(View.GONE);
 			loading.setVisibility(View.VISIBLE);
@@ -326,55 +327,104 @@ public class FragmentHome extends Fragment
 			ImageURL = args.getString("ImageURL");
 			URL = args.getString("URL");
 		}
-		
+
+		@SuppressWarnings("deprecation")
+		@TargetApi(16)
 		public void setIndicator()
 		{
-			switch (Slide)
+			if (Build.VERSION.SDK_INT >= 16)
 			{
-				case 1:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					break;
-				case 2:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					break;
-				case 3:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					break;
-				case 4:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					break;
-				case 5:
-					s1.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s2.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s3.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s4.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light_transparent));
-					s5.setBackgroundColor(getActivity().getResources().getColor(R.color.holo_blue_light));
-					break;
-				default:
-					break;
+				switch (Slide)
+				{
+					case 1:
+						s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						break;
+					case 2:
+						s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						break;
+					case 3:
+						s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						break;
+					case 4:
+						s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						break;
+					case 5:
+						s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						break;
+					default:
+						break;
+				}
+			}
+			else
+			{
+				switch (Slide)
+				{
+					case 1:
+						s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						break;
+					case 2:
+						s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						break;
+					case 3:
+						s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						break;
+					case 4:
+						s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						break;
+					case 5:
+						s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
+						s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
+						break;
+					default:
+						break;
+				}
 			}
 		}
 		
 		public void setImage()
 		{
+			
 			imgImage.setScaleType(ScaleType.FIT_XY);
-			if(ImageURL.length() > 0)
+			if (ImageURL.length() > 0)
 				Picasso.with(getActivity()).load(ImageURL).error(R.drawable.no_image_banner).fit().into(imgImage);
 			else
 				Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgImage);
@@ -440,12 +490,7 @@ public class FragmentHome extends Fragment
 			
 			holder.imgPreview.setScaleType(ScaleType.CENTER_INSIDE);
 			if (entry.getImage().length() > 0)
-			{
-				String format = entry.getImage().substring(entry.getImage().length() - 4);
-				File sdCard = Environment.getExternalStorageDirectory();
-				File file = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG + "/files/FeedIMG-" + entry.getID() + format);
-				Picasso.with(context).load(file).error(R.drawable.no_image_banner).fit().into(holder.imgPreview);
-			}
+				Picasso.with(context).load(entry.getImage()).error(R.drawable.no_image_banner).fit().into(holder.imgPreview);
 			else
 				Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
 			
