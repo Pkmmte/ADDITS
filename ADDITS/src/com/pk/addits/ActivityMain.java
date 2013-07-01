@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -55,6 +54,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private long lastUpdateCheckTime;
 	private int updateCheckInterval = 0;// 6 * 60 * 60 * 1000; // Comment out to 0 if you want to test it.
 	
+	FragmentManager fragmentManager;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -65,8 +66,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setIcon(R.drawable.ic_ab_logo);
+		
 		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
+		fragmentManager = getSupportFragmentManager();
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -75,14 +78,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		mTitle = mDrawerTitle = getTitle();
 		mListNames = getResources().getStringArray(R.array.drawer_items);
-		TypedArray typedArray = getResources().obtainTypedArray(R.array.city_images);
-		mListImages = new int[typedArray.length()];
-		for (int i = 0; i < typedArray.length(); ++i)
-		{
-			mListImages[i] = typedArray.getResourceId(i, 0);
-		}
-		typedArray.recycle();
-		
 		initializeNavigationDrawer();
 		
 		if (savedInstanceState == null)
@@ -126,10 +121,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			{
 				Fragment fragment = new FragmentHome();
 				mTitle = "Home";
+				actionBar.setTitle(mTitle);
 				articleShowing = false;
-				
-				FragmentManager fragmentManager = getSupportFragmentManager();
-				fragmentManager.beginTransaction().setCustomAnimations(R.anim.out_to_right, R.anim.fade_into, R.anim.fade_away, R.anim.in_from_right).replace(R.id.content_frame, fragment).commit();
+				fragmentManager.beginTransaction().setCustomAnimations(R.anim.out_to_right, R.anim.fade_into).replace(R.id.content_frame, fragment).commit();
 				
 				return true;
 			}
@@ -196,10 +190,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				break;
 		}
 		
-		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-		
-		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(position, true);
 		setTitle(mListNames[position]);
 		currentFragment = mListNames[position];
@@ -221,7 +212,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		articleShowing = true;
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-		fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.fade_away, R.anim.fade_into, R.anim.out_to_right).replace(R.id.content_frame, fragment).commit();
+		fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.fade_away).replace(R.id.content_frame, fragment).commit();
 	}
 	
 	public static Feed[] getFeed()
@@ -264,7 +255,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG);
 					dir.mkdirs();
 					File file = new File(dir, Data.FEED_TAG);
-					boolean fileExists = file.exists();
 					
 					/** Fetch Website Data **/
 					showP = new showProgress("Checking for new content...", true, true);
@@ -272,7 +262,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					
 					Data.downloadFeed();
 					boolean NewFeed = false;
-					if (fileExists)
+					if (file.exists())
 						NewFeed = Data.compareFeed();
 					else
 						Data.writeFeed();
@@ -286,12 +276,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						NewsFeed = Data.retrieveFeed(true).clone();
 						Data.deleteTempFile();
 						
-						/** Cache Images **/
-						showP = new showProgress("Caching content...", true, false);
-						mHandler.post(showP);
-						
-						Data.cacheFeedImages(NewsFeed);
-						
 						showP = new showProgress("Everything is up to date!", false, true);
 						mHandler.post(showP);
 					}
@@ -300,15 +284,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					{
 						NewsFeed = Data.retrieveFeed(true).clone();
 						Data.deleteTempFile();
-						
-						if (!fileExists)
-						{
-							/** Cache Images **/
-							showP = new showProgress("Caching content...", true, false);
-							mHandler.post(showP);
-							
-							Data.cacheFeedImages(NewsFeed);
-						}
 						
 						showP = new showProgress("Everything is up to date!", false, true);
 						mHandler.post(showP);

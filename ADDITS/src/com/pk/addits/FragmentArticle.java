@@ -24,7 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
-import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
+import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.squareup.picasso.Picasso;
 
 public class FragmentArticle extends Fragment
@@ -103,15 +103,16 @@ public class FragmentArticle extends Fragment
 		mHandler = new Handler();
 		
 		actionBar.setTitle(Article.getTitle());
-		//if (Article.getImage().length() > 0)
-		//	Picasso.with(getActivity()).load(Article.getImage()).error(R.drawable.no_image_banner).fit().into(imgHeader);
-		//else
-		//	Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgHeader);
+		if (Article.getImage().length() > 0)
+			Picasso.with(getActivity()).load(Article.getImage()).error(R.drawable.no_image_banner).fit().into(imgHeader);
+		else
+			Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgHeader);
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Published by " + Article.getAuthor());
 		txtDate.setText(Article.getDate());
 		txtContent.setText(Article.getContent());
+		//Ion.with(imgHeader).error(R.drawable.no_image_banner).load(Article.getImage());
 		
 		if (Article.getComments() > 0)
 		{

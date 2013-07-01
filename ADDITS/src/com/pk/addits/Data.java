@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -344,36 +343,6 @@ public class Data
 		return Feeeeedz;
 	}
 	
-	public static void cacheFeedImages(Feed[] Feeeedz)
-	{
-		File sdCard = Environment.getExternalStorageDirectory();
-		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/files");
-		dir.mkdirs();
-		
-		for (int x = 0; x < Feeeedz.length; x++)
-		{
-			if (Feeeedz[x].getImage().length() > 0)
-			{
-				String format = Feeeedz[x].getImage().substring(Feeeedz[x].getImage().length() - 4);
-				File file = new File(dir, "FeedIMG-" + x + format);
-				
-				if (file.exists())
-					file.delete();
-				
-				try
-				{
-					InputStream is = new URL(Feeeedz[x].getImage()).openStream();
-					OutputStream os = new FileOutputStream(file);
-					CopyStream(is, os);
-				}
-				catch (Exception e)
-				{
-					Log.v("Cache Image Error: ", e.toString());
-				}
-			}
-		}
-	}
-	
 	public static void downloadCommentFeed(String feedURL)
 	{
 		File sdCard = Environment.getExternalStorageDirectory();
@@ -510,27 +479,6 @@ public class Data
 			link = link.replace("[", "").replace("]", "").replace("-150x150", "");
 		}
 		return link;
-	}
-	
-	public static void CopyStream(InputStream is, OutputStream os)
-	{
-		final int buffer_size = 1024;
-		
-		try
-		{
-			byte[] bytes = new byte[buffer_size];
-			for (;;)
-			{
-				int count = is.read(bytes, 0, buffer_size);
-				if (count == -1)
-					break;
-				os.write(bytes, 0, count);
-			}
-		}
-		catch (Exception ex)
-		{
-			Log.v("CopyStream ERROR: ", ex.toString());
-		}
 	}
 	
 	public static boolean isNetworkConnected(Context context)

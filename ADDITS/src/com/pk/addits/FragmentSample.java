@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.manuelpeinado.fadingactionbar.FadingActionBarHelper;
+import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 
 public class FragmentSample extends Fragment
 {
