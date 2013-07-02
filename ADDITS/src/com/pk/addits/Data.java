@@ -10,11 +10,8 @@ import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +30,11 @@ import android.os.Environment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Display;
+import android.widget.Toast;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.util.XmlDom;
 import com.pk.addits.FragmentArticle.CommentFeed;
 import com.pk.addits.FragmentHome.SlideItem;
 
@@ -529,8 +530,35 @@ public class Data
 			e.printStackTrace();
 		}
 		
-		final CharSequence ago = DateUtils.getRelativeDateTimeString(context, date.getTime(), System.currentTimeMillis(),DateUtils.SECOND_IN_MILLIS, 0);
+		final CharSequence ago = DateUtils.getRelativeDateTimeString(context, date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS, 0);
 		
 		return ago.toString();
+	}
+	
+	@SuppressLint("SimpleDateFormat")
+	public static boolean isNewerDate(String nDate, String oDate)
+	{
+		SimpleDateFormat tFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+		Date newDate = new Date();
+		Date oldDate = new Date();
+
+		try
+		{
+			newDate = tFormat.parse(nDate);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		try
+		{
+			oldDate = tFormat.parse(oDate);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return oldDate.before(newDate);
 	}
 }

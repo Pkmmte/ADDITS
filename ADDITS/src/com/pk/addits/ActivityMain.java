@@ -1,6 +1,11 @@
 package com.pk.addits;
 
 import java.io.File;
+import java.util.List;
+
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.util.XmlDom;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -27,6 +32,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
 {
@@ -79,6 +85,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		mTitle = mDrawerTitle = getTitle();
 		mListNames = getResources().getStringArray(R.array.drawer_items);
 		initializeNavigationDrawer();
+		getTESTFeed();
 		
 		if (savedInstanceState == null)
 		{
@@ -352,5 +359,26 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			else
 				FragmentHome.updateState();
 		}
+	}
+	
+	public void getTESTFeed()
+	{
+		AQuery aq = new AQuery(ActivityMain.this);
+		aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "saveFeed");
+	}
+	
+	public void saveFeed(String url, XmlDom xml, AjaxStatus status)
+	{
+		Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show();
+		List<XmlDom> entries = xml.tags("item");
+		Toast.makeText(ActivityMain.this, "Entry count = " + entries.size(), Toast.LENGTH_SHORT).show();
+		
+		for (XmlDom item : entries)
+		{
+			String title = item.text("title");
+			String date = item.text("pubDate");
+			Toast.makeText(ActivityMain.this, title + "\n" + date + "\n" + Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"), Toast.LENGTH_SHORT).show();
+		}
+		
 	}
 }
