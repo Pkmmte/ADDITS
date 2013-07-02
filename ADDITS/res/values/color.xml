@@ -15,6 +15,7 @@
     <color name="holo_red_dark">#ffcc0000</color>
     <color name="holo_purple">#ffaa66cc</color>
     <color name="holo_purple_light">#ffbb88dd</color>
+    <color name="holo_purple_light_transparent2">#88bb88dd</color>
     <color name="holo_purple_dark">#ff8855aa</color>
     <color name="holo_orange_light">#ffffbb33</color>
     <color name="holo_orange_dark">#ffff8800</color>

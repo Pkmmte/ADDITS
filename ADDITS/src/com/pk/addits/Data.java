@@ -10,8 +10,11 @@ import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,12 +23,14 @@ import org.apache.http.util.ByteArrayBuffer;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Display;
 
@@ -127,10 +132,10 @@ public class Data
 		tempFile.renameTo(file);
 	}
 	
-	public static boolean compareFeed()
+	public static boolean compareFeed(Context context)
 	{
-		Feed[] tempFeed = retrieveFeed(false).clone();
-		Feed[] realFeed = retrieveFeed(true).clone();
+		Feed[] tempFeed = retrieveFeed(context, false).clone();
+		Feed[] realFeed = retrieveFeed(context, true).clone();
 		
 		if (tempFeed.length != realFeed.length)
 			return true;
@@ -180,7 +185,7 @@ public class Data
 		return false;
 	}
 	
-	public static Feed[] retrieveFeed(boolean realFeed)
+	public static Feed[] retrieveFeed(Context context, boolean realFeed)
 	{
 		int count = 0;
 		
@@ -252,6 +257,7 @@ public class Data
 			
 			// Flags
 			boolean itemActive = false;
+			boolean categoryFound = false;
 			int feedCount = 0;
 			
 			while (eventType != XmlPullParser.END_DOCUMENT)
@@ -273,15 +279,18 @@ public class Data
 						if (xrp.next() == XmlPullParser.TEXT)
 							URL = xrp.getText();
 					}
-					else if (itemActive && elemName.equals("category"))
+					else if (itemActive && elemName.equals("category") && !categoryFound)
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
+						{
 							Category = xrp.getText();
+							categoryFound = true;
+						}
 					}
 					else if (itemActive && elemName.equals("pubDate"))
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
-							Date = parseDate(xrp.getText());
+							Date = parseDate(context, xrp.getText());
 					}
 					else if (itemActive && elemName.equals("dc:creator"))
 					{
@@ -329,6 +338,7 @@ public class Data
 				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
 				{
 					itemActive = false;
+					categoryFound = false;
 					
 					Feeeeedz[feedCount] = new Feed(feedCount, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
 					feedCount++;
@@ -381,7 +391,7 @@ public class Data
 		}
 	}
 	
-	public static List<CommentFeed> retrieveCommentFeed()
+	public static List<CommentFeed> retrieveCommentFeed(Context context)
 	{
 		List<CommentFeed> comments = new ArrayList<CommentFeed>();
 		
@@ -428,7 +438,7 @@ public class Data
 					else if (itemActive && elemName.equals("pubDate"))
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
-							Date = parseDate(xrp.getText());
+							Date = parseDate(context, xrp.getText());
 					}
 				}
 				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
@@ -505,42 +515,22 @@ public class Data
 		file.delete();
 	}
 	
-	public static String parseDate(String mDate)
+	@SuppressLint("SimpleDateFormat")
+	public static String parseDate(Context context, String mDate)
 	{
-		String date = "";
 		SimpleDateFormat tFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
-		Date date1 = new Date();
-		Date date2 = new Date();
+		Date date = new Date();
 		try
 		{
-			date2 = tFormat.parse(mDate);
+			date = tFormat.parse(mDate);
 		}
 		catch (ParseException e)
 		{
 			e.printStackTrace();
 		}
 		
-		long difference = date1.getTime() - date2.getTime();
-		int seconds = (int) (difference / 100);
-		int minutes = seconds / 60;
-		int hours = minutes / 60;
-		int days = hours / 24;
-		int weeks = days / 7;
-		int months = weeks / 4;
+		final CharSequence ago = DateUtils.getRelativeDateTimeString(context, date.getTime(), System.currentTimeMillis(),DateUtils.SECOND_IN_MILLIS, 0);
 		
-		if(seconds <= 60)
-			date = seconds + " seconds ago";
-		else if(minutes <= 60)
-			date = minutes + " minutes ago";
-		else if(hours <= 24) 
-			date = hours + " hours ago";
-		else if(days <= 7)
-			date = days + " days ago";
-		else if(weeks <= 4)
-			date = weeks + " weeks ago";
-		else
-			date = months + " months ago";
-		
-		return date;
+		return ago.toString();
 	}
 }

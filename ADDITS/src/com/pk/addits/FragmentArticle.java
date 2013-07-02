@@ -109,8 +109,8 @@ public class FragmentArticle extends Fragment
 			Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgHeader);
 		
 		txtTitle.setText(Article.getTitle());
-		txtAuthor.setText("Published by " + Article.getAuthor());
-		txtDate.setText(Article.getDate());
+		txtAuthor.setText("Posted by " + Article.getAuthor());
+		txtDate.setText(Data.parseDate(getActivity(), Article.getDate()));
 		txtContent.setText(Article.getContent());
 		
 		if (Article.getComments() > 0)
@@ -205,7 +205,7 @@ public class FragmentArticle extends Fragment
 				try
 				{
 					Data.downloadCommentFeed(Article.getCommentFeed());
-					commentList = Data.retrieveCommentFeed();
+					commentList = Data.retrieveCommentFeed(getActivity());
 					mHandler.post(loadComments);
 				}
 				catch (Exception e)
@@ -289,7 +289,7 @@ public class FragmentArticle extends Fragment
 			
 			holder.txtCreator.setText(entry.getCreator());
 			holder.txtContent.setText(entry.getContent());
-			holder.txtDate.setText("Posted by " + entry.getDate());
+			holder.txtDate.setText(Data.parseDate(context, entry.getDate()));
 			
 			return view;
 		}

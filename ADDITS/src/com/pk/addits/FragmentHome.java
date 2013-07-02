@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -35,6 +36,7 @@ public class FragmentHome extends Fragment
 	static ScrollGridView grid;
 	static LinearLayout loading;
 	static FrameLayout frame;
+	static Button moar;
 	static FeedAdapter adapter;
 	static FadingActionBarHelperHome2 mFadingHelper;
 	
@@ -49,6 +51,7 @@ public class FragmentHome extends Fragment
 	
 	static Fragment fragSlide;
 	static FragmentManager fm;
+	static int numLoaded;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -58,11 +61,13 @@ public class FragmentHome extends Fragment
 		feedList = new ArrayList<Feed>();
 		grid = (ScrollGridView) view.findViewById(R.id.GridView);
 		loading = (LinearLayout) view.findViewById(R.id.loadingNews);
-		//frame = (RelativeLayout) view.findViewById(R.id.slider);
-		currentSlide = 1;
+		moar = (Button) view.findViewById(R.id.MoarArticles);
+		
 		adapter = new FeedAdapter(getActivity(), feedList);
 		grid.setAdapter(adapter);
 		grid.setExpanded(true);
+		currentSlide = 1;
+		numLoaded = 0;
 		
 		return view;
 	}
@@ -80,12 +85,15 @@ public class FragmentHome extends Fragment
 			@Override
 			public boolean handleMessage(Message msg)
 			{
-				if (currentSlide == 5)
-					currentSlide = 1;
-				else
-					currentSlide++;
-				
-				populateSlide();
+				if (mFadingHelper.mLastScrollPosition < 10)
+				{
+					if (currentSlide == 5)
+						currentSlide = 1;
+					else
+						currentSlide++;
+					
+					populateSlide();
+				}
 				
 				return false;
 			}
@@ -97,6 +105,7 @@ public class FragmentHome extends Fragment
 		timer.schedule(new firstTask(), 5000, 7000);
 		
 		updateState();
+		
 		grid.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
@@ -118,6 +127,19 @@ public class FragmentHome extends Fragment
 				
 				Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
 				ActivityMain.callArticle(getActivity(), Article);
+			}
+		});
+		moar.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				moar.setText("Loading Articles...");
+				
+				if(numLoaded + 10 < NewsFeed.length)
+					addArticles(10);
+				else
+					addArticles(NewsFeed.length - numLoaded);
 			}
 		});
 	}
@@ -152,6 +174,7 @@ public class FragmentHome extends Fragment
 		if (NewsFeed == null)
 		{
 			grid.setVisibility(View.GONE);
+			moar.setVisibility(View.GONE);
 			loading.setVisibility(View.VISIBLE);
 			feedList.clear();
 		}
@@ -160,14 +183,31 @@ public class FragmentHome extends Fragment
 			grid.setVisibility(View.VISIBLE);
 			loading.setVisibility(View.GONE);
 			
-			for (int x = 0; x < NewsFeed.length; x++)
-				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
-			
-			adapter.notifyDataSetChanged();
-			
+			if(numLoaded + 10 < NewsFeed.length)
+				addArticles(10);
+			else
+				addArticles(NewsFeed.length - numLoaded);
 			Slides = Data.generateSlides(NewsFeed);
 			populateSlide();
 		}
+	}
+	
+	public static void addArticles(int number)
+	{
+		for (int x = 0; x < number; x++)
+		{
+			feedList.add(new Feed(NewsFeed[numLoaded].getID(), NewsFeed[numLoaded].getTitle(), NewsFeed[numLoaded].getDescription(), NewsFeed[numLoaded].getContent(), NewsFeed[numLoaded].getCommentFeed(), NewsFeed[numLoaded].getAuthor(), NewsFeed[numLoaded].getDate(), NewsFeed[numLoaded].getCategory(), NewsFeed[numLoaded].getImage(), NewsFeed[numLoaded].getURL(), NewsFeed[numLoaded].getComments(), NewsFeed[numLoaded].isFavorite(), NewsFeed[numLoaded].isRead()));
+			numLoaded++;
+		}
+		
+		if(numLoaded < NewsFeed.length)
+		{
+			moar.setText("Load More Articles");
+			moar.setVisibility(View.VISIBLE);
+		}
+		else
+			moar.setVisibility(View.GONE);
+		adapter.notifyDataSetChanged();
 	}
 	
 	public static void populateSlide()

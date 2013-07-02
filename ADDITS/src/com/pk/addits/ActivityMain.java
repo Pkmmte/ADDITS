@@ -263,7 +263,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					Data.downloadFeed();
 					boolean NewFeed = false;
 					if (file.exists())
-						NewFeed = Data.compareFeed();
+						NewFeed = Data.compareFeed(ActivityMain.this);
 					else
 						Data.writeFeed();
 					
@@ -273,7 +273,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						showP = new showProgress("Updating content...", true, false);
 						mHandler.post(showP);
 						
-						NewsFeed = Data.retrieveFeed(true).clone();
+						NewsFeed = Data.retrieveFeed(ActivityMain.this, true).clone();
 						Data.deleteTempFile();
 						
 						showP = new showProgress("Everything is up to date!", false, true);
@@ -282,7 +282,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					else
 					// Nothing New
 					{
-						NewsFeed = Data.retrieveFeed(true).clone();
+						NewsFeed = Data.retrieveFeed(ActivityMain.this, true).clone();
 						Data.deleteTempFile();
 						
 						showP = new showProgress("Everything is up to date!", false, true);

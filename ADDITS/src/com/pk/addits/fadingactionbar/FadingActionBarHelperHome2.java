@@ -279,6 +279,7 @@ public class FadingActionBarHelperHome2
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
 		{
 			View topChild = view.getChildAt(0);
+			
 			if (topChild == null)
 			{
 				onNewScroll(0);
@@ -296,9 +297,10 @@ public class FadingActionBarHelperHome2
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState)
 		{
+			// Do Nothing...
 		}
 	};
-	private int mLastScrollPosition;
+	public int mLastScrollPosition;
 	
 	private void onNewScroll(int scrollPosition)
 	{
