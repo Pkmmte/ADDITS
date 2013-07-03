@@ -1,7 +1,5 @@
 package com.pk.addits;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,38 +10,30 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pk.addits.FragmentHome.SlideItem;
 import com.squareup.picasso.Picasso;
 
 public class Slider extends Fragment
 {
-	int Slide;
-	String Text;
-	String SubText;
-	String ImageURL;
-	String URL;
+	private String Title;
+	private String Author;
+	private String Date;
+	private String ImageURL;
 	
-	ImageView imgImage;
-	TextView txtText;
-	TextView txtSubText;
-	LinearLayout Content;
+	private ImageView imgImage;
+	private TextView txtTitle;
+	private TextView txtAuthor;
+	private TextView txtDate;
+	private LinearLayout Content;
 	
-	View s1;
-	View s2;
-	View s3;
-	View s4;
-	View s5;
-	
-	public static final Slider newInstance(SlideItem[] Slides, int slide)
+	public static final Slider newInstance(String Title, String Author, String Date, String ImageURL)
 	{
 		Slider f = new Slider();
-		Bundle bdl = new Bundle(5);
+		Bundle bdl = new Bundle(4);
 		
-		bdl.putInt("Slide", slide);
-		bdl.putString("Text", Slides[slide - 1].getText());
-		bdl.putString("SubText", Slides[slide - 1].getSubText());
-		bdl.putString("ImageURL", Slides[slide - 1].getImageURL());
-		bdl.putString("URL", Slides[slide - 1].getURL());
+		bdl.putString("Title", Title);
+		bdl.putString("Author", Author);
+		bdl.putString("Date", Date);
+		bdl.putString("ImageURL", ImageURL);
 		
 		f.setArguments(bdl);
 		return f;
@@ -55,14 +45,10 @@ public class Slider extends Fragment
 		View view = inflater.inflate(R.layout.fragment_home_slider, container, false);
 		
 		imgImage = (ImageView) view.findViewById(R.id.Image);
-		txtText = (TextView) view.findViewById(R.id.txtText);
-		txtSubText = (TextView) view.findViewById(R.id.txtSubText);
+		txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
+		txtDate = (TextView) view.findViewById(R.id.txtDate);
 		Content = (LinearLayout) view.findViewById(R.id.Content);
-		s1 = view.findViewById(R.id.slide1);
-		s2 = view.findViewById(R.id.slide2);
-		s3 = view.findViewById(R.id.slide3);
-		s4 = view.findViewById(R.id.slide4);
-		s5 = view.findViewById(R.id.slide5);
 		
 		return view;
 	}
@@ -74,121 +60,35 @@ public class Slider extends Fragment
 		
 		retrieveData();
 		
-		txtText.setText(Text);
-		txtSubText.setText(SubText);
+		txtTitle.setText(Title);
+		txtAuthor.setText(Author);
+		txtDate.setText(Date);
 		
-		setIndicator();
+		if(Title.length() < 1 && Author.length() < 1 && Date.length() < 1)
+			Content.setVisibility(View.GONE);
+		else
+			Content.setVisibility(View.VISIBLE);
+		
 		setImage();
 	}
 	
 	public void retrieveData()
 	{
 		Bundle args = getArguments();
-		Slide = args.getInt("Slide");
-		Text = args.getString("Text");
-		SubText = args.getString("SubText");
+		Title = args.getString("Title");
+		Author = args.getString("Author");
+		Date = args.getString("Date");
 		ImageURL = args.getString("ImageURL");
-		URL = args.getString("URL");
-	}
-
-	@SuppressWarnings("deprecation")
-	@TargetApi(16)
-	public void setIndicator()
-	{
-		if (Build.VERSION.SDK_INT >= 16)
-		{
-			switch (Slide)
-			{
-				case 1:
-					s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					break;
-				case 2:
-					s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					break;
-				case 3:
-					s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					break;
-				case 4:
-					s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					break;
-				case 5:
-					s1.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s2.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s3.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s4.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s5.setBackground(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					break;
-				default:
-					break;
-			}
-		}
-		else
-		{
-			switch (Slide)
-			{
-				case 1:
-					s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					break;
-				case 2:
-					s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					break;
-				case 3:
-					s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					break;
-				case 4:
-					s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					break;
-				case 5:
-					s1.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s2.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s3.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s4.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_off));
-					s5.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.indicator_on));
-					break;
-				default:
-					break;
-			}
-		}
 	}
 	
 	public void setImage()
 	{
-		imgImage.setScaleType(ScaleType.FIT_XY);
 		if (ImageURL.length() > 0)
 			Picasso.with(getActivity()).load(ImageURL).error(R.drawable.no_image_banner).fit().into(imgImage);
 		else
 			Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgImage);
+		
+		imgImage.setScaleType(ScaleType.FIT_XY);
+		imgImage.setAdjustViewBounds(false);
 	}
 }

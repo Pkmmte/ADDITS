@@ -8,8 +8,9 @@
         android:id="@+id/Image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/placeholder"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/no_image_banner" />
 
     <LinearLayout
@@ -22,67 +23,43 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/txtText"
+            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10.0dip"
             android:layout_marginRight="5.0dip"
             android:layout_marginTop="5.0dip"
-            android:maxLines="1"
-            android:text="@string/placeholder"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-        <TextView
-            android:id="@+id/txtSubText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5.0dip"
-            android:layout_marginLeft="10.0dip"
-            android:layout_marginRight="5.0dip"
             android:maxLines="2"
             android:text="@string/placeholder"
             android:textColor="@color/white"
-            android:textSize="13sp" />
-    </LinearLayout>
+            android:textSize="16sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:orientation="horizontal" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:layout_marginRight="5.0dip" >
 
-        <View
-            android:id="@+id/slide1"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:background="@drawable/indicator_on" />
+            <TextView
+                android:id="@+id/txtAuthor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="@string/placeholder"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
 
-        <View
-            android:id="@+id/slide2"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:background="@drawable/indicator_off" />
-
-        <View
-            android:id="@+id/slide3"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:background="@drawable/indicator_off" />
-
-        <View
-            android:id="@+id/slide4"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:background="@drawable/indicator_off" />
-
-        <View
-            android:id="@+id/slide5"
-            android:layout_width="8dp"
-            android:layout_height="8dp"
-            android:background="@drawable/indicator_off" />
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:text="@string/placeholder"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.pk.addits;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -43,7 +44,6 @@ public class FragmentHome extends Fragment
 	static List<Feed> feedList;
 	static Feed[] NewsFeed;
 	
-	static SlideItem[] Slides;
 	static int currentSlide;
 	static Timer timer;
 	Handler timeHandler;
@@ -86,21 +86,13 @@ public class FragmentHome extends Fragment
 			public boolean handleMessage(Message msg)
 			{
 				if (mFadingHelper.mLastScrollPosition < 10)
-				{
-					if (currentSlide == 5)
-						currentSlide = 1;
-					else
-						currentSlide++;
-					
 					populateSlide();
-				}
 				
 				return false;
 			}
 		});
 		
 		// Dummy Data
-		Slides = Data.generateSlides(NewsFeed);
 		populateSlide();
 		timer.schedule(new firstTask(), 5000, 7000);
 		
@@ -159,7 +151,7 @@ public class FragmentHome extends Fragment
 		super.onAttach(activity);
 		
 		frame = new FrameLayout(activity);
-		FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(activity, 0.4));
+		FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(activity, 0.35));
 		frame.setLayoutParams(layoutParams);
 		frame.setId(R.id.slider_content);
 		frame.setClickable(true);
@@ -187,7 +179,7 @@ public class FragmentHome extends Fragment
 				addArticles(10);
 			else
 				addArticles(NewsFeed.length - numLoaded);
-			Slides = Data.generateSlides(NewsFeed);
+			
 			populateSlide();
 		}
 	}
@@ -212,38 +204,26 @@ public class FragmentHome extends Fragment
 	
 	public static void populateSlide()
 	{
-		fragSlide = Slider.newInstance(Slides, currentSlide);
+		String sTitle = "";
+		String sAuthor = "";
+		String sDate = "";
+		String sImage = "";
+		
+		if(NewsFeed != null)
+		{
+			Random generator = new Random();
+			int r = generator.nextInt(NewsFeed.length);
+			sTitle = NewsFeed[r].getTitle();
+			sAuthor = NewsFeed[r].getAuthor();
+			sDate = NewsFeed[r].getDate();
+			sImage = NewsFeed[r].getImage();
+		}
+		fragSlide = Slider.newInstance(sTitle, sAuthor, sDate, sImage);
 		
 		FragmentTransaction trans = fm.beginTransaction();
 		trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
 		trans.replace(R.id.slider_content, fragSlide);
 		trans.commit();
-	}
-	
-	public static void previousSlide()
-	{
-		timer.cancel();
-		timer.purge();
-		
-		if (currentSlide == 1)
-			currentSlide = 5;
-		else
-			currentSlide--;
-		
-		populateSlide();
-	}
-	
-	public static void nextSlide()
-	{
-		timer.cancel();
-		timer.purge();
-		
-		if (currentSlide == 5)
-			currentSlide = 1;
-		else
-			currentSlide++;
-		
-		populateSlide();
 	}
 	
 	// Tells handler to send a message
@@ -331,41 +311,5 @@ public class FragmentHome extends Fragment
 		public TextView txtDate;
 		public TextView txtCategory;
 		public ImageView imgPreview;
-	}
-	
-	public static class SlideItem
-	{
-		String Text;
-		String SubText;
-		String ImageURL;
-		String URL;
-		
-		public SlideItem(String Text, String SubText, String ImageURL, String URL)
-		{
-			this.Text = Text;
-			this.SubText = SubText;
-			this.ImageURL = ImageURL;
-			this.URL = URL;
-		}
-		
-		public String getText()
-		{
-			return Text;
-		}
-		
-		public String getSubText()
-		{
-			return SubText;
-		}
-		
-		public String getImageURL()
-		{
-			return ImageURL;
-		}
-		
-		public String getURL()
-		{
-			return URL;
-		}
 	}
 }

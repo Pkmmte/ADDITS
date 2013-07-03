@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,13 +29,8 @@ import android.os.Environment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Display;
-import android.widget.Toast;
 
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxStatus;
-import com.androidquery.util.XmlDom;
 import com.pk.addits.FragmentArticle.CommentFeed;
-import com.pk.addits.FragmentHome.SlideItem;
 
 public class Data
 {
@@ -55,35 +49,6 @@ public class Data
 		display.getSize(size);
 		int height = (int) (size.y * percent);
 		return height;
-	}
-	
-	public static SlideItem[] generateSlides(Feed[] Feeeeedz)
-	{
-		SlideItem[] Slides = new SlideItem[5];
-		List<Integer> usedArticles = new ArrayList<Integer>();
-		
-		if (Feeeeedz == null)
-		{
-			for (int x = 0; x < Slides.length; x++)
-				Slides[x] = new SlideItem("", "", "", MAIN_URL);
-		}
-		else
-		{
-			int count = 0;
-			while (count < Slides.length)
-			{
-				Random generator = new Random();
-				int r = generator.nextInt(Slides.length);
-				if (!usedArticles.contains(r))
-				{
-					Slides[count] = new SlideItem(Feeeeedz[r].getTitle(), Feeeeedz[r].getDescription(), Feeeeedz[r].getImage(), Feeeeedz[r].getURL());
-					usedArticles.add(r);
-					count++;
-				}
-			}
-		}
-		
-		return Slides;
 	}
 	
 	public static void downloadFeed()
