@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -89,6 +90,16 @@ public class FragmentArticle extends Fragment
 		txtLoadComments = (TextView) view.findViewById(R.id.txtLoadComments);
 		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 		comments = (ListView) view.findViewById(R.id.ListView);
+
+		Typeface fontTitle = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
+		Typeface fontAuthor = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
+		Typeface fontDate = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
+		Typeface fontContent = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
+
+		txtTitle.setTypeface(fontTitle);
+		txtAuthor.setTypeface(fontAuthor);
+		txtDate.setTypeface(fontDate);
+		txtContent.setTypeface(fontContent);
 		
 		return view;
 	}
@@ -279,6 +290,14 @@ public class FragmentArticle extends Fragment
 				holder.txtCreator = (TextView) view.findViewById(R.id.txtCreator);
 				holder.txtContent = (TextView) view.findViewById(R.id.txtContent);
 				holder.txtDate = (TextView) view.findViewById(R.id.txtDate);
+
+				Typeface fontCreator = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Bold.ttf");
+				Typeface fontDate = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
+				Typeface fontContent = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
+
+				holder.txtCreator.setTypeface(fontCreator);
+				holder.txtDate.setTypeface(fontDate);
+				holder.txtContent.setTypeface(fontContent);
 				
 				view.setTag(holder);
 			}

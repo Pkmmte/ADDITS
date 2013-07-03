@@ -8,6 +8,7 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -292,6 +293,18 @@ public class FragmentHome extends Fragment
 			holder.txtAuthor.setText("Posted by " + entry.getAuthor());
 			holder.txtDate.setText(entry.getDate());
 			holder.txtCategory.setText(entry.getCategory());
+
+			Typeface fontTitle = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Bold.ttf");
+			Typeface fontDescription = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
+			Typeface fontAuthor = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
+			Typeface fontDate = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
+			Typeface fontCategory = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
+
+			holder.txtTitle.setTypeface(fontTitle);
+			holder.txtDescription.setTypeface(fontDescription);
+			holder.txtAuthor.setTypeface(fontAuthor);
+			holder.txtDate.setTypeface(fontDate);
+			holder.txtCategory.setTypeface(fontCategory);
 			
 			holder.imgPreview.setScaleType(ScaleType.CENTER_INSIDE);
 			if (entry.getImage().length() > 0)
@@ -311,5 +324,6 @@ public class FragmentHome extends Fragment
 		public TextView txtDate;
 		public TextView txtCategory;
 		public ImageView imgPreview;
+		
 	}
 }

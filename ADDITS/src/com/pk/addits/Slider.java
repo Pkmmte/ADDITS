@@ -1,5 +1,6 @@
 package com.pk.addits;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -49,6 +50,14 @@ public class Slider extends Fragment
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
 		Content = (LinearLayout) view.findViewById(R.id.Content);
+
+		Typeface fontTitle = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
+		Typeface fontAuthor = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
+		Typeface fontDate = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
+		
+		txtTitle.setTypeface(fontTitle);
+		txtAuthor.setTypeface(fontAuthor);
+		txtDate.setTypeface(fontDate);
 		
 		return view;
 	}
