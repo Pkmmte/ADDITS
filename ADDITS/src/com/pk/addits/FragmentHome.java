@@ -25,7 +25,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -55,6 +54,10 @@ public class FragmentHome extends Fragment
 	static int numLoaded;
 	static Integer currentSlideID;
 	
+	Typeface fontRegular;
+	Typeface fontBold;
+	Typeface fontLight;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -80,6 +83,9 @@ public class FragmentHome extends Fragment
 		super.onStart();
 		fm = getChildFragmentManager();
 		NewsFeed = ActivityMain.getFeed();
+		fontRegular = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
+		fontBold = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
+		fontLight = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
 		
 		timer = new Timer();
 		timeHandler = new Handler(new Callback()
@@ -87,16 +93,15 @@ public class FragmentHome extends Fragment
 			@Override
 			public boolean handleMessage(Message msg)
 			{
-				if (mFadingHelper.mLastScrollPosition < 10)
+				if (mFadingHelper.mLastScrollPosition < 10 && NewsFeed != null)
 					populateSlide();
 				
 				return false;
 			}
 		});
-		
-		// Dummy Data
-		populateSlide();
 		timer.schedule(new firstTask(), 5000, 7000);
+		
+		populateSlide();
 		
 		updateState();
 		
@@ -260,7 +265,6 @@ public class FragmentHome extends Fragment
 		}
 	}
 	
-	// Tells handler to send a message
 	class firstTask extends TimerTask
 	{
 		@Override
@@ -314,6 +318,12 @@ public class FragmentHome extends Fragment
 				holder.txtCategory = (TextView) view.findViewById(R.id.txtCategory);
 				holder.imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
 				
+				holder.txtTitle.setTypeface(fontBold);
+				holder.txtDescription.setTypeface(fontRegular);
+				holder.txtAuthor.setTypeface(fontLight);
+				holder.txtDate.setTypeface(fontLight);
+				holder.txtCategory.setTypeface(fontRegular);
+				
 				view.setTag(holder);
 			}
 			else
@@ -327,19 +337,6 @@ public class FragmentHome extends Fragment
 			holder.txtDate.setText(entry.getDate());
 			holder.txtCategory.setText(entry.getCategory());
 			
-			Typeface fontTitle = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Bold.ttf");
-			Typeface fontDescription = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
-			Typeface fontAuthor = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
-			Typeface fontDate = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
-			Typeface fontCategory = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
-			
-			holder.txtTitle.setTypeface(fontTitle);
-			holder.txtDescription.setTypeface(fontDescription);
-			holder.txtAuthor.setTypeface(fontAuthor);
-			holder.txtDate.setTypeface(fontDate);
-			holder.txtCategory.setTypeface(fontCategory);
-			
-			holder.imgPreview.setScaleType(ScaleType.CENTER_INSIDE);
 			if (entry.getImage().length() > 0)
 				Picasso.with(context).load(entry.getImage()).error(R.drawable.no_image_banner).fit().skipCache().into(holder.imgPreview);
 			else

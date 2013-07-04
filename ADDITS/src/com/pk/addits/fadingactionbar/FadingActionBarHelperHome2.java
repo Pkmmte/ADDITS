@@ -40,7 +40,6 @@ public class FadingActionBarHelperHome2
 	private LayoutInflater mInflater;
 	private boolean mLightActionBar;
 	private boolean mUseParallax = true;
-	private int mLastDampedScroll;
 	private int mLastHeaderHeight = -1;
 	private ViewGroup mContentContainer;
 	private ViewGroup mScrollView;
@@ -342,17 +341,16 @@ public class FadingActionBarHelperHome2
 	{
 		float damping = mUseParallax ? 0.5f : 1.0f;
 		int dampedScroll = (int) (scrollPosition * damping);
-		int offset = mLastDampedScroll - dampedScroll;
-		mHeaderContainer.offsetTopAndBottom(offset);
+		mHeaderContainer.setTop(-dampedScroll);
+	    mHeaderContainer.setBottom(-dampedScroll + mLastHeaderHeight);
 		
-		if (mListViewBackgroundView != null)
-		{
-			offset = mLastScrollPosition - scrollPosition;
-			mListViewBackgroundView.offsetTopAndBottom(offset);
-		}
-		
-		mLastScrollPosition = scrollPosition;
-		mLastDampedScroll = dampedScroll;
+	    if (mListViewBackgroundView != null)
+	    {
+	        int postion = mLastHeaderHeight - scrollPosition;
+	        int height = mListViewBackgroundView.getHeight();
+	        mListViewBackgroundView.setTop(postion);
+	        mListViewBackgroundView.setBottom(postion + height);
+	    }
 	}
 	
 	private void updateHeaderHeight(int headerHeight)

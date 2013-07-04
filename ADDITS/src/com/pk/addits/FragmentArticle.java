@@ -53,6 +53,10 @@ public class FragmentArticle extends Fragment
 	ProgressBar progressBar;
 	ListView comments;
 	
+	Typeface fontRegular;
+	Typeface fontBold;
+	Typeface fontLight;
+	
 	public static FragmentArticle newInstance(Feed article)
 	{
 		FragmentArticle f = new FragmentArticle();
@@ -92,25 +96,17 @@ public class FragmentArticle extends Fragment
 		txtLoadComments = (TextView) view.findViewById(R.id.txtLoadComments);
 		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 		comments = (ListView) view.findViewById(R.id.ListView);
+
+		fontRegular = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
+		fontBold = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
+		fontLight = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
 		
-		Typeface fontTitle = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
-		Typeface fontAuthor = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
-		Typeface fontDate = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
-		Typeface fontContent = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
-		
-		txtTitle.setTypeface(fontTitle);
-		txtAuthor.setTypeface(fontAuthor);
-		txtDate.setTypeface(fontDate);
-		txtContent.setTypeface(fontContent);
+		txtTitle.setTypeface(fontBold);
+		txtAuthor.setTypeface(fontLight);
+		txtDate.setTypeface(fontLight);
+		txtContent.setTypeface(fontRegular);
 		
 		return view;
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(true);
 	}
 	
 	@Override
@@ -309,13 +305,9 @@ public class FragmentArticle extends Fragment
 				holder.txtContent = (TextView) view.findViewById(R.id.txtContent);
 				holder.txtDate = (TextView) view.findViewById(R.id.txtDate);
 				
-				Typeface fontCreator = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Bold.ttf");
-				Typeface fontDate = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
-				Typeface fontContent = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
-				
-				holder.txtCreator.setTypeface(fontCreator);
-				holder.txtDate.setTypeface(fontDate);
-				holder.txtContent.setTypeface(fontContent);
+				holder.txtCreator.setTypeface(fontBold);
+				holder.txtDate.setTypeface(fontLight);
+				holder.txtContent.setTypeface(fontRegular);
 				
 				view.setTag(holder);
 			}

@@ -194,6 +194,21 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			case 0:
 				fragment = new FragmentHome();
 				break;
+			case 1:
+				fragment = new FragmentCustomization();
+				break;
+			case 2:
+				fragment = new FragmentDeveloperFocus();
+				break;
+			case 3:
+				fragment = new FragmentMerchandise();
+				break;
+			case 4:
+				fragment = new FragmentReviews();
+				break;
+			case 5:
+				fragment = new FragmentTutorials();
+				break;
 			default:
 				fragment = new FragmentSample();
 				Bundle args = new Bundle();
@@ -363,7 +378,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				}
 			}
 			else
-				FragmentHome.updateState();
+			{
+				if(currentFragment.equals("Home"))
+					FragmentHome.updateState();
+			}
 		}
 	}
 	/*
