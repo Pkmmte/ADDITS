@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -36,6 +37,8 @@ public class FragmentHome extends Fragment
 	static View view;
 	static ScrollGridView grid;
 	static LinearLayout loading;
+	static ImageView loadingAnimation;
+	static AnimationDrawable loadingAnim;
 	static FrameLayout frame;
 	static Button moar;
 	static FeedAdapter adapter;
@@ -66,6 +69,7 @@ public class FragmentHome extends Fragment
 		feedList = new ArrayList<Feed>();
 		grid = (ScrollGridView) view.findViewById(R.id.GridView);
 		loading = (LinearLayout) view.findViewById(R.id.loadingNews);
+		loadingAnimation = (ImageView) view.findViewById(R.id.loadingAnimation);
 		moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
@@ -73,6 +77,10 @@ public class FragmentHome extends Fragment
 		grid.setExpanded(true);
 		currentSlide = 1;
 		numLoaded = 0;
+
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.80));
+		loading.setLayoutParams(layoutParams);
+		loadingAnim = (AnimationDrawable) loadingAnimation.getBackground();
 		
 		return view;
 	}
@@ -174,13 +182,16 @@ public class FragmentHome extends Fragment
 		{
 			grid.setVisibility(View.GONE);
 			moar.setVisibility(View.GONE);
+			//frame.setVisibility(View.GONE);
 			loading.setVisibility(View.VISIBLE);
 			feedList.clear();
+			loadingAnim.start();
 		}
 		else
 		{
 			grid.setVisibility(View.VISIBLE);
 			loading.setVisibility(View.GONE);
+			//frame.setVisibility(View.VISIBLE);
 			
 			if (numLoaded + 10 < NewsFeed.length)
 				addArticles(10);
@@ -188,6 +199,7 @@ public class FragmentHome extends Fragment
 				addArticles(NewsFeed.length - numLoaded);
 			
 			populateSlide();
+			loadingAnim.stop();
 		}
 	}
 	
