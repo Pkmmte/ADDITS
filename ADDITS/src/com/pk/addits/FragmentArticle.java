@@ -101,6 +101,16 @@ public class FragmentArticle extends Fragment
 		txtDate.setTypeface(fontDate);
 		txtContent.setTypeface(fontContent);
 		
+		Typeface fontTitle = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
+		Typeface fontAuthor = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
+		Typeface fontDate = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
+		Typeface fontContent = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
+		
+		txtTitle.setTypeface(fontTitle);
+		txtAuthor.setTypeface(fontAuthor);
+		txtDate.setTypeface(fontDate);
+		txtContent.setTypeface(fontContent);
+		
 		return view;
 	}
 	
@@ -112,6 +122,7 @@ public class FragmentArticle extends Fragment
 		actionBar = getActivity().getActionBar();
 		retrieveArguments();
 		mHandler = new Handler();
+		configureShare();
 		
 		actionBar.setTitle(Article.getTitle());
 		if (Article.getImage().length() > 0)
@@ -173,7 +184,6 @@ public class FragmentArticle extends Fragment
 		
 		MenuItem shareItem = menu.findItem(R.id.Share_Label);
 		mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
-		configureShare();
 	}
 	
 	public void retrieveArguments()
@@ -295,6 +305,14 @@ public class FragmentArticle extends Fragment
 				Typeface fontDate = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
 				Typeface fontContent = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
 
+				holder.txtCreator.setTypeface(fontCreator);
+				holder.txtDate.setTypeface(fontDate);
+				holder.txtContent.setTypeface(fontContent);
+				
+				Typeface fontCreator = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Bold.ttf");
+				Typeface fontDate = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
+				Typeface fontContent = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
+				
 				holder.txtCreator.setTypeface(fontCreator);
 				holder.txtDate.setTypeface(fontDate);
 				holder.txtContent.setTypeface(fontContent);

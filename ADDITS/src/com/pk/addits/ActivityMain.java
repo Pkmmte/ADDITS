@@ -85,7 +85,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		mTitle = mDrawerTitle = getTitle();
 		mListNames = getResources().getStringArray(R.array.drawer_items);
 		initializeNavigationDrawer();
-		getTESTFeed();
+		//getTESTFeed();
 		
 		if (savedInstanceState == null)
 		{
@@ -360,14 +360,14 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				FragmentHome.updateState();
 		}
 	}
-	
+	/*
 	public void getTESTFeed()
 	{
 		AQuery aq = new AQuery(ActivityMain.this);
-		aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "saveFeed");
+		boolean be = aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "saveFeed");
 	}
 	
-	public void saveFeed(String url, XmlDom xml, AjaxStatus status)
+	public boolean saveFeed(String url, XmlDom xml, AjaxStatus status)
 	{
 		Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show();
 		List<XmlDom> entries = xml.tags("item");
@@ -377,8 +377,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		{
 			String title = item.text("title");
 			String date = item.text("pubDate");
+			if(Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"))
+				return true;
+			boolean = true;
 			Toast.makeText(ActivityMain.this, title + "\n" + date + "\n" + Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"), Toast.LENGTH_SHORT).show();
 		}
-		
-	}
+		return false;
+	}*/
 }

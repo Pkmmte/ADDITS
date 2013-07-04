@@ -59,6 +59,14 @@ public class Slider extends Fragment
 		txtAuthor.setTypeface(fontAuthor);
 		txtDate.setTypeface(fontDate);
 		
+		Typeface fontTitle = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
+		Typeface fontAuthor = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
+		Typeface fontDate = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
+		  
+		txtTitle.setTypeface(fontTitle);
+		txtAuthor.setTypeface(fontAuthor);
+		txtDate.setTypeface(fontDate);
+		
 		return view;
 	}
 	

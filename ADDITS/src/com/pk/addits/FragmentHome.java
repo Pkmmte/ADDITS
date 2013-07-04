@@ -306,6 +306,18 @@ public class FragmentHome extends Fragment
 			holder.txtDate.setTypeface(fontDate);
 			holder.txtCategory.setTypeface(fontCategory);
 			
+			Typeface fontTitle = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Bold.ttf");
+			Typeface fontDescription = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
+			Typeface fontAuthor = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
+			Typeface fontDate = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
+			Typeface fontCategory = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
+			
+			holder.txtTitle.setTypeface(fontTitle);
+			holder.txtDescription.setTypeface(fontDescription);
+			holder.txtAuthor.setTypeface(fontAuthor);
+			holder.txtDate.setTypeface(fontDate);
+			holder.txtCategory.setTypeface(fontCategory);
+			
 			holder.imgPreview.setScaleType(ScaleType.CENTER_INSIDE);
 			if (entry.getImage().length() > 0)
 				Picasso.with(context).load(entry.getImage()).error(R.drawable.no_image_banner).fit().skipCache().into(holder.imgPreview);
