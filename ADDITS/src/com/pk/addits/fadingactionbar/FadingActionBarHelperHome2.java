@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -22,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
+import com.pk.addits.FragmentHome;
 import com.pk.addits.R;
 
 public class FadingActionBarHelperHome2
@@ -135,6 +137,8 @@ public class FadingActionBarHelperHome2
 		int heightMeasureSpec = MeasureSpec.makeMeasureSpec(LayoutParams.WRAP_CONTENT, MeasureSpec.EXACTLY);
 		mHeaderView.measure(widthMeasureSpec, heightMeasureSpec);
 		updateHeaderHeight(mHeaderView.getMeasuredHeight());
+		mHeaderView.setClickable(true);
+		mHeaderView.setOnClickListener(mOnHeaderClickListener);
 		
 		root.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
 		{
@@ -237,6 +241,8 @@ public class FadingActionBarHelperHome2
 		initializeGradient(mHeaderContainer);
 		mHeaderContainer.addView(mHeaderView, 0);
 		mMarginView = mContentContainer.findViewById(R.id.fab__content_top_margin);
+		mMarginView.setClickable(true);
+		mMarginView.setOnClickListener(mOnHeaderClickListener);
 		
 		return mScrollView;
 	}
@@ -272,6 +278,15 @@ public class FadingActionBarHelperHome2
 		listView.setOnScrollListener(mOnScrollListener);
 		return mContentContainer;
 	}
+	
+	private OnClickListener mOnHeaderClickListener = new View.OnClickListener()
+	{
+		@Override
+		public void onClick(View v)
+		{
+			FragmentHome.onHeaderClickListener(v);
+		}
+	};
 	
 	private OnScrollListener mOnScrollListener = new OnScrollListener()
 	{

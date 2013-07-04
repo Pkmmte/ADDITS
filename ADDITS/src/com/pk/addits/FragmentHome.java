@@ -53,6 +53,7 @@ public class FragmentHome extends Fragment
 	static Fragment fragSlide;
 	static FragmentManager fm;
 	static int numLoaded;
+	static Integer currentSlideID;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -209,6 +210,7 @@ public class FragmentHome extends Fragment
 		String sAuthor = "";
 		String sDate = "";
 		String sImage = "";
+		String sCategory = "";
 		
 		if (NewsFeed != null)
 		{
@@ -218,13 +220,44 @@ public class FragmentHome extends Fragment
 			sAuthor = NewsFeed[r].getAuthor();
 			sDate = NewsFeed[r].getDate();
 			sImage = NewsFeed[r].getImage();
+			sCategory = NewsFeed[r].getCategory();
+			currentSlideID = NewsFeed[r].getID();
 		}
-		fragSlide = Slider.newInstance(sTitle, sAuthor, sDate, sImage);
+		if(!sCategory.equalsIgnoreCase("DAILY SAVER"))
+			fragSlide = Slider.newInstance(sTitle, sAuthor, sDate, sImage);
+		else
+		{
+			populateSlide();
+			return;
+		}
 		
 		FragmentTransaction trans = fm.beginTransaction();
 		trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
 		trans.replace(R.id.slider_content, fragSlide);
 		trans.commit();
+	}
+	
+	public static void onHeaderClickListener(View v)
+	{
+		if(currentSlideID != null)
+		{
+			int ID = NewsFeed[currentSlideID].getID();
+			String Title = NewsFeed[currentSlideID].getTitle();
+			String Description = NewsFeed[currentSlideID].getDescription();
+			String Content = NewsFeed[currentSlideID].getContent();
+			String CommentFeed = NewsFeed[currentSlideID].getCommentFeed();
+			String Author = NewsFeed[currentSlideID].getAuthor();
+			String Date = NewsFeed[currentSlideID].getDate();
+			String Category = NewsFeed[currentSlideID].getCategory();
+			String Image = NewsFeed[currentSlideID].getImage();
+			String URL = NewsFeed[currentSlideID].getURL();
+			int Comments = NewsFeed[currentSlideID].getComments();
+			boolean Favorite = NewsFeed[currentSlideID].isFavorite();
+			boolean Read = NewsFeed[currentSlideID].isRead();
+			
+			Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
+			ActivityMain.callArticle(v.getContext(), Article);
+		}
 	}
 	
 	// Tells handler to send a message

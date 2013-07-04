@@ -39,6 +39,8 @@ public class FragmentArticle extends Fragment
 	private Handler mHandler;
 	private List<CommentFeed> commentList;
 	private CommentFeedAdapter adapter;
+	static MenuItem shareItem;
+	static Menu optionsMenu;
 	
 	ImageView imgHeader;
 	TextView txtTitle;
@@ -105,6 +107,13 @@ public class FragmentArticle extends Fragment
 	}
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+	
+	@Override
 	public void onStart()
 	{
 		super.onStart();
@@ -127,7 +136,7 @@ public class FragmentArticle extends Fragment
 		
 		if (Article.getComments() > 0)
 		{
-			txtLoadComments.setText("Load " + Article.getComments() + " Comments");
+			txtLoadComments.setText("Load Comments");
 			commentCard.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
@@ -171,9 +180,16 @@ public class FragmentArticle extends Fragment
 	{
 		menu.clear();
 		inflater.inflate(R.menu.article, menu);
+		optionsMenu = menu;
 		
-		MenuItem shareItem = menu.findItem(R.id.Share_Label);
+		shareItem = menu.findItem(R.id.Share_Label);
 		mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
+	}
+	
+	public static void menuVisibility(boolean drawerOpen)
+	{
+		if(shareItem != null && optionsMenu != null)
+			shareItem.setVisible(!drawerOpen);
 	}
 	
 	public void retrieveArguments()
@@ -199,7 +215,9 @@ public class FragmentArticle extends Fragment
 	
 	public void configureShare()
 	{
-		String shareBody = Article.getTitle() + "\n\n" + Article.getURL();
+		/** Uncomment this when website launches **/
+		// String shareBody = Article.getTitle(); + "\n\n" + Article.getURL();
+		String shareBody = "This feature is currently disabled... BWAHAHAHAHA!!";
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);

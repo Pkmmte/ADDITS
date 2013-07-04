@@ -1,11 +1,6 @@
 package com.pk.addits;
 
 import java.io.File;
-import java.util.List;
-
-import com.androidquery.AQuery;
-import com.androidquery.callback.AjaxStatus;
-import com.androidquery.util.XmlDom;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -23,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -32,7 +28,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
 {
@@ -114,6 +109,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	}
 	
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu)
+	{
+		if(articleShowing)
+			FragmentArticle.menuVisibility(mDrawerLayout.isDrawerOpen(mDrawerList));
+		
+		return super.onPrepareOptionsMenu(menu);
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
@@ -130,7 +134,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				mTitle = "Home";
 				actionBar.setTitle(mTitle);
 				articleShowing = false;
-				fragmentManager.beginTransaction().setCustomAnimations(R.anim.out_to_right, R.anim.fade_into).replace(R.id.content_frame, fragment).commit();
+				fragmentManager.beginTransaction().setCustomAnimations(R.anim.fade_into, R.anim.out_to_right).replace(R.id.content_frame, fragment).commit();
 				
 				return true;
 			}
@@ -167,11 +171,13 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			public void onDrawerClosed(View view)
 			{
 				actionBar.setTitle(mTitle);
+				invalidateOptionsMenu();
 			}
 			
 			public void onDrawerOpened(View drawerView)
 			{
 				actionBar.setTitle(mDrawerTitle);
+				invalidateOptionsMenu();
 			}
 		};
 		
