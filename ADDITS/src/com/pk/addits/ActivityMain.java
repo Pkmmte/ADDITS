@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
@@ -50,6 +51,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private String[] mListNames;
 	private int[] mListImages;
 	
+	private ProgressBar ProgressBar;
+	private View ProgressFinished;
 	private LinearLayout Loading;
 	private TextView LoadingText;
 	private long lastUpdateCheckTime;
@@ -76,6 +79,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		Loading = (LinearLayout) findViewById(R.id.loading);
 		LoadingText = (TextView) findViewById(R.id.loadingText);
+		ProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+		ProgressFinished = findViewById(R.id.progressFinished);
 		
 		mTitle = mDrawerTitle = getTitle();
 		mListNames = getResources().getStringArray(R.array.drawer_items);
@@ -285,7 +290,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					File file = new File(dir, Data.FEED_TAG);
 					
 					/** Fetch Website Data **/
-					showP = new showProgress("Checking for new content...", true, true);
+					showP = new showProgress("Checking for new content...", true, true, false);
 					mHandler.post(showP);
 					
 					Data.downloadFeed();
@@ -298,13 +303,13 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					if (NewFeed) // New Stuff Found
 					{
 						/** New Stuff Found **/
-						showP = new showProgress("Updating content...", true, false);
+						showP = new showProgress("Updating content...", true, false, false);
 						mHandler.post(showP);
 						
 						NewsFeed = Data.retrieveFeed(ActivityMain.this, true).clone();
 						Data.deleteTempFile();
-						
-						showP = new showProgress("Everything is up to date!", false, true);
+
+						showP = new showProgress("Everything is up to date!", true, false, true);
 						mHandler.post(showP);
 					}
 					else
@@ -312,13 +317,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					{
 						NewsFeed = Data.retrieveFeed(ActivityMain.this, true).clone();
 						Data.deleteTempFile();
-						
-						showP = new showProgress("Everything is up to date!", false, true);
+
+						showP = new showProgress("Everything is up to date!", true, false, true);
 						mHandler.post(showP);
 					}
 					
-					showP = new showProgress("", false, false);
+					showP = new showProgress("", false, false, false);
 					mHandler.post(showP);
+					showP = new showProgress("Everything is up to date!", false, true, true);
+					mHandler.postDelayed(showP, 4000);
 				}
 				catch (Exception e)
 				{
@@ -342,12 +349,14 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		boolean Active;
 		boolean Animate;
+		boolean Finished;
 		String Progress;
 		
-		public showProgress(String p, boolean a, boolean aa)
+		public showProgress(String p, boolean a, boolean aa, boolean f)
 		{
 			this.Active = a;
 			this.Animate = aa;
+			this.Finished = f;
 			this.Progress = p;
 		}
 		
@@ -366,6 +375,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.slide_up);
 						Loading.startAnimation(a);
 					}
+					if(Finished)
+					{
+						ProgressBar.setVisibility(View.GONE);
+						ProgressFinished.setVisibility(View.VISIBLE);
+					}
 				}
 				else
 				{
@@ -374,6 +388,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					{
 						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.slide_down);
 						Loading.startAnimation(a);
+					}
+					if(Finished)
+					{
+						ProgressBar.setVisibility(View.GONE);
+						ProgressFinished.setVisibility(View.VISIBLE);
 					}
 				}
 			}

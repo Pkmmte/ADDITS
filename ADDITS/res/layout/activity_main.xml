@@ -32,11 +32,19 @@
                 android:orientation="vertical" >
 
                 <ProgressBar
+					android:id="@+id/progressBar"
                     style="@style/CustomProgressBarHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-6.5dp"
                     android:indeterminate="true" />
+				
+				<View
+					android:id="@+id/progressFinished"
+					android:layout_width="match_parent"
+					android:layout_height="4.5dp"
+					android:background="@color/holo_green_light"
+					android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
