@@ -127,7 +127,7 @@ public class FragmentArticle extends Fragment
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
-		txtDate.setText(Data.parseDate(getActivity(), Article.getDate()));
+		txtDate.setText(Article.getDate());
 		txtContent.setText(Article.getContent());
 		
 		if (Article.getComments() > 0)
