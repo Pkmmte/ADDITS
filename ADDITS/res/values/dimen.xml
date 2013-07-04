@@ -2,5 +2,15 @@
 <resources>
 
     <dimen name="abs__action_bar_default_height">48dp</dimen>
-
+    
+	<dimen name="margin_small">4dp</dimen>
+	<dimen name="margin_medium">8dp</dimen>
+	<dimen name="margin_large">12dp</dimen>
+	<dimen name="divider_thin">1dp</dimen>
+	<dimen name="divider_thick">5dp</dimen>
+	<dimen name="text_title">18sp</dimen>
+	<dimen name="text_title_med">16sp</dimen>
+	<dimen name="text_primary">14sp</dimen>
+	<dimen name="text_secondary">13sp</dimen>
+    
 </resources>

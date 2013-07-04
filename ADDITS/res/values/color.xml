@@ -27,5 +27,8 @@
     <color name="transparent">#00000000</color>
     <color name="black_trans">#aa000000</color>
     <color name="black_transparent">#cc000000</color>
+    
+    <color name="addits_green">#FF8CBA00</color>
+    <color name="addits_gray_dark">#AA1C1F23</color>
 
 </resources>

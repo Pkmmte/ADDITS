@@ -10,25 +10,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
         android:background="@drawable/card_bg"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="5.0dip"
+            android:layout_height="@dimen/divider_thick"
             android:background="@color/black_light"
             android:orientation="horizontal" >
 
             <View
-                android:layout_width="0.0dip"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/holo_orange_dark" />
 
             <View
-                android:layout_width="0.0dip"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5" />
         </LinearLayout>
@@ -44,42 +44,43 @@
                 android:background="@color/white"
                 android:orientation="vertical" >
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small" >
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:background="@color/holo_green_dark" >
+                        android:layout_marginTop="@dimen/margin_medium"
+                        android:layout_marginBottom="@dimen/margin_medium"
+                        android:layout_centerVertical="true"
+                        android:background="@color/addits_green" >
 
                         <TextView
                             android:id="@+id/txtCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:fontFamily="sans-serif-light"
-                            android:text="@string/placeholder"
+                            android:padding="@dimen/margin_small"
+                            android:fontFamily="serif"
+                            android:text="@string/dummy_category"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
-                            android:textSize="15sp" />
+                            android:textSize="@dimen/text_primary" />
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/txtDate"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="5dp"
-                        android:fontFamily="sans-serif-light"
-                        android:gravity="right"
-                        android:text="@string/placeholder"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textSize="13sp" />
-                </LinearLayout>
+                        android:padding="@dimen/margin_medium"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:fontFamily="serif"
+                        android:text="@string/dummy_date"
+                        android:textSize="@dimen/text_secondary" />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,22 +91,21 @@
                         android:id="@+id/txtTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:padding="@dimen/margin_medium"
+                        android:fontFamily="serif"
                         android:maxLines="2"
-                        android:text="@string/placeholder"
-                        android:textSize="19sp" />
+                        android:text="@string/dummy_title"
+                        android:textSize="@dimen/text_title" />
 
                     <TextView
                         android:id="@+id/txtDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:fontFamily="sans-serif-light"
+                        android:padding="@dimen/margin_medium"
+                        android:fontFamily="serif"
                         android:maxLines="3"
-                        android:text="@string/placeholder"
-                        android:textSize="13sp" />
+                        android:text="@string/dummy_desc"
+                        android:textSize="@dimen/text_primary" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -119,24 +119,25 @@
                             android:scaleType="centerInside"
                             android:src="@drawable/no_image_banner" />
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
-                            android:background="@drawable/shadow_author" >
+        					android:background="@drawable/button_black_transparent_selector" >
 
                             <TextView
                                 android:id="@+id/txtAuthor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="3dp"
-                                android:layout_marginLeft="7dp"
-                                android:layout_marginTop="15dp"
-                                android:fontFamily="sans-serif-light"
-                                android:text="@string/placeholder"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentBottom="true"
+                                android:fontFamily="serif"
+                                android:padding="@dimen/margin_medium"
+                                android:text="@string/dummy_author"
                                 android:textColor="@color/white"
-                                android:textSize="13sp" />
-                        </LinearLayout>
+                                android:textSize="@dimen/text_secondary" />
+
+                        </RelativeLayout>
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:contentDescription="@string/placeholder"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@drawable/no_image_banner" />
 
     <LinearLayout
@@ -26,29 +26,33 @@
             android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10.0dip"
-            android:layout_marginRight="5.0dip"
-            android:layout_marginTop="5.0dip"
+            android:layout_marginLeft="@dimen/margin_medium"
+            android:layout_marginRight="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
             android:maxLines="2"
-            android:text="@string/placeholder"
+            android:text="@string/dummy_title"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="@dimen/text_title_med"
+            android:fontFamily="serif" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5.0dip"
-            android:layout_marginLeft="10.0dip"
-            android:layout_marginRight="5.0dip" >
+            android:layout_marginLeft="@dimen/margin_medium"
+            android:layout_marginRight="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small" >
 
             <TextView
                 android:id="@+id/txtAuthor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="@string/placeholder"
+                android:text="@string/dummy_author"
                 android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:textSize="@dimen/text_secondary"
+                android:fontFamily="serif" />
 
             <TextView
                 android:id="@+id/txtDate"
@@ -56,9 +60,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
-                android:text="@string/placeholder"
+                android:text="@string/dummy_date"
                 android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:textSize="@dimen/text_secondary"
+                android:fontFamily="serif" />
         </RelativeLayout>
     </LinearLayout>
 

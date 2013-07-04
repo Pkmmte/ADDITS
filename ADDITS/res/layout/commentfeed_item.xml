@@ -12,32 +12,42 @@
             android:id="@+id/txtCreator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/placeholder"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/margin_medium"
+            android:text="@string/dummy_author"
+            android:textSize="@dimen/text_title_med" />"
+        
         <TextView
             android:id="@+id/txtDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="7dp"
-            android:layout_marginTop="5dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/placeholder" />
+            android:fontFamily="serif"
+            android:padding="@dimen/margin_medium"
+            android:text="@string/dummy_date"
+            android:textSize="@dimen/text_secondary" />
 
     </RelativeLayout>
+
+        <View
+            android:name="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_thin"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"
+            android:background="@color/addits_green" />
 
     <TextView
         android:id="@+id/txtContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginTop="5dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/placeholder" />
+        android:padding="@dimen/margin_medium"
+        android:fontFamily="serif"
+        android:text="@string/dummy_desc"
+        android:textSize="@dimen/text_primary" />
 
 </LinearLayout>

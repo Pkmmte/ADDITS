@@ -10,9 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="15.0dip"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_small"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -23,18 +23,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="5.0dip"
+            android:layout_height="@dimen/divider_thick"
             android:background="@color/black_light"
             android:orientation="horizontal" >
 
             <View
-                android:layout_width="0.0dip"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@color/holo_blue_dark" />
+                android:background="@color/holo_purple_dark" />
 
             <View
-                android:layout_width="0.0dip"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5" />
         </LinearLayout>
@@ -43,10 +43,10 @@
                 android:id="@+id/txtTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:fontFamily="sans-serif-thin"
-                android:text="@string/placeholder"
-                android:textSize="19sp" />
+                android:padding="@dimen/margin_medium"
+                android:fontFamily="serif"
+                android:text="@string/dummy_title"
+                android:textSize="@dimen/text_title" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -57,18 +57,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="7dp"
-                    android:fontFamily="sans-serif-thin"
-                    android:text="@string/placeholder" />
+                    android:padding="@dimen/margin_medium"
+                    android:fontFamily="serif"
+                    android:text="@string/dummy_author" />
 
                 <TextView
                     android:id="@+id/txtDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="7dp"
-                    android:fontFamily="sans-serif-thin"
-                    android:text="@string/placeholder" />
+                    android:padding="@dimen/margin_medium"
+                    android:fontFamily="serif"
+                    android:text="@string/dummy_date" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
@@ -77,21 +77,18 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-	        android:layout_marginLeft="4dp"
-	        android:layout_marginRight="4dp"
+	        android:layout_marginLeft="@dimen/margin_small"
+	        android:layout_marginRight="@dimen/margin_small"
 	        android:background="@drawable/card_bg" >
 
     <TextView
         android:id="@+id/txtContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:fontFamily="sans-serif-thin"
-        android:text="@string/placeholder"
-        android:textSize="15sp" />
+        android:padding="@dimen/margin_medium"
+        android:fontFamily="serif"
+        android:text="@string/dummy_desc"
+        android:textSize="@dimen/text_primary" />
 	</LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -102,8 +99,8 @@
             android:id="@+id/commentCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-	        android:layout_marginLeft="4dp"
-	        android:layout_marginRight="4dp"
+	        android:layout_marginLeft="@dimen/margin_small"
+	        android:layout_marginRight="@dimen/margin_small"
             android:clickable="true"
             android:foreground="@drawable/transparent_selector" >
 
@@ -115,18 +112,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="5.0dip"
+            android:layout_height="@dimen/divider_thick"
             android:background="@color/black_light"
             android:orientation="horizontal" >
 
             <View
-                android:layout_width="0.0dip"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@color/holo_red_dark" />
 
             <View
-                android:layout_width="0.0dip"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5" />
         </LinearLayout>
@@ -141,7 +138,7 @@
                         android:id="@+id/progressBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/margin_small"
                         android:visibility="gone" />
 
                     <TextView
@@ -149,17 +146,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="5dp"
-                        android:text="@string/placeholder"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:layout_marginBottom="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/dummy_comments"
+                        android:textSize="@dimen/text_title_med" />
                 </LinearLayout>
 
                 <ListView
                     android:id="@+id/ListView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/commentfeed_item" />
+
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

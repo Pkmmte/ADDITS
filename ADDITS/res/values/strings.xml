@@ -16,6 +16,9 @@
         \n Blah Blah Blah. ADDITS is pretty cool. But the1dynasty is the best!
         \n Grab my new app below. Just kidding. there are no links here :P</string>
     <string name="dummy_title">Some sample text to show what this could look like with a review here. Blah Blah Blah.</string>
-    
+    <string name="dummy_author">the1dynasty</string>
+    <string name="dummy_date">May 5, 8:55PM</string>
+    <string name="dummy_comments">No Comments</string>
+    <string name="dummy_category">Articles</string>
     
 </resources>
