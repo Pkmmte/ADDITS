@@ -129,7 +129,7 @@ public class FragmentHome extends Fragment
 			{
 				moar.setText("Loading Articles...");
 				
-				if(numLoaded + 10 < NewsFeed.length)
+				if (numLoaded + 10 < NewsFeed.length)
 					addArticles(10);
 				else
 					addArticles(NewsFeed.length - numLoaded);
@@ -176,7 +176,7 @@ public class FragmentHome extends Fragment
 			grid.setVisibility(View.VISIBLE);
 			loading.setVisibility(View.GONE);
 			
-			if(numLoaded + 10 < NewsFeed.length)
+			if (numLoaded + 10 < NewsFeed.length)
 				addArticles(10);
 			else
 				addArticles(NewsFeed.length - numLoaded);
@@ -193,7 +193,7 @@ public class FragmentHome extends Fragment
 			numLoaded++;
 		}
 		
-		if(numLoaded < NewsFeed.length)
+		if (numLoaded < NewsFeed.length)
 		{
 			moar.setText("Load More Articles");
 			moar.setVisibility(View.VISIBLE);
@@ -210,7 +210,7 @@ public class FragmentHome extends Fragment
 		String sDate = "";
 		String sImage = "";
 		
-		if(NewsFeed != null)
+		if (NewsFeed != null)
 		{
 			Random generator = new Random();
 			int r = generator.nextInt(NewsFeed.length);
@@ -293,18 +293,6 @@ public class FragmentHome extends Fragment
 			holder.txtAuthor.setText("Posted by " + entry.getAuthor());
 			holder.txtDate.setText(entry.getDate());
 			holder.txtCategory.setText(entry.getCategory());
-
-			Typeface fontTitle = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Bold.ttf");
-			Typeface fontDescription = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
-			Typeface fontAuthor = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
-			Typeface fontDate = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Light.ttf");
-			Typeface fontCategory = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");
-
-			holder.txtTitle.setTypeface(fontTitle);
-			holder.txtDescription.setTypeface(fontDescription);
-			holder.txtAuthor.setTypeface(fontAuthor);
-			holder.txtDate.setTypeface(fontDate);
-			holder.txtCategory.setTypeface(fontCategory);
 			
 			Typeface fontTitle = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Bold.ttf");
 			Typeface fontDescription = Typeface.createFromAsset(context.getAssets(), "RobotoSlab-Regular.ttf");

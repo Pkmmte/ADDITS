@@ -50,19 +50,11 @@ public class Slider extends Fragment
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
 		Content = (LinearLayout) view.findViewById(R.id.Content);
-
-		Typeface fontTitle = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
-		Typeface fontAuthor = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
-		Typeface fontDate = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
-		
-		txtTitle.setTypeface(fontTitle);
-		txtAuthor.setTypeface(fontAuthor);
-		txtDate.setTypeface(fontDate);
 		
 		Typeface fontTitle = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
 		Typeface fontAuthor = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
 		Typeface fontDate = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
-		  
+		
 		txtTitle.setTypeface(fontTitle);
 		txtAuthor.setTypeface(fontAuthor);
 		txtDate.setTypeface(fontDate);
@@ -81,7 +73,7 @@ public class Slider extends Fragment
 		txtAuthor.setText(Author);
 		txtDate.setText(Date);
 		
-		if(Title.length() < 1 && Author.length() < 1 && Date.length() < 1)
+		if (Title.length() < 1 && Author.length() < 1 && Date.length() < 1)
 			Content.setVisibility(View.GONE);
 		else
 			Content.setVisibility(View.VISIBLE);
