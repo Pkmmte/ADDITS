@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list android:oneshot="false"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:duration="100" android:drawable="@drawable/load_dissected_1" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_2" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_3" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_4" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_5" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_6" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_7" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_8" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_9" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_10" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_11" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_12" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_13" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_14" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_15" />
+    <item android:duration="100" android:drawable="@drawable/load_dissected_16" />
+    <item android:duration="60000" android:drawable="@drawable/loading_dissected_spinner" />
+
+</animation-list>
