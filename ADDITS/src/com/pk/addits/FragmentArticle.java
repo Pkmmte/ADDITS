@@ -31,7 +31,7 @@ import com.squareup.picasso.Picasso;
 public class FragmentArticle extends Fragment
 {
 	ActionBar actionBar;
-	private ShareActionProvider mShareActionProvider;
+	static ShareActionProvider mShareActionProvider;
 	View view;
 	static FadingActionBarHelper mFadingHelper;
 	Feed Article;
@@ -186,6 +186,8 @@ public class FragmentArticle extends Fragment
 	{
 		if(shareItem != null && optionsMenu != null)
 			shareItem.setVisible(!drawerOpen);
+		if(!drawerOpen)
+			configureShare();
 	}
 	
 	public void retrieveArguments()
@@ -209,7 +211,7 @@ public class FragmentArticle extends Fragment
 		Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
 	}
 	
-	public void configureShare()
+	public static void configureShare()
 	{
 		/** Uncomment this when website launches **/
 		// String shareBody = Article.getTitle(); + "\n\n" + Article.getURL();

@@ -398,7 +398,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			}
 			else
 			{
-				if(currentFragment.equals("Home"))
+				if(currentFragment.equals("Home") && !articleShowing)
 					FragmentHome.updateState();
 			}
 		}
