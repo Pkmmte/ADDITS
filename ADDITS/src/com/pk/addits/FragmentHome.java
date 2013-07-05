@@ -9,7 +9,6 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -26,7 +25,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
@@ -36,9 +34,6 @@ public class FragmentHome extends Fragment
 {
 	static View view;
 	static ScrollGridView grid;
-	static LinearLayout loading;
-	static ImageView loadingAnimation;
-	static AnimationDrawable loadingAnim;
 	static FrameLayout frame;
 	static Button moar;
 	static FeedAdapter adapter;
@@ -68,8 +63,6 @@ public class FragmentHome extends Fragment
 		
 		feedList = new ArrayList<Feed>();
 		grid = (ScrollGridView) view.findViewById(R.id.GridView);
-		loading = (LinearLayout) view.findViewById(R.id.loadingNews);
-		loadingAnimation = (ImageView) view.findViewById(R.id.loadingAnimation);
 		moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
@@ -77,10 +70,6 @@ public class FragmentHome extends Fragment
 		grid.setExpanded(true);
 		currentSlide = 1;
 		numLoaded = 0;
-
-		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.80));
-		loading.setLayoutParams(layoutParams);
-		loadingAnim = (AnimationDrawable) loadingAnimation.getBackground();
 		
 		return view;
 	}
@@ -180,18 +169,12 @@ public class FragmentHome extends Fragment
 		
 		if (NewsFeed == null)
 		{
-			grid.setVisibility(View.GONE);
 			moar.setVisibility(View.GONE);
-			//frame.setVisibility(View.GONE);
-			loading.setVisibility(View.VISIBLE);
 			feedList.clear();
-			loadingAnim.start();
 		}
 		else
 		{
 			grid.setVisibility(View.VISIBLE);
-			loading.setVisibility(View.GONE);
-			//frame.setVisibility(View.VISIBLE);
 			
 			if (numLoaded + 10 < NewsFeed.length)
 				addArticles(10);
@@ -199,7 +182,6 @@ public class FragmentHome extends Fragment
 				addArticles(NewsFeed.length - numLoaded);
 			
 			populateSlide();
-			loadingAnim.stop();
 		}
 	}
 	

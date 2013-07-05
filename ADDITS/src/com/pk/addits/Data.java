@@ -36,6 +36,7 @@ public class Data
 {
 	public static final String PREFS_TAG = "AndroidDissectedPreferences";
 	public static final String PREF_TAG_LAST_UPDATE_CHECK_TIME = "Last Update Check Time";
+	public static final String PREF_TAG_FIRST_TIME = "First Time";
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";
 	public static final String FEED_URL = "http://addits.androiddissected.com/feed/";

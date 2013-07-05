@@ -131,13 +131,13 @@ public final class R {
         public static final int transparent_selector=0x7f02003e;
     }
     public static final class id {
-        public static final int Content=0x7f090023;
-        public static final int GridView=0x7f09001d;
-        public static final int Image=0x7f090022;
+        public static final int Content=0x7f090022;
+        public static final int GridView=0x7f09001b;
+        public static final int Image=0x7f090021;
         public static final int ListView=0x7f09001a;
-        public static final int MoarArticles=0x7f09001e;
-        public static final int Share_Label=0x7f090028;
-        public static final int background=0x7f090025;
+        public static final int MoarArticles=0x7f09001c;
+        public static final int Share_Label=0x7f090029;
+        public static final int background=0x7f090026;
         public static final int commentCard=0x7f090018;
         public static final int content_frame=0x7f090002;
         public static final int divider=0x7f09000a;
@@ -148,22 +148,23 @@ public final class R {
         public static final int fab__header_container=0x7f09000c;
         public static final int fab__listview_background=0x7f09000e;
         public static final int fab__scroll_view=0x7f09000f;
-        public static final int image_header=0x7f090024;
+        public static final int image_header=0x7f090025;
         public static final int imgPreview=0x7f090015;
         public static final int left_drawer=0x7f090007;
         public static final int linearLayout=0x7f090017;
         public static final int loading=0x7f090003;
-        public static final int loadingAnimation=0x7f09001c;
-        public static final int loadingNews=0x7f09001b;
+        public static final int loadingImage=0x7f090023;
+        public static final int loadingNews=0x7f090020;
         public static final int loadingText=0x7f090006;
-        public static final int progress=0x7f090027;
+        public static final int progress=0x7f090028;
         public static final int progressBar=0x7f090004;
         public static final int progressFinished=0x7f090005;
-        public static final int secondaryProgress=0x7f090026;
-        public static final int slideContent=0x7f090020;
-        public static final int slider=0x7f09001f;
-        public static final int sliderShadow=0x7f090021;
+        public static final int secondaryProgress=0x7f090027;
+        public static final int slideContent=0x7f09001e;
+        public static final int slider=0x7f09001d;
+        public static final int sliderShadow=0x7f09001f;
         public static final int slider_content=0x7f090000;
+        public static final int textLoading=0x7f090024;
         public static final int txtAuthor=0x7f090016;
         public static final int txtCategory=0x7f090012;
         public static final int txtContent=0x7f09000b;
@@ -186,7 +187,8 @@ public final class R {
         public static final int fragment_customization=0x7f040009;
         public static final int fragment_home=0x7f04000a;
         public static final int fragment_home_slider=0x7f04000b;
-        public static final int header_light=0x7f04000c;
+        public static final int fragment_loading=0x7f04000c;
+        public static final int header_light=0x7f04000d;
     }
     public static final class menu {
         public static final int article=0x7f0c0000;
