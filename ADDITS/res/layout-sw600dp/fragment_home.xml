@@ -1,47 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/slider"
-        android:layout_width="match_parent"
-        android:layout_height="200.0dip" >
-
-        <FrameLayout
-            android:id="@+id/slideContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <View
-            android:id="@+id/sliderShadow"
-            android:layout_width="match_parent"
-            android:layout_height="50.0dip"
-            android:background="@drawable/shadow_vertical_270" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/loadingNews"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-6.5dp"
-        android:layout_gravity="center" >
-
-        <ProgressBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-        	style="?android:attr/progressBarStyleHorizontal"
-        	android:indeterminateOnly="true" />
-
-    </LinearLayout>
-
     <com.pk.addits.ScrollGridView
         android:id="@+id/GridView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:numColumns="2" />
+        android:layout_height="wrap_content"
+        android:numColumns="2"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/MoarArticles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_medium"
+        android:layout_marginRight="@dimen/margin_medium"
+        android:background="@drawable/button_purple_selector"
+        android:text="Load More Articles"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white"
+        android:visibility="gone" />
 
 </LinearLayout>
