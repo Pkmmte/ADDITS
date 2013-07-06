@@ -121,7 +121,8 @@ public class FragmentArticle extends Fragment
 		
 		actionBar.setTitle(Article.getTitle());
 		if (Article.getImage().length() > 0)
-			Picasso.with(getActivity()).load(Article.getImage()).error(R.drawable.no_image_banner).fit().into(imgHeader);
+			Picasso.with(getActivity()).load(Article.getImage()).error
+			(R.drawable.no_image_banner).fit().into(imgHeader);
 		else
 			Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgHeader);
 		
@@ -167,7 +168,9 @@ public class FragmentArticle extends Fragment
 	{
 		super.onAttach(activity);
 		
-		mFadingHelper = new FadingActionBarHelper().actionBarBackground(R.drawable.ab_background).headerLayout(R.layout.header_light).contentLayout(R.layout.fragment_article).lightActionBar(false);
+		mFadingHelper = new FadingActionBarHelper().actionBarBackground
+				(R.drawable.ab_background).headerLayout(R.layout.header_light).contentLayout
+				(R.layout.fragment_article).lightActionBar(false);
 		mFadingHelper.initActionBar(activity);
 	}
 	
@@ -208,7 +211,8 @@ public class FragmentArticle extends Fragment
 		boolean Favorite = args.getBoolean("Favorite");
 		boolean Read = args.getBoolean("Read");
 		
-		Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
+		Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, 
+				Category, Image, URL, Comments, Favorite, Read);
 	}
 	
 	public static void configureShare()
@@ -299,7 +303,8 @@ public class FragmentArticle extends Fragment
 			CommentFeed entry = listItem.get(position);
 			if (view == null)
 			{
-				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				LayoutInflater inflater = (LayoutInflater) context.getSystemService
+						(Context.LAYOUT_INFLATER_SERVICE);
 				view = inflater.inflate(R.layout.commentfeed_item, null);
 				
 				holder = new ViewHolder();

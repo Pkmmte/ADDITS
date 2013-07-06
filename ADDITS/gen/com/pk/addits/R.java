@@ -55,15 +55,25 @@ public final class R {
     }
     public static final class dimen {
         public static final int abs__action_bar_default_height=0x7f080000;
-        public static final int divider_thick=0x7f080005;
-        public static final int divider_thin=0x7f080004;
-        public static final int margin_large=0x7f080003;
-        public static final int margin_medium=0x7f080002;
-        public static final int margin_small=0x7f080001;
-        public static final int text_primary=0x7f080008;
-        public static final int text_secondary=0x7f080009;
-        public static final int text_title=0x7f080006;
-        public static final int text_title_med=0x7f080007;
+        public static final int divider_thick=0x7f080009;
+        /**  Dividers 
+         */
+        public static final int divider_thin=0x7f080008;
+        /**  Images 
+         */
+        public static final int feed_image=0x7f08000a;
+        public static final int margin_large=0x7f080007;
+        public static final int margin_medium=0x7f080006;
+        /**  Margins 
+         */
+        public static final int margin_small=0x7f080005;
+        public static final int slider_image=0x7f08000b;
+        public static final int text_primary=0x7f080003;
+        public static final int text_secondary=0x7f080004;
+        /**  Fonts 
+         */
+        public static final int text_title=0x7f080001;
+        public static final int text_title_med=0x7f080002;
     }
     public static final class drawable {
         public static final int ab_background=0x7f020000;

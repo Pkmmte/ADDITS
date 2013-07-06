@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView.ScaleType;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -335,6 +336,9 @@ public class FragmentHome extends Fragment
 				Picasso.with(context).load(entry.getImage()).error(R.drawable.no_image_banner).fit().skipCache().into(holder.imgPreview);
 			else
 				Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
+
+			holder.imgPreview.setScaleType(ScaleType.CENTER_CROP);
+			holder.imgPreview.setAdjustViewBounds(false);
 			
 			return view;
 		}

@@ -101,7 +101,9 @@
                         android:id="@+id/txtDescription"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/margin_medium"
+                        android:layout_marginBottom="@dimen/margin_medium"
+                        android:layout_marginLeft="@dimen/margin_medium"
+                        android:layout_marginRight="@dimen/margin_medium"
                         android:fontFamily="serif"
                         android:maxLines="3"
                         android:text="@string/dummy_desc"
@@ -114,9 +116,9 @@
                         <ImageView
                             android:id="@+id/imgPreview"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/feed_image"
                             android:contentDescription="@string/placeholder"
-                            android:scaleType="centerInside"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/no_image_banner" />
 
                         <RelativeLayout
