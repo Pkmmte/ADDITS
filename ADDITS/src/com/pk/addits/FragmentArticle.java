@@ -122,9 +122,9 @@ public class FragmentArticle extends Fragment
 		actionBar.setTitle(Article.getTitle());
 		if (Article.getImage().length() > 0)
 			Picasso.with(getActivity()).load(Article.getImage()).error
-			(R.drawable.no_image_banner).fit().into(imgHeader);
+			(R.drawable.loading_image_banner).fit().into(imgHeader);
 		else
-			Picasso.with(getActivity()).load(R.drawable.no_image_banner).fit().into(imgHeader);
+			Picasso.with(getActivity()).load(R.drawable.loading_image_banner).fit().into(imgHeader);
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());

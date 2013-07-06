@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:contentDescription="@string/placeholder"
                             android:scaleType="centerInside"
-                            android:src="@drawable/no_image_banner" />
+                            android:src="@drawable/loading_image_banner" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"

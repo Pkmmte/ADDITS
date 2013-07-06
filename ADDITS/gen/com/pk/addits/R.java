@@ -119,8 +119,8 @@ public final class R {
         public static final int load_dissected_9=0x7f020028;
         public static final int loading_dissected=0x7f020029;
         public static final int loading_dissected_spinner=0x7f02002a;
-        public static final int next_white=0x7f02002b;
-        public static final int no_image_banner=0x7f02002c;
+        public static final int loading_image_banner=0x7f02002b;
+        public static final int next_white=0x7f02002c;
         public static final int previous_white=0x7f02002d;
         public static final int progress_horizontal=0x7f02002e;
         public static final int progress_indeterminate_horizontal_holo=0x7f02002f;
@@ -141,14 +141,14 @@ public final class R {
         public static final int transparent_selector=0x7f02003e;
     }
     public static final class id {
-        public static final int Content=0x7f09001e;
-        public static final int GridView=0x7f09001b;
-        public static final int Image=0x7f09001d;
-        public static final int ListView=0x7f09001a;
-        public static final int MoarArticles=0x7f09001c;
-        public static final int Share_Label=0x7f090025;
-        public static final int background=0x7f090022;
-        public static final int commentCard=0x7f090018;
+        public static final int Content=0x7f09001f;
+        public static final int GridView=0x7f09001c;
+        public static final int Image=0x7f09001e;
+        public static final int ListView=0x7f09001b;
+        public static final int MoarArticles=0x7f09001d;
+        public static final int Share_Label=0x7f090026;
+        public static final int background=0x7f090023;
+        public static final int commentCard=0x7f090019;
         public static final int content_frame=0x7f090002;
         public static final int divider=0x7f09000a;
         public static final int drawer_layout=0x7f090001;
@@ -158,27 +158,28 @@ public final class R {
         public static final int fab__header_container=0x7f09000c;
         public static final int fab__listview_background=0x7f09000e;
         public static final int fab__scroll_view=0x7f09000f;
-        public static final int image_header=0x7f090021;
-        public static final int imgPreview=0x7f090015;
+        public static final int image_header=0x7f090022;
+        public static final int imgPreview=0x7f090016;
+        public static final int lblUnread=0x7f090012;
         public static final int left_drawer=0x7f090007;
-        public static final int linearLayout=0x7f090017;
+        public static final int linearLayout=0x7f090018;
         public static final int loading=0x7f090003;
-        public static final int loadingImage=0x7f09001f;
+        public static final int loadingImage=0x7f090020;
         public static final int loadingText=0x7f090006;
-        public static final int progress=0x7f090024;
+        public static final int progress=0x7f090025;
         public static final int progressBar=0x7f090004;
         public static final int progressFinished=0x7f090005;
-        public static final int secondaryProgress=0x7f090023;
+        public static final int secondaryProgress=0x7f090024;
         public static final int slider_content=0x7f090000;
-        public static final int textLoading=0x7f090020;
-        public static final int txtAuthor=0x7f090016;
-        public static final int txtCategory=0x7f090012;
+        public static final int textLoading=0x7f090021;
+        public static final int txtAuthor=0x7f090017;
+        public static final int txtCategory=0x7f090013;
         public static final int txtContent=0x7f09000b;
         public static final int txtCreator=0x7f090008;
         public static final int txtDate=0x7f090009;
-        public static final int txtDescription=0x7f090014;
-        public static final int txtLoadComments=0x7f090019;
-        public static final int txtTitle=0x7f090013;
+        public static final int txtDescription=0x7f090015;
+        public static final int txtLoadComments=0x7f09001a;
+        public static final int txtTitle=0x7f090014;
     }
     public static final class layout {
         public static final int activity_main=0x7f040000;

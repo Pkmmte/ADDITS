@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView.ScaleType;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -306,6 +305,7 @@ public class FragmentHome extends Fragment
 				view = inflater.inflate(R.layout.feed_item, null);
 				
 				holder = new ViewHolder();
+				holder.lblUnread = view.findViewById(R.id.lblUnread);
 				holder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 				holder.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 				holder.txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
@@ -333,12 +333,15 @@ public class FragmentHome extends Fragment
 			holder.txtCategory.setText(entry.getCategory());
 			
 			if (entry.getImage().length() > 0)
-				Picasso.with(context).load(entry.getImage()).error(R.drawable.no_image_banner).fit().skipCache().into(holder.imgPreview);
+				Picasso.with(context).load(entry.getImage()).error(R.drawable.loading_image_banner).fit().skipCache().into(holder.imgPreview);
 			else
-				Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
-
-			holder.imgPreview.setScaleType(ScaleType.CENTER_CROP);
+				holder.imgPreview.setVisibility(View.GONE);
+			//	Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
+			
 			holder.imgPreview.setAdjustViewBounds(false);
+			
+			if(entry.isRead())
+				holder.lblUnread.setVisibility(View.INVISIBLE);
 			
 			return view;
 		}
@@ -346,6 +349,7 @@ public class FragmentHome extends Fragment
 	
 	private static class ViewHolder
 	{
+		public View lblUnread;
 		public TextView txtTitle;
 		public TextView txtDescription;
 		public TextView txtAuthor;
