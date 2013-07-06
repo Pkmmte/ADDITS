@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:ignore="NestedWeights" >
 
-    <com.pk.addits.ScrollGridView
+    <com.pk.addits.CustomGridView
         android:id="@+id/GridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

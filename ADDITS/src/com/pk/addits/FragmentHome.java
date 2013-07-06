@@ -17,13 +17,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +36,7 @@ import com.squareup.picasso.Picasso;
 public class FragmentHome extends Fragment
 {
 	static View view;
-	static ScrollGridView grid;
+	static CustomGridView grid;
 	static FrameLayout frame;
 	static Button moar;
 	static FeedAdapter adapter;
@@ -62,12 +65,12 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		
 		feedList = new ArrayList<Feed>();
-		grid = (ScrollGridView) view.findViewById(R.id.GridView);
+		grid = (CustomGridView) view.findViewById(R.id.GridView);
 		moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
 		grid.setAdapter(adapter);
-		grid.setExpanded(true);
+		//grid.setExpanded(true);
 		currentSlide = 1;
 		numLoaded = 0;
 		
@@ -99,9 +102,31 @@ public class FragmentHome extends Fragment
 		timer.schedule(new firstTask(), 5000, 7000);
 		
 		populateSlide();
-		
 		updateState();
-		
+		grid.setOnTouchListener(new OnTouchListener()
+		{
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event)
+			{
+				if (event.getAction() == MotionEvent.ACTION_MOVE)
+				{
+					return true;
+				}
+				return false;
+			}
+			
+		});
+		// grid.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		// {
+		// @Override
+		// public void onGlobalLayout()
+		// {
+		// grid.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+		// View lastChild = grid.getChildAt(grid.getChildCount() - 1);
+		// grid.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, lastChild.getBottom()));
+		// }
+		// });
 		grid.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
@@ -222,7 +247,7 @@ public class FragmentHome extends Fragment
 			sCategory = NewsFeed[r].getCategory();
 			currentSlideID = NewsFeed[r].getID();
 		}
-		if(!sCategory.equalsIgnoreCase("DAILY SAVER"))
+		if (!sCategory.equalsIgnoreCase("DAILY SAVER"))
 			fragSlide = Slider.newInstance(sTitle, sAuthor, sDate, sImage);
 		else
 		{
@@ -238,7 +263,7 @@ public class FragmentHome extends Fragment
 	
 	public static void onHeaderClickListener(View v)
 	{
-		if(currentSlideID != null)
+		if (currentSlideID != null)
 		{
 			int ID = NewsFeed[currentSlideID].getID();
 			String Title = NewsFeed[currentSlideID].getTitle();
@@ -336,11 +361,11 @@ public class FragmentHome extends Fragment
 				Picasso.with(context).load(entry.getImage()).error(R.drawable.loading_image_banner).fit().skipCache().into(holder.imgPreview);
 			else
 				holder.imgPreview.setVisibility(View.GONE);
-			//	Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
+			// Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
 			
 			holder.imgPreview.setAdjustViewBounds(false);
 			
-			if(entry.isRead())
+			if (entry.isRead())
 				holder.lblUnread.setVisibility(View.INVISIBLE);
 			
 			return view;
