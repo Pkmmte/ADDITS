@@ -27,6 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -334,6 +335,7 @@ public class FragmentHome extends Fragment
 				
 				holder = new ViewHolder();
 				holder.lblUnread = view.findViewById(R.id.lblUnread);
+				holder.lblAuthor = (RelativeLayout) view.findViewById(R.id.lblAuthor);
 				holder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 				holder.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 				holder.txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
@@ -369,9 +371,24 @@ public class FragmentHome extends Fragment
 			holder.imgPreview.setAdjustViewBounds(false);
 			
 			if (entry.isRead())
+			{
 				holder.lblUnread.setVisibility(View.INVISIBLE);
+				if (entry.getImage().length() > 0)
+				{
+					int height = holder.imgPreview.getHeight() + holder.lblAuthor.getHeight();
+					holder.lblAuthor.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height));
+				}
+			}
 			else
+			{
 				holder.lblUnread.setVisibility(View.VISIBLE);
+				if (entry.getImage().length() > 0)
+				{
+					RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+					layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+					holder.lblAuthor.setLayoutParams(layoutParams);
+				}
+			}
 			
 			return view;
 		}
@@ -380,6 +397,7 @@ public class FragmentHome extends Fragment
 	private static class ViewHolder
 	{
 		public View lblUnread;
+		public RelativeLayout lblAuthor;
 		public TextView txtTitle;
 		public TextView txtDescription;
 		public TextView txtAuthor;
