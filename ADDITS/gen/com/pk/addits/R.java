@@ -9,12 +9,12 @@ package com.pk.addits;
 
 public final class R {
     public static final class anim {
-        public static final int fade_away=0x7f050000;
-        public static final int fade_in=0x7f050001;
-        public static final int fade_into=0x7f050002;
-        public static final int fade_out=0x7f050003;
-        public static final int in_from_right=0x7f050004;
-        public static final int out_to_right=0x7f050005;
+        public static final int fade_in=0x7f050000;
+        public static final int fade_out=0x7f050001;
+        public static final int now_left_in=0x7f050002;
+        public static final int now_left_out=0x7f050003;
+        public static final int now_right_in=0x7f050004;
+        public static final int now_right_out=0x7f050005;
         public static final int slide_down=0x7f050006;
         public static final int slide_up=0x7f050007;
     }

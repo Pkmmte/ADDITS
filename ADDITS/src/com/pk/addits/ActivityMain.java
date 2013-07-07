@@ -152,7 +152,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				mTitle = "Home";
 				actionBar.setTitle(mTitle);
 				articleShowing = false;
-				fragmentManager.beginTransaction().setCustomAnimations(R.anim.fade_into, R.anim.out_to_right).replace(R.id.content_frame, fragment).commit();
+				fragmentManager.beginTransaction().setCustomAnimations(R.anim.now_left_in, R.anim.now_right_out).replace(R.id.content_frame, fragment).commit();
 				
 				return true;
 			}
@@ -273,7 +273,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		articleShowing = true;
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-		fragmentManager.beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.fade_away).replace(R.id.content_frame, fragment).commit();
+		fragmentManager.beginTransaction().setCustomAnimations(R.anim.now_right_in, R.anim.now_left_out).replace(R.id.content_frame, fragment).commit();
 	}
 	
 	public static Feed[] getFeed()
