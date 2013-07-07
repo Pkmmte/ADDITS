@@ -191,12 +191,13 @@ public final class R {
         public static final int fab__listview_container=0x7f040005;
         public static final int fab__scrollview_container=0x7f040006;
         public static final int feed_item=0x7f040007;
-        public static final int fragment_article=0x7f040008;
-        public static final int fragment_customization=0x7f040009;
-        public static final int fragment_home=0x7f04000a;
-        public static final int fragment_home_slider=0x7f04000b;
-        public static final int fragment_loading=0x7f04000c;
-        public static final int header_light=0x7f04000d;
+        public static final int feed_item2=0x7f040008;
+        public static final int fragment_article=0x7f040009;
+        public static final int fragment_customization=0x7f04000a;
+        public static final int fragment_home=0x7f04000b;
+        public static final int fragment_home_slider=0x7f04000c;
+        public static final int fragment_loading=0x7f04000d;
+        public static final int header_light=0x7f04000e;
     }
     public static final class menu {
         public static final int article=0x7f0c0000;

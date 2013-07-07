@@ -17,18 +17,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
@@ -36,7 +36,7 @@ import com.squareup.picasso.Picasso;
 public class FragmentHome extends Fragment
 {
 	static View view;
-	static CustomGridView grid;
+	static PkGridView grid;
 	static FrameLayout frame;
 	static Button moar;
 	static FeedAdapter adapter;
@@ -65,12 +65,11 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		
 		feedList = new ArrayList<Feed>();
-		grid = (CustomGridView) view.findViewById(R.id.GridView);
+		grid = (PkGridView) view.findViewById(R.id.GridView);
 		moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
 		grid.setAdapter(adapter);
-		//grid.setExpanded(true);
 		currentSlide = 1;
 		numLoaded = 0;
 		
@@ -103,30 +102,34 @@ public class FragmentHome extends Fragment
 		
 		populateSlide();
 		updateState();
-		grid.setOnTouchListener(new OnTouchListener()
+		
+		SwipeDismissGridViewTouchListener touchListener = new SwipeDismissGridViewTouchListener(grid, new SwipeDismissGridViewTouchListener.OnDismissCallback()
 		{
-			
 			@Override
-			public boolean onTouch(View v, MotionEvent event)
+			public void onDismiss(PkGridView listView, int[] reverseSortedPositions)
 			{
-				if (event.getAction() == MotionEvent.ACTION_MOVE)
+				for (int position : reverseSortedPositions)
 				{
-					return true;
+					NewsFeed[position].setRead(!adapter.getItem(position).isRead());
+					feedList.remove(adapter.getItem(position));
+					feedList.add(position, NewsFeed[position]);
+					
+					Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+					anim.setDuration(500);
+					
+					adapter.notifyDataSetChanged();
+					grid.getChildAt(position).startAnimation(anim);
+					
+					if(NewsFeed[position].isRead())
+						Toast.makeText(getActivity(), "Marked as read!", Toast.LENGTH_SHORT).show();
+					else
+						Toast.makeText(getActivity(), "Marked as unread!", Toast.LENGTH_SHORT).show();
 				}
-				return false;
+				
 			}
-			
 		});
-		// grid.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
-		// {
-		// @Override
-		// public void onGlobalLayout()
-		// {
-		// grid.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-		// View lastChild = grid.getChildAt(grid.getChildCount() - 1);
-		// grid.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, lastChild.getBottom()));
-		// }
-		// });
+		grid.setOnTouchListener(touchListener);
+		
 		grid.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
@@ -310,7 +313,7 @@ public class FragmentHome extends Fragment
 			return listItem.size();
 		}
 		
-		public Object getItem(int position)
+		public Feed getItem(int position)
 		{
 			return listItem.get(position);
 		}
@@ -322,7 +325,7 @@ public class FragmentHome extends Fragment
 		
 		public View getView(int position, View view, ViewGroup viewGroup)
 		{
-			ViewHolder holder;
+			final ViewHolder holder;
 			Feed entry = listItem.get(position);
 			if (view == null)
 			{
@@ -367,6 +370,8 @@ public class FragmentHome extends Fragment
 			
 			if (entry.isRead())
 				holder.lblUnread.setVisibility(View.INVISIBLE);
+			else
+				holder.lblUnread.setVisibility(View.VISIBLE);
 			
 			return view;
 		}

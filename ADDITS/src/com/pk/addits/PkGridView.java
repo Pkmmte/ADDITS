@@ -11,13 +11,13 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 
-public class CustomGridView extends GridView implements OnTouchListener, OnScrollListener
+public class PkGridView extends GridView implements OnTouchListener, OnScrollListener
 {
 	
 	private int listViewTouchAction;
-	private static final int MAXIMUM_LIST_ITEMS_VIEWABLE = 99;
+	private static final int MAXIMUM_LIST_ITEMS_VIEWABLE = 50;
 	
-	public CustomGridView(Context context, AttributeSet attrs)
+	public PkGridView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		listViewTouchAction = -1;
@@ -67,6 +67,7 @@ public class CustomGridView extends GridView implements OnTouchListener, OnScrol
 					listItem.measure(widthMeasureSpec, heightMeasureSpec);
 					newHeight += listItem.getMeasuredHeight();
 				}
+				//newHeight += 5 * listPosition;
 			}
 			if ((heightMode == MeasureSpec.AT_MOST) && (newHeight > heightSize))
 			{

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.pk.addits.ScrollGridView
+    <com.pk.addits.PkGridView
         android:id="@+id/GridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
