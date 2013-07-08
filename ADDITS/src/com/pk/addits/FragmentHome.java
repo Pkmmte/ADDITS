@@ -19,17 +19,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
@@ -37,7 +35,7 @@ import com.squareup.picasso.Picasso;
 public class FragmentHome extends Fragment
 {
 	static View view;
-	static PkGridView grid;
+	static GridView grid;
 	static FrameLayout frame;
 	static Button moar;
 	static FeedAdapter adapter;
@@ -66,7 +64,7 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		
 		feedList = new ArrayList<Feed>();
-		grid = (PkGridView) view.findViewById(R.id.GridView);
+		grid = (GridView) view.findViewById(R.id.GridView);
 		moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
@@ -104,7 +102,7 @@ public class FragmentHome extends Fragment
 		populateSlide();
 		updateState();
 		
-		SwipeDismissGridViewTouchListener touchListener = new SwipeDismissGridViewTouchListener(grid, new SwipeDismissGridViewTouchListener.OnDismissCallback()
+		/*SwipeDismissGridViewTouchListener touchListener = new SwipeDismissGridViewTouchListener(grid, new SwipeDismissGridViewTouchListener.OnDismissCallback()
 		{
 			@Override
 			public void onDismiss(PkGridView listView, int[] reverseSortedPositions)
@@ -128,8 +126,8 @@ public class FragmentHome extends Fragment
 				}
 				
 			}
-		});
-		grid.setOnTouchListener(touchListener);
+		});*/
+		//grid.setOnTouchListener(touchListener);
 		
 		grid.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -326,6 +324,8 @@ public class FragmentHome extends Fragment
 		
 		public View getView(int position, View view, ViewGroup viewGroup)
 		{
+			System.out.println("getview:" + position + " " + view);
+			
 			final ViewHolder holder;
 			Feed entry = listItem.get(position);
 			if (view == null)
