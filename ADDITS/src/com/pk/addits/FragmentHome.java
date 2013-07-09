@@ -22,22 +22,21 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.origamilabs.library.headergridview.views.HeaderGridView;
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
 
 public class FragmentHome extends Fragment
 {
 	static View view;
-	static GridView grid;
+	static HeaderGridView grid;
 	static FrameLayout frame;
-	static Button moar;
+	//static Button moar;
 	static FeedAdapter adapter;
 	static FadingActionBarHelperHome2 mFadingHelper;
 	
@@ -64,8 +63,8 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		
 		feedList = new ArrayList<Feed>();
-		grid = (GridView) view.findViewById(R.id.GridView);
-		moar = (Button) view.findViewById(R.id.MoarArticles);
+		grid = (HeaderGridView) view.findViewById(R.id.GridView);
+		//moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
 		grid.setAdapter(adapter);
@@ -126,8 +125,8 @@ public class FragmentHome extends Fragment
 				}
 				
 			}
-		});*/
-		//grid.setOnTouchListener(touchListener);
+		});
+		grid.setOnTouchListener(touchListener);*/
 		
 		grid.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -152,7 +151,7 @@ public class FragmentHome extends Fragment
 				ActivityMain.callArticle(getActivity(), Article);
 			}
 		});
-		moar.setOnClickListener(new View.OnClickListener()
+		/*moar.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
@@ -164,7 +163,7 @@ public class FragmentHome extends Fragment
 				else
 					addArticles(NewsFeed.length - numLoaded);
 			}
-		});
+		});*/
 	}
 	
 	@Override
@@ -196,7 +195,7 @@ public class FragmentHome extends Fragment
 		
 		if (NewsFeed == null)
 		{
-			moar.setVisibility(View.GONE);
+			//moar.setVisibility(View.GONE);
 			feedList.clear();
 		}
 		else
@@ -220,13 +219,13 @@ public class FragmentHome extends Fragment
 			numLoaded++;
 		}
 		
-		if (numLoaded < NewsFeed.length)
-		{
-			moar.setText("Load More Articles");
-			moar.setVisibility(View.VISIBLE);
-		}
-		else
-			moar.setVisibility(View.GONE);
+		//if (numLoaded < NewsFeed.length)
+		//{
+		//	moar.setText("Load More Articles");
+		//	moar.setVisibility(View.VISIBLE);
+		//}
+		//else
+		//	moar.setVisibility(View.GONE);
 		adapter.notifyDataSetChanged();
 	}
 	
