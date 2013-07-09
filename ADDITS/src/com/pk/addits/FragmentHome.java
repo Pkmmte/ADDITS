@@ -19,9 +19,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -63,7 +66,7 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		
 		feedList = new ArrayList<Feed>();
-		grid = (HeaderGridView) view.findViewById(R.id.GridView);
+		grid = (HeaderGridView) view.findViewById(R.id.home_header);
 		//moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
@@ -388,6 +391,11 @@ public class FragmentHome extends Fragment
 					holder.lblAuthor.setLayoutParams(layoutParams);
 				}
 			}
+			
+			Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+			anim.setDuration(2000);
+			
+			holder.txtTitle.startAnimation(anim);
 			
 			return view;
 		}
