@@ -11,12 +11,13 @@ public final class R {
     public static final class anim {
         public static final int fade_in=0x7f050000;
         public static final int fade_out=0x7f050001;
-        public static final int now_left_in=0x7f050002;
-        public static final int now_left_out=0x7f050003;
-        public static final int now_right_in=0x7f050004;
-        public static final int now_right_out=0x7f050005;
-        public static final int slide_down=0x7f050006;
-        public static final int slide_up=0x7f050007;
+        public static final int incoming_card=0x7f050002;
+        public static final int now_left_in=0x7f050003;
+        public static final int now_left_out=0x7f050004;
+        public static final int now_right_in=0x7f050005;
+        public static final int now_right_out=0x7f050006;
+        public static final int slide_down=0x7f050007;
+        public static final int slide_up=0x7f050008;
     }
     public static final class array {
         public static final int drawer_items=0x7f060000;
@@ -142,14 +143,15 @@ public final class R {
         public static final int transparent_selector=0x7f02003f;
     }
     public static final class id {
-        public static final int Content=0x7f090022;
-        public static final int GridView=0x7f09001f;
-        public static final int Image=0x7f090021;
-        public static final int ListView=0x7f09001e;
-        public static final int MoarArticles=0x7f090020;
-        public static final int Share_Label=0x7f090029;
-        public static final int background=0x7f090026;
-        public static final int commentCard=0x7f09001c;
+        public static final int Card=0x7f090014;
+        public static final int Content=0x7f090023;
+        public static final int GridView=0x7f090020;
+        public static final int Image=0x7f090022;
+        public static final int ListView=0x7f09001f;
+        public static final int MoarArticles=0x7f090021;
+        public static final int Share_Label=0x7f09002a;
+        public static final int background=0x7f090027;
+        public static final int commentCard=0x7f09001d;
         public static final int content_frame=0x7f090003;
         public static final int divider=0x7f09000b;
         public static final int drawer_layout=0x7f090002;
@@ -161,29 +163,29 @@ public final class R {
         public static final int fab__listview_background=0x7f09000f;
         public static final int fab__scroll_view=0x7f090010;
         public static final int home_header=0x7f090001;
-        public static final int image_header=0x7f090025;
-        public static final int imgPreview=0x7f090018;
-        public static final int lblAuthor=0x7f090019;
-        public static final int lblUnread=0x7f090014;
+        public static final int image_header=0x7f090026;
+        public static final int imgPreview=0x7f090019;
+        public static final int lblAuthor=0x7f09001a;
+        public static final int lblUnread=0x7f090015;
         public static final int left_drawer=0x7f090008;
-        public static final int linearLayout=0x7f09001b;
+        public static final int linearLayout=0x7f09001c;
         public static final int loading=0x7f090004;
-        public static final int loadingImage=0x7f090023;
+        public static final int loadingImage=0x7f090024;
         public static final int loadingText=0x7f090007;
-        public static final int progress=0x7f090028;
+        public static final int progress=0x7f090029;
         public static final int progressBar=0x7f090005;
         public static final int progressFinished=0x7f090006;
-        public static final int secondaryProgress=0x7f090027;
+        public static final int secondaryProgress=0x7f090028;
         public static final int slider_content=0x7f090000;
-        public static final int textLoading=0x7f090024;
-        public static final int txtAuthor=0x7f09001a;
-        public static final int txtCategory=0x7f090015;
+        public static final int textLoading=0x7f090025;
+        public static final int txtAuthor=0x7f09001b;
+        public static final int txtCategory=0x7f090016;
         public static final int txtContent=0x7f09000c;
         public static final int txtCreator=0x7f090009;
         public static final int txtDate=0x7f09000a;
-        public static final int txtDescription=0x7f090017;
-        public static final int txtLoadComments=0x7f09001d;
-        public static final int txtTitle=0x7f090016;
+        public static final int txtDescription=0x7f090018;
+        public static final int txtLoadComments=0x7f09001e;
+        public static final int txtTitle=0x7f090017;
     }
     public static final class layout {
         public static final int activity_main=0x7f040000;

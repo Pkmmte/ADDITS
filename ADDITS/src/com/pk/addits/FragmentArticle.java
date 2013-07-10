@@ -34,7 +34,7 @@ public class FragmentArticle extends Fragment
 	static ShareActionProvider mShareActionProvider;
 	View view;
 	static FadingActionBarHelper mFadingHelper;
-	Feed Article;
+	static Feed Article;
 	private Thread loadCommentsThread;
 	private Handler mHandler;
 	private List<CommentFeed> commentList;
@@ -218,8 +218,7 @@ public class FragmentArticle extends Fragment
 	public static void configureShare()
 	{
 		/** Uncomment this when website launches **/
-		// String shareBody = Article.getTitle(); + "\n\n" + Article.getURL();
-		String shareBody = "This feature is currently disabled... BWAHAHAHAHA!!";
+		String shareBody = Article.getTitle() + "\n\n" + Article.getURL();
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);

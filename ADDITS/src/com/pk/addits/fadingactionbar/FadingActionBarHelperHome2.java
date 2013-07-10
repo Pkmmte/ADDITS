@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -46,6 +45,10 @@ public class FadingActionBarHelperHome2
 	private boolean mFirstGlobalLayoutPerformed;
 	private View mMarginView;
 	private View mListViewBackgroundView;
+	
+	private int currentVisibleItemCount;
+	private int currentScrollState;
+	private int currentTotalItemCount;
 	
 	public FadingActionBarHelperHome2 actionBarBackground(int drawableResId)
 	{
@@ -137,7 +140,6 @@ public class FadingActionBarHelperHome2
 		mHeaderView.measure(widthMeasureSpec, heightMeasureSpec);
 		updateHeaderHeight(mHeaderView.getMeasuredHeight());
 		mHeaderView.setClickable(true);
-		mHeaderView.setOnClickListener(mOnHeaderClickListener);
 		
 		root.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
 		{
@@ -241,7 +243,6 @@ public class FadingActionBarHelperHome2
 		mHeaderContainer.addView(mHeaderView, 0);
 		mMarginView = mContentContainer.findViewById(R.id.fab__content_top_margin);
 		mMarginView.setClickable(true);
-		mMarginView.setOnClickListener(mOnHeaderClickListener);
 		
 		return mScrollView;
 	}
@@ -256,7 +257,7 @@ public class FadingActionBarHelperHome2
 	
 	private View createListView(ListView listView)
 	{
-		mContentContainer = (ViewGroup) mInflater.inflate(R.layout.fab_gridview_container, null);
+		mContentContainer = (ViewGroup) mInflater.inflate(R.layout.fab__listview_container, null);
 		mContentContainer.addView(mContentView);
 		
 		mHeaderContainer = (FrameLayout) mContentContainer.findViewById(R.id.fab__header_container);
@@ -278,20 +279,13 @@ public class FadingActionBarHelperHome2
 		return mContentContainer;
 	}
 	
-	private OnClickListener mOnHeaderClickListener = new View.OnClickListener()
-	{
-		@Override
-		public void onClick(View v)
-		{
-			FragmentHome.onHeaderClickListener(v);
-		}
-	};
-	
 	private OnScrollListener mOnScrollListener = new OnScrollListener()
 	{
 		@Override
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
 		{
+			currentVisibleItemCount = visibleItemCount;
+			currentTotalItemCount = totalItemCount;
 			View topChild = view.getChildAt(0);
 			
 			if (topChild == null)
@@ -311,7 +305,16 @@ public class FadingActionBarHelperHome2
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState)
 		{
-			// Do Nothing...
+			currentScrollState = scrollState;
+			isScrollCompleted(view, (view.getLastVisiblePosition() + 1));
+		}
+		
+		private void isScrollCompleted(View v, int lastVisiblePosition)
+		{
+			if (currentVisibleItemCount > 0 && currentScrollState == SCROLL_STATE_IDLE && currentTotalItemCount == lastVisiblePosition)
+			{
+				FragmentHome.scrollEnd();
+			}
 		}
 	};
 	public int mLastScrollPosition;
@@ -342,15 +345,15 @@ public class FadingActionBarHelperHome2
 		float damping = mUseParallax ? 0.5f : 1.0f;
 		int dampedScroll = (int) (scrollPosition * damping);
 		mHeaderContainer.setTop(-dampedScroll);
-	    mHeaderContainer.setBottom(-dampedScroll + mLastHeaderHeight);
+		mHeaderContainer.setBottom(-dampedScroll + mLastHeaderHeight);
 		
-	    if (mListViewBackgroundView != null)
-	    {
-	        int postion = mLastHeaderHeight - scrollPosition;
-	        int height = mListViewBackgroundView.getHeight();
-	        mListViewBackgroundView.setTop(postion);
-	        mListViewBackgroundView.setBottom(postion + height);
-	    }
+		if (mListViewBackgroundView != null)
+		{
+			int postion = mLastHeaderHeight - scrollPosition;
+			int height = mListViewBackgroundView.getHeight();
+			mListViewBackgroundView.setTop(postion);
+			mListViewBackgroundView.setBottom(postion + height);
+		}
 	}
 	
 	private void updateHeaderHeight(int headerHeight)

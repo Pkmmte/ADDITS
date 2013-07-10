@@ -26,6 +26,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,7 +39,6 @@ public class FragmentHome extends Fragment
 	static View view;
 	static ListView list;
 	static FrameLayout frame;
-	//static Button moar;
 	static FeedAdapter adapter;
 	static FadingActionBarHelperHome2 mFadingHelper;
 	
@@ -66,7 +66,6 @@ public class FragmentHome extends Fragment
 		
 		feedList = new ArrayList<Feed>();
 		list = (ListView) view.findViewById(android.R.id.list);
-		//moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
 		list.setAdapter(adapter);
@@ -135,37 +134,46 @@ public class FragmentHome extends Fragment
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 			{
-				int ID = feedList.get(position).getID();
-				String Title = feedList.get(position).getTitle();
-				String Description = feedList.get(position).getDescription();
-				String Content = feedList.get(position).getContent();
-				String CommentFeed = feedList.get(position).getCommentFeed();
-				String Author = feedList.get(position).getAuthor();
-				String Date = feedList.get(position).getDate();
-				String Category = feedList.get(position).getCategory();
-				String Image = feedList.get(position).getImage();
-				String URL = feedList.get(position).getURL();
-				int Comments = feedList.get(position).getComments();
-				boolean Favorite = feedList.get(position).isFavorite();
-				boolean Read = feedList.get(position).isRead();
-				
-				Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
-				ActivityMain.callArticle(getActivity(), Article);
+				if(position > 0)
+				{
+					int ID = feedList.get(position - 1).getID();
+					String Title = feedList.get(ID).getTitle();
+					String Description = feedList.get(ID).getDescription();
+					String Content = feedList.get(ID).getContent();
+					String CommentFeed = feedList.get(ID).getCommentFeed();
+					String Author = feedList.get(ID).getAuthor();
+					String Date = feedList.get(ID).getDate();
+					String Category = feedList.get(ID).getCategory();
+					String Image = feedList.get(ID).getImage();
+					String URL = feedList.get(ID).getURL();
+					int Comments = feedList.get(ID).getComments();
+					boolean Favorite = feedList.get(ID).isFavorite();
+					boolean Read = feedList.get(ID).isRead();
+					
+					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
+					ActivityMain.callArticle(getActivity(), Article);
+				}
+				else if (currentSlideID != null)
+				{
+					int ID = NewsFeed[currentSlideID].getID();
+					String Title = NewsFeed[currentSlideID].getTitle();
+					String Description = NewsFeed[currentSlideID].getDescription();
+					String Content = NewsFeed[currentSlideID].getContent();
+					String CommentFeed = NewsFeed[currentSlideID].getCommentFeed();
+					String Author = NewsFeed[currentSlideID].getAuthor();
+					String Date = NewsFeed[currentSlideID].getDate();
+					String Category = NewsFeed[currentSlideID].getCategory();
+					String Image = NewsFeed[currentSlideID].getImage();
+					String URL = NewsFeed[currentSlideID].getURL();
+					int Comments = NewsFeed[currentSlideID].getComments();
+					boolean Favorite = NewsFeed[currentSlideID].isFavorite();
+					boolean Read = NewsFeed[currentSlideID].isRead();
+					
+					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
+					ActivityMain.callArticle(getActivity(), Article);
+				}
 			}
 		});
-		/*moar.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				moar.setText("Loading Articles...");
-				
-				if (numLoaded + 10 < NewsFeed.length)
-					addArticles(10);
-				else
-					addArticles(NewsFeed.length - numLoaded);
-			}
-		});*/
 	}
 	
 	@Override
@@ -197,7 +205,6 @@ public class FragmentHome extends Fragment
 		
 		if (NewsFeed == null)
 		{
-			//moar.setVisibility(View.GONE);
 			feedList.clear();
 		}
 		else
@@ -221,13 +228,6 @@ public class FragmentHome extends Fragment
 			numLoaded++;
 		}
 		
-		//if (numLoaded < NewsFeed.length)
-		//{
-		//	moar.setText("Load More Articles");
-		//	moar.setVisibility(View.VISIBLE);
-		//}
-		//else
-		//	moar.setVisibility(View.GONE);
 		adapter.notifyDataSetChanged();
 	}
 	
@@ -264,27 +264,12 @@ public class FragmentHome extends Fragment
 		trans.commit();
 	}
 	
-	public static void onHeaderClickListener(View v)
+	public static void scrollEnd()
 	{
-		if (currentSlideID != null)
-		{
-			int ID = NewsFeed[currentSlideID].getID();
-			String Title = NewsFeed[currentSlideID].getTitle();
-			String Description = NewsFeed[currentSlideID].getDescription();
-			String Content = NewsFeed[currentSlideID].getContent();
-			String CommentFeed = NewsFeed[currentSlideID].getCommentFeed();
-			String Author = NewsFeed[currentSlideID].getAuthor();
-			String Date = NewsFeed[currentSlideID].getDate();
-			String Category = NewsFeed[currentSlideID].getCategory();
-			String Image = NewsFeed[currentSlideID].getImage();
-			String URL = NewsFeed[currentSlideID].getURL();
-			int Comments = NewsFeed[currentSlideID].getComments();
-			boolean Favorite = NewsFeed[currentSlideID].isFavorite();
-			boolean Read = NewsFeed[currentSlideID].isRead();
-			
-			Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
-			ActivityMain.callArticle(v.getContext(), Article);
-		}
+		if (numLoaded + 10 < NewsFeed.length)
+			addArticles(10);
+		else
+			addArticles(NewsFeed.length - numLoaded);
 	}
 	
 	class firstTask extends TimerTask
@@ -335,6 +320,7 @@ public class FragmentHome extends Fragment
 				view = inflater.inflate(R.layout.feed_item, null);
 				
 				holder = new ViewHolder();
+				holder.Card = (LinearLayout) view.findViewById(R.id.Card);
 				holder.lblUnread = view.findViewById(R.id.lblUnread);
 				holder.lblAuthor = (RelativeLayout) view.findViewById(R.id.lblAuthor);
 				holder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
@@ -391,10 +377,8 @@ public class FragmentHome extends Fragment
 				}
 			}
 			
-			Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
-			anim.setDuration(2000);
-			
-			holder.txtTitle.startAnimation(anim);
+			Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.incoming_card);
+			holder.Card.startAnimation(anim);
 			
 			return view;
 		}
@@ -402,6 +386,7 @@ public class FragmentHome extends Fragment
 	
 	private static class ViewHolder
 	{
+		public LinearLayout Card;
 		public View lblUnread;
 		public RelativeLayout lblAuthor;
 		public TextView txtTitle;
