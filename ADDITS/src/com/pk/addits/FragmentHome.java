@@ -24,20 +24,19 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.origamilabs.library.headergridview.views.HeaderGridView;
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
 
 public class FragmentHome extends Fragment
 {
 	static View view;
-	static HeaderGridView grid;
+	static ListView list;
 	static FrameLayout frame;
 	//static Button moar;
 	static FeedAdapter adapter;
@@ -66,11 +65,11 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		
 		feedList = new ArrayList<Feed>();
-		grid = (HeaderGridView) view.findViewById(R.id.home_header);
+		list = (ListView) view.findViewById(android.R.id.list);
 		//moar = (Button) view.findViewById(R.id.MoarArticles);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
-		grid.setAdapter(adapter);
+		list.setAdapter(adapter);
 		currentSlide = 1;
 		numLoaded = 0;
 		
@@ -131,7 +130,7 @@ public class FragmentHome extends Fragment
 		});
 		grid.setOnTouchListener(touchListener);*/
 		
-		grid.setOnItemClickListener(new OnItemClickListener()
+		list.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
@@ -203,7 +202,7 @@ public class FragmentHome extends Fragment
 		}
 		else
 		{
-			grid.setVisibility(View.VISIBLE);
+			list.setVisibility(View.VISIBLE);
 			
 			if (numLoaded + 10 < NewsFeed.length)
 				addArticles(10);

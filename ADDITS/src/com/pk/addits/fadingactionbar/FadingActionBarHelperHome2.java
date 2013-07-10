@@ -20,9 +20,9 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 
-import com.origamilabs.library.headergridview.views.HeaderGridView;
 import com.pk.addits.FragmentHome;
 import com.pk.addits.R;
 
@@ -118,11 +118,11 @@ public class FadingActionBarHelperHome2
 		//
 		// See if we are in a ListView or ScrollView scenario
 		
-		HeaderGridView gridView = (HeaderGridView) mContentView.findViewById(android.R.id.list);
+		ListView listView = (ListView) mContentView.findViewById(android.R.id.list);
 		View root;
-		if (gridView != null)
+		if (listView != null)
 		{
-			root = createGridView(gridView);
+			root = createListView(listView);
 		}
 		else
 		{
@@ -254,7 +254,7 @@ public class FadingActionBarHelperHome2
 		}
 	};
 	
-	private View createGridView(HeaderGridView gridView)
+	private View createListView(ListView listView)
 	{
 		mContentContainer = (ViewGroup) mInflater.inflate(R.layout.fab_gridview_container, null);
 		mContentContainer.addView(mContentView);
@@ -263,18 +263,18 @@ public class FadingActionBarHelperHome2
 		initializeGradient(mHeaderContainer);
 		mHeaderContainer.addView(mHeaderView, 0);
 		
-		mMarginView = new View(gridView.getContext());
+		mMarginView = new View(listView.getContext());
 		mMarginView.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, 0));
-		gridView.addHeaderView(mMarginView, null, true);
+		listView.addHeaderView(mMarginView, null, true);
 		
 		// Make the background as high as the screen so that it fills regardless
 		// of the amount of scroll.
 		mListViewBackgroundView = mContentContainer.findViewById(R.id.fab__listview_background);
 		FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mListViewBackgroundView.getLayoutParams();
-		params.height = Utils.getDisplayHeight(gridView.getContext());
+		params.height = Utils.getDisplayHeight(listView.getContext());
 		mListViewBackgroundView.setLayoutParams(params);
 		
-		gridView.setOnScrollListener(mOnScrollListener);
+		listView.setOnScrollListener(mOnScrollListener);
 		return mContentContainer;
 	}
 	
