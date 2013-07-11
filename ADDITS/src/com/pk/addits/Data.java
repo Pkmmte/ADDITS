@@ -218,7 +218,6 @@ public class Data
 			String Description = "";
 			String Content = "";
 			String CommentFeed = "";
-			int Comments = 0;
 			boolean Favorite = false;
 			boolean Read = false;
 			
@@ -286,28 +285,13 @@ public class Data
 						if (xrp.next() == XmlPullParser.TEXT)
 							CommentFeed = xrp.getText();
 					}
-					else if (itemActive && elemName.equals("slash:comments"))
-					{
-						if (xrp.next() == XmlPullParser.TEXT)
-							Comments = Integer.parseInt(xrp.getText());
-					}
-					else if (itemActive && elemName.equals("favorite"))
-					{
-						if (xrp.next() == XmlPullParser.TEXT)
-							Comments = Integer.parseInt(xrp.getText());
-					}
-					else if (itemActive && elemName.equals("read"))
-					{
-						if (xrp.next() == XmlPullParser.TEXT)
-							Comments = Integer.parseInt(xrp.getText());
-					}
 				}
 				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
 				{
 					itemActive = false;
 					categoryFound = false;
 					
-					Feeeeedz[feedCount] = new Feed(feedCount, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
+					Feeeeedz[feedCount] = new Feed(feedCount, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					feedCount++;
 				}
 				eventType = xrp.next();
@@ -461,6 +445,65 @@ public class Data
 		return link;
 	}
 	
+	public static void overwriteXML(Feed[] Feeeeedz)
+	{
+		File sdCard = Environment.getExternalStorageDirectory();
+		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
+		dir.mkdirs();
+		File file = new File(dir, FEED_TAG);
+		
+		try
+		{
+			StringBuilder XMLbuilder = new StringBuilder();
+			XMLbuilder.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<feed>\n");
+			
+			for (int x = 0; x < Feeeeedz.length; x++)
+			{
+				int sID = Feeeeedz[x].getID();
+				String sTitle = Feeeeedz[x].getTitle();
+				String sDescription = Feeeeedz[x].getDescription();
+				String sContent = Feeeeedz[x].getContent();
+				String sCommentFeed = Feeeeedz[x].getCommentFeed();
+				String sAuthor = Feeeeedz[x].getAuthor();
+				String sDate = Feeeeedz[x].getDate();
+				String sCategory = Feeeeedz[x].getCategory();
+				String sImage = Feeeeedz[x].getImage();
+				String sURL = Feeeeedz[x].getURL();
+				boolean sFavorite = Feeeeedz[x].isFavorite();
+				boolean sRead = Feeeeedz[x].isRead();
+				
+				// Fix "&" Sign
+				// category = category.replace("&", "&amp;");
+				// description = description.replace("&", "&amp;");
+				
+				XMLbuilder.append("	<article\n" + 
+								  "		id=\"" + sID + "\"\n" + 
+								  "		title=\"" + sTitle + "\"\n" + 
+								  "		description=\"" + sDescription + "\"\n" + 
+								  "		content=\"" + sContent + "\"\n" + 
+								  "		commentfeed=\"" + sCommentFeed + "\"\n" + 
+								  "		author=\"" + sAuthor + "\"\n" + 
+								  "		date=\"" + sDate + "\"\n" + 
+								  "		category=\"" + sCategory + "\"\n" + 
+								  "		image=\"" + sImage + "\"\n" + 
+								  "		url=\"" + sURL + "\"\n" + 
+								  "		favorite=\"" + sFavorite + "\"\n" + 
+								  "		read=\"" + sRead + "\" />\n\n");
+			}
+			
+			XMLbuilder.append("</feed>");
+			String XML = XMLbuilder.toString();
+			
+			FileOutputStream f = new FileOutputStream(file);
+			f.write(XML.getBytes());
+			f.close();
+		}
+		catch (Exception e)
+		{
+			Log.w("XML Write Error", e);
+		}
+	}
+	
 	public static boolean isNetworkConnected(Context context)
 	{
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -507,7 +550,7 @@ public class Data
 		SimpleDateFormat tFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
 		Date newDate = new Date();
 		Date oldDate = new Date();
-
+		
 		try
 		{
 			newDate = tFormat.parse(nDate);

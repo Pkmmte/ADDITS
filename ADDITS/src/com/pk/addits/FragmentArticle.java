@@ -71,7 +71,6 @@ public class FragmentArticle extends Fragment
 		bundle.putString("Category", article.getCategory());
 		bundle.putString("Image", article.getImage());
 		bundle.putString("URL", article.getURL());
-		bundle.putInt("Comments", article.getComments());
 		bundle.putBoolean("Favorite", article.isFavorite());
 		bundle.putBoolean("Read", article.isRead());
 		
@@ -96,7 +95,7 @@ public class FragmentArticle extends Fragment
 		txtLoadComments = (TextView) view.findViewById(R.id.txtLoadComments);
 		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 		comments = (ListView) view.findViewById(R.id.ListView);
-
+		
 		fontRegular = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
 		fontBold = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
 		fontLight = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
@@ -121,8 +120,7 @@ public class FragmentArticle extends Fragment
 		
 		actionBar.setTitle(Article.getTitle());
 		if (Article.getImage().length() > 0)
-			Picasso.with(getActivity()).load(Article.getImage()).error
-			(R.drawable.loading_image_banner).fit().into(imgHeader);
+			Picasso.with(getActivity()).load(Article.getImage()).error(R.drawable.loading_image_banner).fit().into(imgHeader);
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_banner).fit().into(imgHeader);
 		
@@ -131,36 +129,27 @@ public class FragmentArticle extends Fragment
 		txtDate.setText(Article.getDate());
 		txtContent.setText(Article.getContent());
 		
-		if (Article.getComments() > 0)
+		commentCard.setOnClickListener(new View.OnClickListener()
 		{
-			txtLoadComments.setText("Load Comments");
-			commentCard.setOnClickListener(new View.OnClickListener()
+			@Override
+			public void onClick(View v)
 			{
-				@Override
-				public void onClick(View v)
+				progressBar.setVisibility(View.VISIBLE);
+				txtLoadComments.setText("Loading Comments...");
+				commentCard.setClickable(false);
+				
+				if (loadCommentsThread == null)
 				{
-					progressBar.setVisibility(View.VISIBLE);
-					txtLoadComments.setText("Loading " + Article.getComments() + " Comments...");
-					commentCard.setClickable(false);
-					
-					if (loadCommentsThread == null)
-					{
-						initializeLoadCommentsThread();
-						loadCommentsThread.start();
-					}
-					else if (!loadCommentsThread.isAlive())
-					{
-						initializeLoadCommentsThread();
-						loadCommentsThread.start();
-					}
+					initializeLoadCommentsThread();
+					loadCommentsThread.start();
 				}
-			});
-		}
-		else
-		{
-			txtLoadComments.setText("No Comments");
-			commentCard.setClickable(false);
-		}
+				else if (!loadCommentsThread.isAlive())
+				{
+					initializeLoadCommentsThread();
+					loadCommentsThread.start();
+				}
+			}
+		});
 	}
 	
 	@Override
@@ -168,9 +157,7 @@ public class FragmentArticle extends Fragment
 	{
 		super.onAttach(activity);
 		
-		mFadingHelper = new FadingActionBarHelper().actionBarBackground
-				(R.drawable.ab_background).headerLayout(R.layout.header_light).contentLayout
-				(R.layout.fragment_article).lightActionBar(false);
+		mFadingHelper = new FadingActionBarHelper().actionBarBackground(R.drawable.ab_background).headerLayout(R.layout.header_light).contentLayout(R.layout.fragment_article).lightActionBar(false);
 		mFadingHelper.initActionBar(activity);
 	}
 	
@@ -187,9 +174,9 @@ public class FragmentArticle extends Fragment
 	
 	public static void menuVisibility(boolean drawerOpen)
 	{
-		if(shareItem != null && optionsMenu != null)
+		if (shareItem != null && optionsMenu != null)
 			shareItem.setVisible(!drawerOpen);
-		if(!drawerOpen)
+		if (!drawerOpen)
 			configureShare();
 	}
 	
@@ -207,12 +194,10 @@ public class FragmentArticle extends Fragment
 		String Category = args.getString("Category");
 		String Image = args.getString("Image");
 		String URL = args.getString("URL");
-		int Comments = args.getInt("Comments");
 		boolean Favorite = args.getBoolean("Favorite");
 		boolean Read = args.getBoolean("Read");
 		
-		Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, 
-				Category, Image, URL, Comments, Favorite, Read);
+		Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 	}
 	
 	public static void configureShare()
@@ -302,8 +287,7 @@ public class FragmentArticle extends Fragment
 			CommentFeed entry = listItem.get(position);
 			if (view == null)
 			{
-				LayoutInflater inflater = (LayoutInflater) context.getSystemService
-						(Context.LAYOUT_INFLATER_SERVICE);
+				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				view = inflater.inflate(R.layout.commentfeed_item, null);
 				
 				holder = new ViewHolder();

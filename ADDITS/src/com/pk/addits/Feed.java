@@ -12,11 +12,10 @@ public class Feed
 	String Category;
 	String Image;
 	String URL;
-	int Comments;
 	boolean Favorite;
 	boolean Read;
 	
-	public Feed(int ID, String Title, String Description, String Content, String CommentFeed, String Author, String Date, String Category, String Image, String URL, int Comments, boolean Favorite, boolean Read)
+	public Feed(int ID, String Title, String Description, String Content, String CommentFeed, String Author, String Date, String Category, String Image, String URL, boolean Favorite, boolean Read)
 	{
 		this.ID = ID;
 		this.Title = Title;
@@ -28,7 +27,6 @@ public class Feed
 		this.Category = Category;
 		this.Image = Image;
 		this.URL = URL;
-		this.Comments = Comments;
 		this.Favorite = Favorite;
 		this.Read = Read;
 	}
@@ -81,11 +79,6 @@ public class Feed
 	public String getURL()
 	{
 		return URL;
-	}
-	
-	public int getComments()
-	{
-		return Comments;
 	}
 	
 	public boolean isFavorite()

@@ -108,18 +108,11 @@ public class FragmentHome extends Fragment
 			{
 				for (int position : reverseSortedPositions)
 				{
-					//NewsFeed[position - 1].setRead(!adapter.getItem(position).isRead());
+					NewsFeed[position - 1].setRead(!feedList.get(position - 1).isRead());
 					feedList.remove(feedList.get(position - 1));
 					feedList.add(position - 1, NewsFeed[position - 1]);
 					
-					//Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
-					//anim.setDuration(500);
-					//Toast.makeText(getActivity(), "Listener Position: " + position, Toast.LENGTH_SHORT).show();
-					//Toast.makeText(getActivity(), "Adapter Position: " + adapter.getItem(position).getTitle() + "List Position: " + feedList.get(position).getTitle() + "\nReal Position: " + NewsFeed[position - 1].getTitle(), Toast.LENGTH_SHORT).show();
-					
 					adapter.notifyDataSetChanged();
-					//Toast.makeText(getActivity(), "Adapter Position: " + adapter.getItem(position).getTitle() + "List Position: " + feedList.get(position).getTitle() + "\nReal Position: " + NewsFeed[position - 1].getTitle(), Toast.LENGTH_SHORT).show();
-					//list.getChildAt(position).startAnimation(anim);
 					
 					if(NewsFeed[position - 1].isRead())
 						Toast.makeText(getActivity(), "Marked as read!", Toast.LENGTH_SHORT).show();
@@ -148,11 +141,10 @@ public class FragmentHome extends Fragment
 					String Category = feedList.get(ID).getCategory();
 					String Image = feedList.get(ID).getImage();
 					String URL = feedList.get(ID).getURL();
-					int Comments = feedList.get(ID).getComments();
 					boolean Favorite = feedList.get(ID).isFavorite();
 					boolean Read = feedList.get(ID).isRead();
 					
-					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
+					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					ActivityMain.callArticle(getActivity(), Article);
 				}
 				else if (currentSlideID != null)
@@ -167,11 +159,10 @@ public class FragmentHome extends Fragment
 					String Category = NewsFeed[currentSlideID].getCategory();
 					String Image = NewsFeed[currentSlideID].getImage();
 					String URL = NewsFeed[currentSlideID].getURL();
-					int Comments = NewsFeed[currentSlideID].getComments();
 					boolean Favorite = NewsFeed[currentSlideID].isFavorite();
 					boolean Read = NewsFeed[currentSlideID].isRead();
 					
-					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Comments, Favorite, Read);
+					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					ActivityMain.callArticle(getActivity(), Article);
 				}
 			}
@@ -214,7 +205,7 @@ public class FragmentHome extends Fragment
 			list.setVisibility(View.VISIBLE);
 			
 			for (int x = 0; x < NewsFeed.length; x++)
-				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
+				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
 			adapter.notifyDataSetChanged();
 			populateSlide();
@@ -240,6 +231,7 @@ public class FragmentHome extends Fragment
 			sCategory = NewsFeed[r].getCategory();
 			currentSlideID = NewsFeed[r].getID();
 		}
+		
 		if (!sCategory.equalsIgnoreCase("DAILY SAVER"))
 			fragSlide = Slider.newInstance(sTitle, sAuthor, sDate, sImage);
 		else
