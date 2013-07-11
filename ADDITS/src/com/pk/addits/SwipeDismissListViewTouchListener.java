@@ -1,20 +1,20 @@
 package com.pk.addits;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import android.widget.ListView;
 
 /**
  * A {@link android.view.View.OnTouchListener} that makes the list items in a {@link ListView} dismissable. {@link ListView} is given special treatment because by default it handles touches for its
@@ -56,7 +56,7 @@ import java.util.List;
  * 
  * @see SwipeDismissTouchListener
  */
-public class SwipeDismissGridViewTouchListener implements View.OnTouchListener
+public class SwipeDismissListViewTouchListener implements View.OnTouchListener
 {
 	// Cached ViewConfiguration and system-wide constant values
 	private int mSlop;
@@ -65,7 +65,7 @@ public class SwipeDismissGridViewTouchListener implements View.OnTouchListener
 	private long mAnimationTime;
 	
 	// Fixed properties
-	private PkGridView mListView;
+	private ListView mListView;
 	private OnDismissCallback mCallback;
 	private int mViewWidth = 1; // 1 and not 0 to prevent dividing by zero
 	
@@ -92,7 +92,7 @@ public class SwipeDismissGridViewTouchListener implements View.OnTouchListener
 		 * @param reverseSortedPositions
 		 *            An array of positions to dismiss, sorted in descending order for convenience.
 		 */
-		void onDismiss(PkGridView listView, int[] reverseSortedPositions);
+		void onDismiss(ListView listView, int[] reverseSortedPositions);
 	}
 	
 	/**
@@ -103,14 +103,14 @@ public class SwipeDismissGridViewTouchListener implements View.OnTouchListener
 	 * @param callback
 	 *            The callback to trigger when the user has indicated that she would like to dismiss one or more list items.
 	 */
-	public SwipeDismissGridViewTouchListener(PkGridView gridView, OnDismissCallback callback)
+	public SwipeDismissListViewTouchListener(ListView listView, OnDismissCallback callback)
 	{
-		ViewConfiguration vc = ViewConfiguration.get(gridView.getContext());
+		ViewConfiguration vc = ViewConfiguration.get(listView.getContext());
 		mSlop = vc.getScaledTouchSlop();
 		mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
 		mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
-		mAnimationTime = gridView.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime);
-		mListView = gridView;
+		mAnimationTime = listView.getContext().getResources().getInteger(android.R.integer.config_shortAnimTime);
+		mListView = listView;
 		mCallback = callback;
 	}
 	
@@ -246,7 +246,7 @@ public class SwipeDismissGridViewTouchListener implements View.OnTouchListener
 				mVelocityTracker = null;
 				mDownX = 0;
 				mDownView = null;
-				mDownPosition = PkGridView.INVALID_POSITION;
+				mDownPosition = ListView.INVALID_POSITION;
 				mSwiping = false;
 				break;
 			}

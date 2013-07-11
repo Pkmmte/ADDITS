@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
@@ -52,7 +53,6 @@ public class FragmentHome extends Fragment
 	
 	static Fragment fragSlide;
 	static FragmentManager fm;
-	static int numLoaded;
 	static Integer currentSlideID;
 	
 	Typeface fontRegular;
@@ -70,7 +70,6 @@ public class FragmentHome extends Fragment
 		adapter = new FeedAdapter(getActivity(), feedList);
 		list.setAdapter(adapter);
 		currentSlide = 1;
-		numLoaded = 0;
 		
 		return view;
 	}
@@ -102,24 +101,27 @@ public class FragmentHome extends Fragment
 		populateSlide();
 		updateState();
 		
-		/*SwipeDismissGridViewTouchListener touchListener = new SwipeDismissGridViewTouchListener(grid, new SwipeDismissGridViewTouchListener.OnDismissCallback()
+		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(list, new SwipeDismissListViewTouchListener.OnDismissCallback()
 		{
 			@Override
-			public void onDismiss(PkGridView listView, int[] reverseSortedPositions)
+			public void onDismiss(ListView listView, int[] reverseSortedPositions)
 			{
 				for (int position : reverseSortedPositions)
 				{
-					NewsFeed[position].setRead(!adapter.getItem(position).isRead());
-					feedList.remove(adapter.getItem(position));
-					feedList.add(position, NewsFeed[position]);
+					//NewsFeed[position - 1].setRead(!adapter.getItem(position).isRead());
+					feedList.remove(feedList.get(position - 1));
+					feedList.add(position - 1, NewsFeed[position - 1]);
 					
-					Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
-					anim.setDuration(500);
+					//Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+					//anim.setDuration(500);
+					//Toast.makeText(getActivity(), "Listener Position: " + position, Toast.LENGTH_SHORT).show();
+					//Toast.makeText(getActivity(), "Adapter Position: " + adapter.getItem(position).getTitle() + "List Position: " + feedList.get(position).getTitle() + "\nReal Position: " + NewsFeed[position - 1].getTitle(), Toast.LENGTH_SHORT).show();
 					
 					adapter.notifyDataSetChanged();
-					grid.getChildAt(position).startAnimation(anim);
+					//Toast.makeText(getActivity(), "Adapter Position: " + adapter.getItem(position).getTitle() + "List Position: " + feedList.get(position).getTitle() + "\nReal Position: " + NewsFeed[position - 1].getTitle(), Toast.LENGTH_SHORT).show();
+					//list.getChildAt(position).startAnimation(anim);
 					
-					if(NewsFeed[position].isRead())
+					if(NewsFeed[position - 1].isRead())
 						Toast.makeText(getActivity(), "Marked as read!", Toast.LENGTH_SHORT).show();
 					else
 						Toast.makeText(getActivity(), "Marked as unread!", Toast.LENGTH_SHORT).show();
@@ -127,7 +129,7 @@ public class FragmentHome extends Fragment
 				
 			}
 		});
-		grid.setOnTouchListener(touchListener);*/
+		list.setOnTouchListener(touchListener);
 		
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -211,24 +213,12 @@ public class FragmentHome extends Fragment
 		{
 			list.setVisibility(View.VISIBLE);
 			
-			if (numLoaded + 10 < NewsFeed.length)
-				addArticles(10);
-			else
-				addArticles(NewsFeed.length - numLoaded);
+			for (int x = 0; x < NewsFeed.length; x++)
+				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].getComments(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
+			adapter.notifyDataSetChanged();
 			populateSlide();
 		}
-	}
-	
-	public static void addArticles(int number)
-	{
-		for (int x = 0; x < number; x++)
-		{
-			feedList.add(new Feed(NewsFeed[numLoaded].getID(), NewsFeed[numLoaded].getTitle(), NewsFeed[numLoaded].getDescription(), NewsFeed[numLoaded].getContent(), NewsFeed[numLoaded].getCommentFeed(), NewsFeed[numLoaded].getAuthor(), NewsFeed[numLoaded].getDate(), NewsFeed[numLoaded].getCategory(), NewsFeed[numLoaded].getImage(), NewsFeed[numLoaded].getURL(), NewsFeed[numLoaded].getComments(), NewsFeed[numLoaded].isFavorite(), NewsFeed[numLoaded].isRead()));
-			numLoaded++;
-		}
-		
-		adapter.notifyDataSetChanged();
 	}
 	
 	public static void populateSlide()
@@ -262,14 +252,6 @@ public class FragmentHome extends Fragment
 		trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
 		trans.replace(R.id.slider_content, fragSlide);
 		trans.commit();
-	}
-	
-	public static void scrollEnd()
-	{
-		if (numLoaded + 10 < NewsFeed.length)
-			addArticles(10);
-		else
-			addArticles(NewsFeed.length - numLoaded);
 	}
 	
 	class firstTask extends TimerTask
@@ -350,7 +332,7 @@ public class FragmentHome extends Fragment
 			holder.txtCategory.setText(entry.getCategory());
 			
 			if (entry.getImage().length() > 0)
-				Picasso.with(context).load(entry.getImage()).error(R.drawable.loading_image_banner).fit().skipCache().into(holder.imgPreview);
+				Picasso.with(context).load(entry.getImage()).error(R.drawable.loading_image_error).fit().into(holder.imgPreview);
 			else
 				holder.imgPreview.setVisibility(View.GONE);
 			// Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);

@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
-import com.pk.addits.FragmentHome;
 import com.pk.addits.R;
 
 public class FadingActionBarHelperHome2
@@ -45,10 +44,6 @@ public class FadingActionBarHelperHome2
 	private boolean mFirstGlobalLayoutPerformed;
 	private View mMarginView;
 	private View mListViewBackgroundView;
-	
-	private int currentVisibleItemCount;
-	private int currentScrollState;
-	private int currentTotalItemCount;
 	
 	public FadingActionBarHelperHome2 actionBarBackground(int drawableResId)
 	{
@@ -284,8 +279,6 @@ public class FadingActionBarHelperHome2
 		@Override
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
 		{
-			currentVisibleItemCount = visibleItemCount;
-			currentTotalItemCount = totalItemCount;
 			View topChild = view.getChildAt(0);
 			
 			if (topChild == null)
@@ -305,16 +298,7 @@ public class FadingActionBarHelperHome2
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState)
 		{
-			currentScrollState = scrollState;
-			isScrollCompleted(view, (view.getLastVisiblePosition() + 1));
-		}
-		
-		private void isScrollCompleted(View v, int lastVisiblePosition)
-		{
-			if (currentVisibleItemCount > 0 && currentScrollState == SCROLL_STATE_IDLE && currentTotalItemCount == lastVisiblePosition)
-			{
-				FragmentHome.scrollEnd();
-			}
+			// Do Nothing...
 		}
 	};
 	public int mLastScrollPosition;
