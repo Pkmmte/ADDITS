@@ -9,21 +9,21 @@ package com.pk.addits;
 
 public final class R {
     public static final class anim {
-        public static final int fade_in=0x7f050000;
-        public static final int fade_out=0x7f050001;
-        public static final int incoming_card=0x7f050002;
-        public static final int now_left_in=0x7f050003;
-        public static final int now_left_out=0x7f050004;
-        public static final int now_right_in=0x7f050005;
-        public static final int now_right_out=0x7f050006;
-        public static final int slide_down=0x7f050007;
-        public static final int slide_up=0x7f050008;
+        public static final int card_anim_list=0x7f050000;
+        public static final int fade_in=0x7f050001;
+        public static final int fade_out=0x7f050002;
+        public static final int loading_slide_down=0x7f050003;
+        public static final int loading_slide_up=0x7f050004;
+        public static final int plus_page_in_left=0x7f050005;
+        public static final int plus_page_in_right=0x7f050006;
+        public static final int plus_page_out_left=0x7f050007;
+        public static final int plus_page_out_right=0x7f050008;
     }
     public static final class animator {
-        public static final int card_flip_left_in=0x7f060000;
-        public static final int card_flip_left_out=0x7f060001;
-        public static final int card_flip_right_in=0x7f060002;
-        public static final int card_flip_right_out=0x7f060003;
+        public static final int now_left_in=0x7f060000;
+        public static final int now_left_out=0x7f060001;
+        public static final int now_right_in=0x7f060002;
+        public static final int now_right_out=0x7f060003;
     }
     public static final class array {
         public static final int drawer_items=0x7f080000;
@@ -194,8 +194,9 @@ public final class R {
         public static final int txtTitle=0x7f0b0017;
     }
     public static final class integer {
-        public static final int card_flip_time_full=0x7f0c0000;
-        public static final int card_flip_time_half=0x7f0c0001;
+        public static final int card_flip_time_full=0x7f0c0001;
+        public static final int card_flip_time_half=0x7f0c0002;
+        public static final int card_flip_time_max=0x7f0c0000;
     }
     public static final class interpolator {
         public static final int decelerate_cubic=0x7f070000;

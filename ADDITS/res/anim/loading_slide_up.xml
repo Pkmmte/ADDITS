@@ -2,11 +2,11 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:shareInterpolator="false" >
 
-    <translate
-        android:duration="750"
+    <translate 
+    	android:duration="@integer/card_flip_time_full"
         android:fromXDelta="0.0%"
-        android:fromYDelta="0.0%"
+        android:fromYDelta="100.0%"
         android:toXDelta="0.0%"
-        android:toYDelta="100.0%" />
+        android:toYDelta="0.0%" />
 
 </set>

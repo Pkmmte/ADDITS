@@ -13,7 +13,7 @@
 	
     <alpha 
 	android:interpolator="@interpolator/decelerate_cubic" 
-	android:duration="1000" 
+    android:duration="@integer/card_flip_time_max"
 	android:fromAlpha="0.0" 
 	android:toAlpha="1.0" />
 </set>

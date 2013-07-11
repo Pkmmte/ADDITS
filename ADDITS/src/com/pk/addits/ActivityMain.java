@@ -153,7 +153,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				actionBar.setTitle(mTitle);
 				articleShowing = false;
 				fragmentManager.beginTransaction().setCustomAnimations(
-						R.anim.now_left_in, R.anim.now_right_out)
+						R.anim.plus_page_in_left, R.anim.plus_page_out_left)
 				.replace(R.id.content_frame, fragment).commit();
 				
 				return true;
@@ -276,7 +276,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
 		fragmentManager.beginTransaction().setCustomAnimations(
-				R.anim.now_right_in, R.anim.now_left_out)
+				R.anim.plus_page_in_right, R.anim.plus_page_out_right)
 		.replace(R.id.content_frame, fragment).commit();
 	}
 	
@@ -438,7 +438,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					Loading.setVisibility(View.VISIBLE);
 					if (Animate)
 					{
-						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.slide_up);
+						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_up);
 						Loading.startAnimation(a);
 					}
 					if (Finished)
@@ -452,7 +452,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					Loading.setVisibility(View.GONE);
 					if (Animate)
 					{
-						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.slide_down);
+						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down);
 						Loading.startAnimation(a);
 					}
 					if (Finished)
