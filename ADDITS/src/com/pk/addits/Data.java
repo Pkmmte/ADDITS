@@ -101,8 +101,8 @@ public class Data
 	
 	public static boolean compareFeed(Context context)
 	{
-		Feed[] tempFeed = retrieveFeed(context, false).clone();
-		Feed[] realFeed = retrieveFeed(context, true).clone();
+		Feed[] tempFeed = retrieveTempFeed(context, false).clone();
+		Feed[] realFeed = retrieveTempFeed(context, true).clone();
 		
 		if (tempFeed.length != realFeed.length)
 			return true;
@@ -152,7 +152,7 @@ public class Data
 		return false;
 	}
 	
-	public static Feed[] retrieveFeed(Context context, boolean realFeed)
+	public static Feed[] retrieveTempFeed(Context context, boolean realFeed)
 	{
 		int count = 0;
 		
@@ -411,7 +411,7 @@ public class Data
 		return comments;
 	}
 	
-	private static String pullLinks(String text)
+	public static String pullLinks(String text)
 	{
 		ArrayList<String> links = new ArrayList<String>();
 		String link = "";
@@ -445,7 +445,7 @@ public class Data
 		return link;
 	}
 	
-	public static void overwriteXML(Feed[] Feeeeedz)
+	public static void overwriteFeedXML(Feed[] Feeeeedz)
 	{
 		File sdCard = Environment.getExternalStorageDirectory();
 		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
@@ -473,8 +473,15 @@ public class Data
 				boolean sRead = Feeeeedz[x].isRead();
 				
 				// Fix "&" Sign
-				// category = category.replace("&", "&amp;");
-				// description = description.replace("&", "&amp;");
+				sTitle = sTitle.replace("&", "&amp;").replace("\"", "&quot;");
+				sDescription = sDescription.replace("&", "&amp;").replace("\"", "&quot;");
+				sContent = sContent.replace("&", "&amp;").replace("\"", "&quot;");
+				sCommentFeed = sCommentFeed.replace("&", "&amp;").replace("\"", "&quot;");
+				sAuthor = sAuthor.replace("&", "&amp;").replace("\"", "&quot;");
+				sDate = sDate.replace("&", "&amp;").replace("\"", "&quot;");
+				sCategory = sCategory.replace("&", "&amp;").replace("\"", "&quot;");
+				sImage = sImage.replace("&", "&amp;").replace("\"", "&quot;");
+				sURL = sURL.replace("&", "&amp;").replace("\"", "&quot;");
 				
 				XMLbuilder.append("	<article\n" + 
 								  "		id=\"" + sID + "\"\n" + 

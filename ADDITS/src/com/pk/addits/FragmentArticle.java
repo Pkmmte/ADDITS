@@ -150,6 +150,8 @@ public class FragmentArticle extends Fragment
 				}
 			}
 		});
+		
+		//ActivityMain.overwriteFeedXML();
 	}
 	
 	@Override
@@ -202,7 +204,6 @@ public class FragmentArticle extends Fragment
 	
 	public static void configureShare()
 	{
-		/** Uncomment this when website launches **/
 		String shareBody = Article.getTitle() + "\n\n" + Article.getURL();
 		Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 		shareIntent.setType("text/plain");

@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
@@ -100,29 +99,6 @@ public class FragmentHome extends Fragment
 		
 		populateSlide();
 		updateState();
-		
-		SwipeDismissListViewTouchListener touchListener = new SwipeDismissListViewTouchListener(list, new SwipeDismissListViewTouchListener.OnDismissCallback()
-		{
-			@Override
-			public void onDismiss(ListView listView, int[] reverseSortedPositions)
-			{
-				for (int position : reverseSortedPositions)
-				{
-					NewsFeed[position - 1].setRead(!feedList.get(position - 1).isRead());
-					feedList.remove(feedList.get(position - 1));
-					feedList.add(position - 1, NewsFeed[position - 1]);
-					
-					adapter.notifyDataSetChanged();
-					
-					if(NewsFeed[position - 1].isRead())
-						Toast.makeText(getActivity(), "Marked as read!", Toast.LENGTH_SHORT).show();
-					else
-						Toast.makeText(getActivity(), "Marked as unread!", Toast.LENGTH_SHORT).show();
-				}
-				
-			}
-		});
-		list.setOnTouchListener(touchListener);
 		
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -327,7 +303,6 @@ public class FragmentHome extends Fragment
 				Picasso.with(context).load(entry.getImage()).error(R.drawable.loading_image_error).fit().into(holder.imgPreview);
 			else
 				holder.imgPreview.setVisibility(View.GONE);
-			// Picasso.with(context).load(R.drawable.no_image_banner).fit().into(holder.imgPreview);
 			
 			holder.imgPreview.setAdjustViewBounds(false);
 			

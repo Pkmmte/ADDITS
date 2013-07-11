@@ -1,6 +1,7 @@
 package com.pk.addits;
 
 import java.io.File;
+import java.util.List;
 
 import android.app.ActionBar;
 import android.content.Context;
@@ -31,15 +32,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.util.XmlDom;
+
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
 {
 	private ActionBar actionBar;
 	private SharedPreferences prefs;
 	private Thread feedThread;
+	private Thread emptyFeedThread;
 	private Handler mHandler;
 	private showProgress showP;
 	private showProgress2 showP2;
-	private boolean firstTime;
+	private boolean emptyFeed;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -62,6 +68,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private int updateCheckInterval = 0;// 6 * 60 * 60 * 1000; // Comment out to 0 if you want to test it.
 	
 	FragmentManager fragmentManager;
+	private boolean newFound;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -76,7 +83,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
-		firstTime = prefs.getBoolean(Data.PREF_TAG_FIRST_TIME, true);
+		emptyFeed = false;
 		fragmentManager = getSupportFragmentManager();
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -89,24 +96,31 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		mTitle = mDrawerTitle = getTitle();
 		mListNames = getResources().getStringArray(R.array.drawer_items);
 		initializeNavigationDrawer();
+		newFound = false;
 		// getTESTFeed();
 		
 		if (savedInstanceState == null)
 		{
-			if (firstTime)
+			mHandler = new Handler();
+			File sdCard = Environment.getExternalStorageDirectory();
+			File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG);
+			dir.mkdirs();
+			File file = new File(dir, Data.FEED_TAG);
+			emptyFeed = !file.exists();
+			
+			if (file.exists())
 			{
-				Editor editor = prefs.edit();
-				editor.putBoolean(Data.PREF_TAG_FIRST_TIME, false);
-				editor.commit();
+				selectItem(0);
 				
-				selectItem(225);
+				initializeFeedThread();
+				checkNewFeed();
 			}
 			else
-				selectItem(0);
-			
-			mHandler = new Handler();
-			initializeFeedThread();
-			checkNewFeed();
+			{
+				selectItem(225);
+				initializeEmptyFeedThread();
+				emptyFeedThread.start();
+			}
 		}
 	}
 	
@@ -152,9 +166,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				mTitle = "Home";
 				actionBar.setTitle(mTitle);
 				articleShowing = false;
-				fragmentManager.beginTransaction().setCustomAnimations(
-						R.anim.plus_page_in_left, R.anim.plus_page_out_left)
-				.replace(R.id.content_frame, fragment).commit();
+				fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_left, R.anim.plus_page_out_left).replace(R.id.content_frame, fragment).commit();
 				
 				return true;
 			}
@@ -167,7 +179,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 	{
-		if (firstTime)
+		if (emptyFeed)
 		{
 			Toast.makeText(ActivityMain.this, "Wait for everything to finish loading first!", Toast.LENGTH_LONG).show();
 			mDrawerLayout.closeDrawers();
@@ -252,7 +264,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		articleShowing = false;
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-		if (!firstTime)
+		if (!emptyFeed)
 		{
 			mDrawerList.setItemChecked(position, true);
 			setTitle(mListNames[position]);
@@ -275,9 +287,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		articleShowing = true;
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-		fragmentManager.beginTransaction().setCustomAnimations(
-				R.anim.plus_page_in_right, R.anim.plus_page_out_right)
-		.replace(R.id.content_frame, fragment).commit();
+		fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right).replace(R.id.content_frame, fragment).commit();
 	}
 	
 	public static Feed[] getFeed()
@@ -307,6 +317,89 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 	}
 	
+	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
+	{
+		Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show();
+		List<XmlDom> entries = xml.tags("item");
+		Toast.makeText(ActivityMain.this, "Entry count = " + entries.size(), Toast.LENGTH_SHORT).show();
+		
+		NewsFeed = new Feed[entries.size()];
+		int count = 0;
+		for (XmlDom item : entries)
+		{
+			String Title = item.text("title");
+			String des = android.text.Html.fromHtml(item.text("description")).toString();
+			String Description = des.substring(3, des.length());
+			String Content = item.text("content:encoded");
+			String CommentFeed = item.text("wfw:commentRss");
+			String Author = item.text("dc:creator");
+			String Date = Data.parseDate(ActivityMain.this, item.text("pubDate"));
+			String Category = item.text("category");
+			String Image = Data.pullLinks(item.text("description"));
+			String URL = item.text("link");
+			
+			NewsFeed[count] = new Feed(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false);
+			count++;
+		}
+		return;
+	}
+	
+	public void checkNew(String url, XmlDom xml, AjaxStatus status)
+	{
+		Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show();
+		List<XmlDom> entries = xml.tags("item");
+		Toast.makeText(ActivityMain.this, "Entry count = " + entries.size(), Toast.LENGTH_SHORT).show();
+		
+		for (XmlDom item : entries)
+		{
+			String title = item.text("title");
+			String date = item.text("pubDate");
+			if (Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"))
+				return;
+			Toast.makeText(ActivityMain.this, title + "\n" + date + "\n" + Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"), Toast.LENGTH_SHORT).show();
+		}
+		return;
+	}
+	
+	public static void overwriteFeedXML()
+	{
+		Data.overwriteFeedXML(NewsFeed);
+	}
+	
+	private void initializeEmptyFeedThread()
+	{
+		emptyFeedThread = new Thread()
+		{
+			public void run()
+			{
+				try
+				{
+					/** Download Content **/
+					showP2 = new showProgress2("Downloading content...");
+					mHandler.post(showP2);
+					
+					AQuery aq = new AQuery(ActivityMain.this);
+					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+					
+					Data.overwriteFeedXML(NewsFeed);
+					
+					showP2 = new showProgress2("Everything is up to date!");
+					mHandler.post(showP2);
+					
+					showP2 = new showProgress2("");
+					mHandler.post(showP2);
+					
+				}
+				catch (Exception e)
+				{
+					Log.v("DownloadFile", "ERROR: " + e.getMessage());
+				}
+				
+				stopThread(this);
+			}
+		};
+	}
+	
 	private void initializeFeedThread()
 	{
 		feedThread = new Thread()
@@ -322,16 +415,12 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					File file = new File(dir, Data.FEED_TAG);
 					
 					/** Fetch Website Data **/
-					if (firstTime)
-					{
-						showP2 = new showProgress2("Checking for new content...");
-						mHandler.post(showP2);
-					}
-					else
-					{
-						showP = new showProgress("Checking for new content...", true, true, false);
-						mHandler.post(showP);
-					}
+					
+					showP = new showProgress("Checking for new content...", true, true, false);
+					mHandler.post(showP);
+					
+					AQuery aq = new AQuery(ActivityMain.this);
+					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
 					
 					Data.downloadFeed();
 					boolean NewFeed = false;
@@ -343,55 +432,33 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					if (NewFeed) // New Stuff Found
 					{
 						/** New Stuff Found **/
-						if (firstTime)
-						{
-							showP2 = new showProgress2("Updating content...");
-							mHandler.post(showP2);
-						}
-						else
-						{
-							showP = new showProgress("Updating content...", true, false, false);
-							mHandler.post(showP);
-						}
 						
-						NewsFeed = Data.retrieveFeed(ActivityMain.this, true).clone();
+						showP = new showProgress("Updating content...", true, false, false);
+						mHandler.post(showP);
+						
+						NewsFeed = Data.retrieveTempFeed(ActivityMain.this, true).clone();
 						Data.deleteTempFile();
 						
-						if (firstTime)
-						{
-							showP2 = new showProgress2("Everything is up to date!");
-							mHandler.post(showP2);
-						}
-						else
-						{
-							showP = new showProgress("Everything is up to date!", true, false, true);
-							mHandler.post(showP);
-						}
+						showP = new showProgress("Everything is up to date!", true, false, true);
+						mHandler.post(showP);
+						
 					}
 					else
 					// Nothing New
 					{
-						NewsFeed = Data.retrieveFeed(ActivityMain.this, true).clone();
+						NewsFeed = Data.retrieveTempFeed(ActivityMain.this, true).clone();
 						Data.deleteTempFile();
 						
-						if (!firstTime)
-						{
-							showP = new showProgress("Everything is up to date!", true, false, true);
-							mHandler.post(showP);
-						}
-					}
-					if (firstTime)
-					{
-						showP2 = new showProgress2("");
-						mHandler.post(showP2);
-					}
-					else
-					{
-						showP = new showProgress("", false, false, false);
+						showP = new showProgress("Everything is up to date!", true, false, true);
 						mHandler.post(showP);
-						showP = new showProgress("Everything is up to date!", false, true, true);
-						mHandler.postDelayed(showP, 4000);
+						
 					}
+					
+					showP = new showProgress("", false, false, false);
+					mHandler.post(showP);
+					showP = new showProgress("Everything is up to date!", false, true, true);
+					mHandler.postDelayed(showP, 4000);
+					
 				}
 				catch (Exception e)
 				{
@@ -488,18 +555,32 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			}
 			else
 			{
-				firstTime = false;
+				emptyFeed = false;
 				selectItem(0);
 			}
 		}
 	}
-	/*
-	 * public void getTESTFeed() { AQuery aq = new AQuery(ActivityMain.this); boolean be = aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "saveFeed"); }
-	 * 
-	 * public boolean saveFeed(String url, XmlDom xml, AjaxStatus status) { Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show(); List<XmlDom> entries =
-	 * xml.tags("item"); Toast.makeText(ActivityMain.this, "Entry count = " + entries.size(), Toast.LENGTH_SHORT).show();
-	 * 
-	 * for (XmlDom item : entries) { String title = item.text("title"); String date = item.text("pubDate"); if(Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000")) return true; boolean = true;
-	 * Toast.makeText(ActivityMain.this, title + "\n" + date + "\n" + Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"), Toast.LENGTH_SHORT).show(); } return false; }
-	 */
+	
+	public void getTESTFeed()
+	{
+		AQuery aq = new AQuery(ActivityMain.this);
+		aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "saveFeed");
+	}
+	
+	public void saveFeed(String url, XmlDom xml, AjaxStatus status)
+	{
+		Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show();
+		List<XmlDom> entries = xml.tags("item");
+		Toast.makeText(ActivityMain.this, "Entry count = " + entries.size(), Toast.LENGTH_SHORT).show();
+		
+		for (XmlDom item : entries)
+		{
+			String title = item.text("title");
+			String date = item.text("pubDate");
+			if (Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"))
+				return;
+			Toast.makeText(ActivityMain.this, title + "\n" + date + "\n" + Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"), Toast.LENGTH_SHORT).show();
+		}
+		return;
+	}
 }
