@@ -70,6 +70,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	FragmentManager fragmentManager;
 	private boolean newFound;
 	private boolean fragmentLoaded;
+	private boolean newChecked;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -99,7 +100,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		mListNames = getResources().getStringArray(R.array.drawer_items);
 		initializeNavigationDrawer();
 		newFound = false;
-		// getTESTFeed();
+		newChecked = false;
 		
 		if (savedInstanceState == null)
 		{
@@ -321,12 +322,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
 	{
-		Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show();
 		List<XmlDom> entries = xml.tags("item");
-		Toast.makeText(ActivityMain.this, "Entry count = " + entries.size(), Toast.LENGTH_SHORT).show();
-		
 		NewsFeed = new Feed[entries.size()];
 		int count = 0;
+		
 		for (XmlDom item : entries)
 		{
 			String Title = item.text("title");
@@ -348,18 +347,21 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	public void checkNew(String url, XmlDom xml, AjaxStatus status)
 	{
-		Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show();
 		List<XmlDom> entries = xml.tags("item");
-		Toast.makeText(ActivityMain.this, "Entry count = " + entries.size(), Toast.LENGTH_SHORT).show();
 		
 		for (XmlDom item : entries)
 		{
 			String title = item.text("title");
 			String date = item.text("pubDate");
-			if (Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"))
+			if (Data.isNewerDate(NewsFeed[0].getDate(), date))
+			{
+				newFound = true;
+				newChecked = true;
+				Toast.makeText(ActivityMain.this, "New Found!" + date + "\n " + title, Toast.LENGTH_SHORT).show();
 				return;
-			Toast.makeText(ActivityMain.this, title + "\n" + date + "\n" + Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"), Toast.LENGTH_SHORT).show();
+			}
 		}
+		newChecked = true;
 		return;
 	}
 	
@@ -421,43 +423,37 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					mHandler.post(showH);
 					/** Fetch Website Data **/
 					
-					/*showP = new showProgress("Checking for new content...", true, false, false);
+					showP = new showProgress("Checking for new content...", true, false, false);
 					mHandler.post(showP);
 					
 					AQuery aq = new AQuery(ActivityMain.this);
 					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
 					
-					Data.downloadFeed();
-					boolean NewFeed = Data.compareFeed(ActivityMain.this);
-					
-					if (NewFeed) // New Stuff Found
+					while(true)
 					{
-						/** New Stuff Found **/
-						/*
+						if(newChecked)
+							break;
+					}
+					
+					if(newFound)
+					{
 						showP = new showProgress("Updating content...", true, false, false);
 						mHandler.post(showP);
 						
-						NewsFeed = Data.retrieveTempFeed(ActivityMain.this, true).clone();
-						Data.deleteTempFile();
-						
-						showP = new showProgress("Everything is up to date!", true, false, true);
-						mHandler.post(showP);
-						
+						// TODO Make sure read/favorite params don't get overwritten
+						aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+						Data.overwriteFeedXML(NewsFeed);
+						Log.v("Happy Face", " New stuff found!");
 					}
 					else
-					// Nothing New
-					{
-						NewsFeed = Data.retrieveTempFeed(ActivityMain.this, true).clone();
-						Data.deleteTempFile();
-						*/
-						showP = new showProgress("Everything is up to date!", true, false, true);
-						mHandler.post(showP);
-						
-					//}
+						Log.v("Sad Face", " No new found...");
 					
-					while(true)
+					showP = new showProgress("Everything is up to date!", true, false, true);
+					mHandler.post(showP);
+					
+					while (true)
 					{
-						if(fragmentLoaded)
+						if (fragmentLoaded)
 						{
 							showP = new showProgress("", false, false, false);
 							mHandler.post(showP);
