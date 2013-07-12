@@ -152,6 +152,93 @@ public class Data
 		return false;
 	}
 	
+	public static Feed[] retrieveFeed()
+	{
+		int count = 0;
+		
+		try
+		{
+			File sdCard = Environment.getExternalStorageDirectory();
+			File dir = null;
+			dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
+			FileInputStream istr = new FileInputStream(dir);
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(false);
+			
+			XmlPullParser xrp = factory.newPullParser();
+			xrp.setInput(istr, "UTF-8");
+			xrp.next();
+			int eventType = xrp.getEventType();
+			
+			while (eventType != XmlPullParser.END_DOCUMENT)
+			{
+				if (eventType == XmlPullParser.START_TAG)
+				{
+					String elemName = xrp.getName();
+					if (elemName.equals("article"))
+						count++;
+				}
+				eventType = xrp.next();
+			}
+		}
+		catch (Exception e)
+		{
+			Log.w("[Feed Count] XML Parse Error", e);
+		}
+		
+		Feed[] Feeeeedz = new Feed[count];
+		
+		try
+		{
+			File sdCard = Environment.getExternalStorageDirectory();
+			File dir = null;
+			dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
+			FileInputStream istr = new FileInputStream(dir);
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			factory.setNamespaceAware(false);
+			
+			XmlPullParser xrp = factory.newPullParser();
+			xrp.setInput(istr, "UTF-8");
+			xrp.next();
+			int eventType = xrp.getEventType();
+			
+			int feedCount = 0;
+			while (eventType != XmlPullParser.END_DOCUMENT)
+			{
+				if (eventType == XmlPullParser.START_TAG)
+				{
+					String elemName = xrp.getName();
+					if (elemName.equals("article"))
+					{
+						// Attributes
+						String Title = xrp.getAttributeValue(null, "title");
+						String Description = xrp.getAttributeValue(null, "description");
+						String Content = xrp.getAttributeValue(null, "content");
+						String CommentFeed = xrp.getAttributeValue(null, "commentfeed");
+						String Author = xrp.getAttributeValue(null, "author");
+						String Date = xrp.getAttributeValue(null, "date");
+						String Category = xrp.getAttributeValue(null, "category");
+						String Image = xrp.getAttributeValue(null, "image");
+						String URL = xrp.getAttributeValue(null, "url");
+						boolean Favorite = Boolean.parseBoolean(xrp.getAttributeValue(null, "favorite"));
+						boolean Read = Boolean.parseBoolean(xrp.getAttributeValue(null, "read"));
+						
+						Feeeeedz[feedCount] = new Feed(feedCount, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+						feedCount++;
+					}
+				}
+				eventType = xrp.next();
+			}
+			
+		}
+		catch (Exception e)
+		{
+			Log.w("[Feed] XML Parse Error", e);
+		}
+		
+		return Feeeeedz;
+	}
+	
 	public static Feed[] retrieveTempFeed(Context context, boolean realFeed)
 	{
 		int count = 0;
@@ -473,15 +560,15 @@ public class Data
 				boolean sRead = Feeeeedz[x].isRead();
 				
 				// Fix "&" Sign
-				sTitle = sTitle.replace("&", "&amp;").replace("\"", "&quot;");
-				sDescription = sDescription.replace("&", "&amp;").replace("\"", "&quot;");
-				sContent = sContent.replace("&", "&amp;").replace("\"", "&quot;");
-				sCommentFeed = sCommentFeed.replace("&", "&amp;").replace("\"", "&quot;");
-				sAuthor = sAuthor.replace("&", "&amp;").replace("\"", "&quot;");
-				sDate = sDate.replace("&", "&amp;").replace("\"", "&quot;");
-				sCategory = sCategory.replace("&", "&amp;").replace("\"", "&quot;");
-				sImage = sImage.replace("&", "&amp;").replace("\"", "&quot;");
-				sURL = sURL.replace("&", "&amp;").replace("\"", "&quot;");
+				sTitle = sTitle.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+				sDescription = sDescription.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+				sContent = sContent.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+				sCommentFeed = sCommentFeed.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+				sAuthor = sAuthor.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+				sDate = sDate.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+				sCategory = sCategory.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+				sImage = sImage.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+				sURL = sURL.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
 				
 				XMLbuilder.append("	<article\n" + 
 								  "		id=\"" + sID + "\"\n" + 

@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +99,9 @@ public class FragmentHome extends Fragment
 		timer.schedule(new firstTask(), 5000, 7000);
 		
 		populateSlide();
-		updateState();
+		for (int x = 0; x < NewsFeed.length; x++)
+			feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
+		adapter.notifyDataSetChanged();
 		
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -178,13 +181,14 @@ public class FragmentHome extends Fragment
 		}
 		else
 		{
-			list.setVisibility(View.VISIBLE);
+			Log.v("Guess what!", "VAGINA!!!!");
+			//feedList = new ArrayList<Feed>();
 			
-			for (int x = 0; x < NewsFeed.length; x++)
-				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
+			//for (int x = 0; x < NewsFeed.length; x++)
+			//	feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
-			adapter.notifyDataSetChanged();
-			populateSlide();
+			//adapter.notifyDataSetChanged();
+			//populateSlide();
 		}
 	}
 	
@@ -300,7 +304,7 @@ public class FragmentHome extends Fragment
 			holder.txtCategory.setText(entry.getCategory());
 			
 			if (entry.getImage().length() > 0)
-				Picasso.with(context).load(entry.getImage()).error(R.drawable.loading_image_error).fit().into(holder.imgPreview);
+				Picasso.with(context).load(entry.getImage()).error(R.drawable.loading_image_error).fit().skipCache().into(holder.imgPreview);
 			else
 				holder.imgPreview.setVisibility(View.GONE);
 			

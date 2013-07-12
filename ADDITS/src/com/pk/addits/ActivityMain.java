@@ -110,7 +110,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			
 			if (file.exists())
 			{
-				selectItem(0);
+				selectItem(225);
 				
 				initializeFeedThread();
 				checkNewFeed();
@@ -264,7 +264,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		articleShowing = false;
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-		if (!emptyFeed)
+		if (position != 225)
 		{
 			mDrawerList.setItemChecked(position, true);
 			setTitle(mListNames[position]);
@@ -408,31 +408,30 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			{
 				try
 				{
-					/** Checking If It Already Contains File **/
-					File sdCard = Environment.getExternalStorageDirectory();
-					File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG);
-					dir.mkdirs();
-					File file = new File(dir, Data.FEED_TAG);
+					Log.v("Loading Feed!", "");
+					showP = new showProgress("Loading feed...", true, true, false);
+					mHandler.post(showP);
 					
+					NewsFeed = Data.retrieveFeed().clone();
+					Log.v("Feed Loaded! ", "" + NewsFeed.length);
+					
+					showHome showH = new showHome();
+					mHandler.post(showH);
 					/** Fetch Website Data **/
 					
-					showP = new showProgress("Checking for new content...", true, true, false);
+					/*showP = new showProgress("Checking for new content...", true, false, false);
 					mHandler.post(showP);
 					
 					AQuery aq = new AQuery(ActivityMain.this);
 					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
 					
 					Data.downloadFeed();
-					boolean NewFeed = false;
-					if (file.exists())
-						NewFeed = Data.compareFeed(ActivityMain.this);
-					else
-						Data.writeFeed();
+					boolean NewFeed = Data.compareFeed(ActivityMain.this);
 					
 					if (NewFeed) // New Stuff Found
 					{
 						/** New Stuff Found **/
-						
+						/*
 						showP = new showProgress("Updating content...", true, false, false);
 						mHandler.post(showP);
 						
@@ -448,11 +447,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					{
 						NewsFeed = Data.retrieveTempFeed(ActivityMain.this, true).clone();
 						Data.deleteTempFile();
-						
+						*/
 						showP = new showProgress("Everything is up to date!", true, false, true);
 						mHandler.post(showP);
 						
-					}
+					//}
 					
 					showP = new showProgress("", false, false, false);
 					mHandler.post(showP);
@@ -558,6 +557,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				emptyFeed = false;
 				selectItem(0);
 			}
+		}
+	}
+	
+	public class showHome implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			selectItem(0);
 		}
 	}
 	
