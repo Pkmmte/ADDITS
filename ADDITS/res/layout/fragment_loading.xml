@@ -21,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:fontFamily="sans-serif-light"
-        android:text="@string/placeholder"
+        android:text="Loading..."
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

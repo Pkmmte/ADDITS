@@ -69,6 +69,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	FragmentManager fragmentManager;
 	private boolean newFound;
+	private boolean fragmentLoaded;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -84,6 +85,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
 		emptyFeed = false;
+		fragmentLoaded = false;
 		fragmentManager = getSupportFragmentManager();
 		
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -387,7 +389,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					mHandler.post(showP2);
 					
 					showP2 = new showProgress2("");
-					mHandler.post(showP2);
+					mHandler.postDelayed(showP2, 5000);
 					
 				}
 				catch (Exception e)
@@ -453,8 +455,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						
 					//}
 					
-					showP = new showProgress("", false, false, false);
-					mHandler.post(showP);
+					while(true)
+					{
+						if(fragmentLoaded)
+						{
+							showP = new showProgress("", false, false, false);
+							mHandler.post(showP);
+							break;
+						}
+					}
 					showP = new showProgress("Everything is up to date!", false, true, true);
 					mHandler.postDelayed(showP, 4000);
 					
@@ -566,6 +575,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		public void run()
 		{
 			selectItem(0);
+			fragmentLoaded = true;
 		}
 	}
 	

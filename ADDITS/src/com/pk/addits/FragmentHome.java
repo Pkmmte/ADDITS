@@ -99,9 +99,7 @@ public class FragmentHome extends Fragment
 		timer.schedule(new firstTask(), 5000, 7000);
 		
 		populateSlide();
-		for (int x = 0; x < NewsFeed.length; x++)
-			feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
-		adapter.notifyDataSetChanged();
+		updateState();
 		
 		list.setOnItemClickListener(new OnItemClickListener()
 		{
@@ -183,12 +181,13 @@ public class FragmentHome extends Fragment
 		{
 			Log.v("Guess what!", "VAGINA!!!!");
 			//feedList = new ArrayList<Feed>();
+			feedList.clear();
 			
-			//for (int x = 0; x < NewsFeed.length; x++)
-			//	feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
+			for (int x = 0; x < NewsFeed.length; x++)
+				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
-			//adapter.notifyDataSetChanged();
-			//populateSlide();
+			adapter.notifyDataSetChanged();
+			populateSlide();
 		}
 	}
 	
