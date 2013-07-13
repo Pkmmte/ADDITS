@@ -73,23 +73,83 @@
         </LinearLayout>
     </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 	        android:layout_marginLeft="@dimen/margin_small"
 	        android:layout_marginRight="@dimen/margin_small"
-	        android:background="@drawable/card_bg" >
+	        android:background="@drawable/card_bg"
+	        android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/txtContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/margin_medium"
-        android:fontFamily="serif"
-        android:text="@string/dummy_desc"
-        android:textSize="@dimen/text_primary" />
-	</LinearLayout>
+		    <TextView
+		        android:id="@+id/txtContent"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentTop="true"
+		        android:padding="@dimen/margin_medium"
+		        android:fontFamily="serif"
+		        android:text="@string/dummy_desc"
+		        android:textSize="@dimen/text_primary" />
+
+        <RelativeLayout
+            android:id="@+id/playLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+		    android:layout_below="@+id/txtContent"
+	        android:orientation="vertical"
+		    android:background="@color/addits_green" >
+                
+			<ImageView
+				android:id="@+id/playBanner"
+				android:layout_width="match_parent"
+				android:layout_height="100dp"
+				android:contentDescription="@string/placeholder"
+				android:src="@drawable/ic_launcher_web"
+				android:scaleType="centerCrop" />
+			<View 
+			    android:layout_width="match_parent"
+			    android:layout_height="100dp"
+			    android:layout_alignParentTop="true"
+			    android:layout_alignParentBottom="true"
+                android:background="@drawable/button_black_transparent_selector" />
+
+                        <RelativeLayout
+                            android:id="@+id/playLayoutTxt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true" >
+
+                            <TextView
+                                android:id="@+id/playDownload"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="right"
+                                android:layout_alignParentBottom="true"
+                                android:fontFamily="sans-serif"
+                                android:padding="@dimen/margin_medium"
+                                android:text="Get it on Google Play"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_primary" />
+                        </RelativeLayout>
+		    <ImageView
+		        android:id="@+id/play_icon"
+		        android:layout_width="96dp"
+		        android:layout_height="96dp"
+		        android:layout_centerVertical="true"
+			    android:layout_alignParentLeft="true"
+		        android:src="@mipmap/ic_launcher" />
+		    
+            <ImageView
+		        android:id="@+id/play_logo"
+		        android:layout_width="64dp"
+		        android:layout_height="64dp"
+		        android:layout_centerVertical="true"
+			    android:layout_alignParentRight="true"
+		        android:src="@drawable/play_logo" />
+		    
+		    </RelativeLayout>
+		</RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
