@@ -263,8 +263,6 @@ public class FragmentHome extends Fragment
 		
 		public View getView(int position, View view, ViewGroup viewGroup)
 		{
-			System.out.println("getview:" + position + " " + view);
-			
 			final ViewHolder holder;
 			Feed entry = listItem.get(position);
 			if (view == null)
@@ -299,7 +297,7 @@ public class FragmentHome extends Fragment
 			holder.txtTitle.setText(entry.getTitle());
 			holder.txtDescription.setText(entry.getDescription());
 			holder.txtAuthor.setText("Posted by " + entry.getAuthor());
-			holder.txtDate.setText(entry.getDate());
+			holder.txtDate.setText(Data.parseDate(context, entry.getDate()));
 			holder.txtCategory.setText(entry.getCategory());
 			
 			if (entry.getImage().length() > 0)

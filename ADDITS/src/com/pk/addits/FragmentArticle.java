@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,6 +42,7 @@ public class FragmentArticle extends Fragment
 	private CommentFeedAdapter adapter;
 	static MenuItem shareItem;
 	static Menu optionsMenu;
+	URLImageParser p;
 	
 	ImageView imgHeader;
 	TextView txtTitle;
@@ -90,6 +92,7 @@ public class FragmentArticle extends Fragment
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
 		txtContent = (TextView) view.findViewById(R.id.txtContent);
+		p = new URLImageParser(txtContent, getActivity());
 		
 		commentCard = (FrameLayout) view.findViewById(R.id.commentCard);
 		txtLoadComments = (TextView) view.findViewById(R.id.txtLoadComments);
@@ -126,8 +129,10 @@ public class FragmentArticle extends Fragment
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
-		txtDate.setText(Article.getDate());
-		txtContent.setText(Article.getContent());
+		txtDate.setText(Data.parseRelativeDate(Article.getDate()));
+		txtContent.setText(Html.fromHtml(Article.getContent()));
+		/** Uncomment this for images **/
+		//txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		
 		commentCard.setOnClickListener(new View.OnClickListener()
 		{
@@ -309,7 +314,7 @@ public class FragmentArticle extends Fragment
 			
 			holder.txtCreator.setText(entry.getCreator());
 			holder.txtContent.setText(entry.getContent());
-			holder.txtDate.setText(Data.parseDate(context, entry.getDate()));
+			holder.txtDate.setText(entry.getDate());
 			
 			return view;
 		}

@@ -336,7 +336,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			String Content = item.text("content:encoded");
 			String CommentFeed = item.text("wfw:commentRss");
 			String Author = item.text("dc:creator");
-			String Date = Data.parseDate(ActivityMain.this, item.text("pubDate"));
+			String Date = item.text("pubDate");
 			String Category = item.text("category");
 			String Image = Data.pullLinks(item.text("description"));
 			String URL = item.text("link");
@@ -355,13 +355,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		for (XmlDom item : entries)
 		{
-			String title = item.text("title");
 			String date = item.text("pubDate");
-			if (Data.isNewerDate(NewsFeed[0].getDate(), date))
+			if (Data.isNewerDate(date, NewsFeed[0].getDate()))
 			{
 				newFound = true;
 				newChecked = true;
-				Toast.makeText(ActivityMain.this, "New Found!" + date + "\n " + title, Toast.LENGTH_SHORT).show();
 				return;
 			}
 		}

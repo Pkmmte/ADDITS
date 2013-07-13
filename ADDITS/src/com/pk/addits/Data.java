@@ -343,7 +343,7 @@ public class Data
 					else if (itemActive && elemName.equals("pubDate"))
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
-							Date = parseDate(context, xrp.getText());
+							Date = xrp.getText();
 					}
 					else if (itemActive && elemName.equals("dc:creator"))
 					{
@@ -476,7 +476,7 @@ public class Data
 					else if (itemActive && elemName.equals("pubDate"))
 					{
 						if (xrp.next() == XmlPullParser.TEXT)
-							Date = parseDate(context, xrp.getText());
+							Date = xrp.getText();
 					}
 				}
 				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equals("item"))
@@ -638,6 +638,25 @@ public class Data
 		return ago.toString();
 	}
 	
+	@SuppressLint("SimpleDateFormat")
+	public static String parseRelativeDate(String mDate)
+	{
+		SimpleDateFormat tFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+		Date date = new Date();
+		try
+		{
+			date = tFormat.parse(mDate);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		
+		final CharSequence ago = DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS, 0);
+		
+		return ago.toString();
+	}
+
 	@SuppressLint("SimpleDateFormat")
 	public static boolean isNewerDate(String nDate, String oDate)
 	{
