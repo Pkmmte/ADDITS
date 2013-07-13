@@ -71,6 +71,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private boolean newFound;
 	private boolean fragmentLoaded;
 	private boolean newChecked;
+	private boolean feedDownloaded;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -101,6 +102,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		initializeNavigationDrawer();
 		newFound = false;
 		newChecked = false;
+		feedDownloaded = false;
 		
 		if (savedInstanceState == null)
 		{
@@ -342,6 +344,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			NewsFeed[count] = new Feed(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false);
 			count++;
 		}
+		
+		feedDownloaded = true;
 		return;
 	}
 	
@@ -385,6 +389,14 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					AQuery aq = new AQuery(ActivityMain.this);
 					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 					
+					while(true)
+					{
+						if(feedDownloaded)
+							break;
+					}
+					
+					showP2 = new showProgress2("Writing content...");
+					mHandler.post(showP2);
 					Data.overwriteFeedXML(NewsFeed);
 					
 					showP2 = new showProgress2("Everything is up to date!");
@@ -442,6 +454,16 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						
 						// TODO Make sure read/favorite params don't get overwritten
 						aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+						
+						while(true)
+						{
+							if(feedDownloaded)
+								break;
+						}
+						
+						showP = new showProgress("Writing content...", true, false, false);
+						mHandler.post(showP);
+						
 						Data.overwriteFeedXML(NewsFeed);
 						Log.v("Happy Face", " New stuff found!");
 					}
