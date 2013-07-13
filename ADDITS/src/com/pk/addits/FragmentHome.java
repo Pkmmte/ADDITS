@@ -42,6 +42,7 @@ public class FragmentHome extends Fragment
 	static FrameLayout frame;
 	static FeedAdapter adapter;
 	static FadingActionBarHelperHome2 mFadingHelper;
+	static Context cntxt;
 	
 	static List<Feed> feedList;
 	static Feed[] NewsFeed;
@@ -64,6 +65,7 @@ public class FragmentHome extends Fragment
 	{
 		view = mFadingHelper.createView(inflater);
 		
+		cntxt = getActivity();
 		feedList = new ArrayList<Feed>();
 		list = (ListView) view.findViewById(android.R.id.list);
 		
@@ -205,10 +207,16 @@ public class FragmentHome extends Fragment
 			int r = generator.nextInt(NewsFeed.length);
 			sTitle = NewsFeed[r].getTitle();
 			sAuthor = NewsFeed[r].getAuthor();
-			sDate = NewsFeed[r].getDate();
+			sDate = Data.parseDate(cntxt, NewsFeed[r].getDate());
 			sImage = NewsFeed[r].getImage();
 			sCategory = NewsFeed[r].getCategory();
 			currentSlideID = NewsFeed[r].getID();
+			
+			if(sImage.length() < 1)
+			{
+				populateSlide();
+				return;
+			}
 		}
 		
 		if (!sCategory.equalsIgnoreCase("DAILY SAVER"))

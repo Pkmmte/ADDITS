@@ -93,7 +93,7 @@ public class Slider extends Fragment
 	public void setImage()
 	{
 		if (ImageURL.length() > 0)
-			Picasso.with(getActivity()).load(ImageURL).error(R.drawable.loading_image_banner).fit().into(imgImage);
+			Picasso.with(getActivity()).load(ImageURL).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().into(imgImage);
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_banner).fit().into(imgImage);
 		

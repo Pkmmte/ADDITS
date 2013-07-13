@@ -268,7 +268,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 		
 		articleShowing = false;
-		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		fragmentManager.beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.content_frame, fragment).commit();
 		if (position != 225)
 		{
 			mDrawerList.setItemChecked(position, true);
