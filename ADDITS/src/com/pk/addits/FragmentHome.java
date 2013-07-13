@@ -327,8 +327,8 @@ public class FragmentHome extends Fragment
 				}
 			}
 			
-			Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.card_anim_list);
-			holder.Card.startAnimation(anim);
+			Animation cardAnimation = AnimationUtils.loadAnimation(context, R.anim.card_anim_list);
+			holder.Card.startAnimation(cardAnimation);
 			
 			return view;
 		}

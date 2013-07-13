@@ -43,8 +43,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private Thread feedThread;
 	private Thread emptyFeedThread;
 	private Handler mHandler;
-	private showProgress showP;
-	private showProgress2 showP2;
+	private AQuery aq;
 	private boolean emptyFeed;
 	
 	private DrawerLayout mDrawerLayout;
@@ -100,6 +99,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		mTitle = mDrawerTitle = getTitle();
 		mListNames = getResources().getStringArray(R.array.drawer_items);
 		initializeNavigationDrawer();
+		aq = new AQuery(ActivityMain.this);
 		newFound = false;
 		newChecked = false;
 		feedDownloaded = false;
@@ -381,10 +381,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				try
 				{
 					/** Download Content **/
-					showP2 = new showProgress2("Downloading content...");
-					mHandler.post(showP2);
+					mHandler.post(new showProgress2("Downloading content..."));
 					
-					AQuery aq = new AQuery(ActivityMain.this);
 					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 					
 					while(true)
@@ -393,15 +391,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							break;
 					}
 					
-					showP2 = new showProgress2("Writing content...");
-					mHandler.post(showP2);
+					mHandler.post(new showProgress2("Writing content..."));
 					Data.overwriteFeedXML(NewsFeed);
 					
-					showP2 = new showProgress2("Everything is up to date!");
-					mHandler.post(showP2);
-					
-					showP2 = new showProgress2("");
-					mHandler.postDelayed(showP2, 5000);
+					mHandler.post(new showProgress2("Everything is up to date!"));
+					mHandler.postDelayed(new showProgress2(""), 5000);
 					
 				}
 				catch (Exception e)
@@ -423,20 +417,16 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				try
 				{
 					Log.v("Loading Feed!", "");
-					showP = new showProgress("Loading feed...", true, true, false);
-					mHandler.post(showP);
+					mHandler.post(new showProgress("Loading feed...", true, true, false));
 					
 					NewsFeed = Data.retrieveFeed().clone();
 					Log.v("Feed Loaded! ", "" + NewsFeed.length);
 					
-					showHome showH = new showHome();
-					mHandler.post(showH);
+					mHandler.post(new showHome());
 					/** Fetch Website Data **/
 					
-					showP = new showProgress("Checking for new content...", true, false, false);
-					mHandler.post(showP);
+					mHandler.post(new showProgress("Checking for new content...", true, false, false));
 					
-					AQuery aq = new AQuery(ActivityMain.this);
 					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
 					
 					while(true)
@@ -447,8 +437,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					
 					if(newFound)
 					{
-						showP = new showProgress("Updating content...", true, false, false);
-						mHandler.post(showP);
+						mHandler.post(new showProgress("Updating content...", true, false, false));
 						
 						// TODO Make sure read/favorite params don't get overwritten
 						aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
@@ -459,8 +448,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								break;
 						}
 						
-						showP = new showProgress("Writing content...", true, false, false);
-						mHandler.post(showP);
+						mHandler.post(new showProgress("Writing content...", true, false, false));
 						
 						Data.overwriteFeedXML(NewsFeed);
 						Log.v("Happy Face", " New stuff found!");
@@ -468,21 +456,18 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					else
 						Log.v("Sad Face", " No new found...");
 					
-					showP = new showProgress("Everything is up to date!", true, false, true);
-					mHandler.post(showP);
+					mHandler.post(new showProgress("Everything is up to date!", true, false, true));
 					
 					while (true)
 					{
 						if (fragmentLoaded)
 						{
-							showP = new showProgress("", false, false, false);
-							mHandler.post(showP);
+							mHandler.post(new showProgress("", false, false, false));
 							break;
 						}
 					}
-					showP = new showProgress("Everything is up to date!", false, true, true);
-					mHandler.postDelayed(showP, 4000);
 					
+					mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
 				}
 				catch (Exception e)
 				{
@@ -593,28 +578,5 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			selectItem(0);
 			fragmentLoaded = true;
 		}
-	}
-	
-	public void getTESTFeed()
-	{
-		AQuery aq = new AQuery(ActivityMain.this);
-		aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "saveFeed");
-	}
-	
-	public void saveFeed(String url, XmlDom xml, AjaxStatus status)
-	{
-		Toast.makeText(ActivityMain.this, "XML = " + xml.toString(), Toast.LENGTH_SHORT).show();
-		List<XmlDom> entries = xml.tags("item");
-		Toast.makeText(ActivityMain.this, "Entry count = " + entries.size(), Toast.LENGTH_SHORT).show();
-		
-		for (XmlDom item : entries)
-		{
-			String title = item.text("title");
-			String date = item.text("pubDate");
-			if (Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"))
-				return;
-			Toast.makeText(ActivityMain.this, title + "\n" + date + "\n" + Data.isNewerDate(date, "Fri, 21 Jun 2013 18:00:39 +0000"), Toast.LENGTH_SHORT).show();
-		}
-		return;
 	}
 }
