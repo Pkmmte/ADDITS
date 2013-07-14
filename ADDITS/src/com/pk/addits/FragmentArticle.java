@@ -21,8 +21,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
@@ -38,7 +40,6 @@ public class FragmentArticle extends Fragment
 	static Feed Article;
 	private Thread loadCommentsThread;
 	private Handler mHandler;
-	private CommentFeedAdapter adapter;
 	static MenuItem shareItem;
 	static Menu optionsMenu;
 	URLImageParser p;
@@ -50,12 +51,14 @@ public class FragmentArticle extends Fragment
 	//TextView txtContent;
 	ListView lstContent;
 	private List<ArticleContent> contentList;
+	private ContentAdapter contentAdapter;
 	
 	FrameLayout commentCard;
 	TextView txtLoadComments;
 	ProgressBar progressBar;
 	ListView comments;
 	private List<CommentFeed> commentList;
+	private CommentFeedAdapter commentAdapter;
 	
 	Typeface fontRegular;
 	Typeface fontBold;
@@ -136,6 +139,11 @@ public class FragmentArticle extends Fragment
 		//txtContent.setText(Html.fromHtml(Article.getContent()));
 		/** Uncomment this for images **/
 		//txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
+		
+		contentList = Data.generateArticleContent(Article.getContent());
+		contentAdapter = new ContentAdapter(getActivity(), contentList);
+		lstContent.setAdapter(contentAdapter);
+		contentAdapter.notifyDataSetChanged();
 		
 		commentCard.setOnClickListener(new View.OnClickListener()
 		{
@@ -288,8 +296,10 @@ public class FragmentArticle extends Fragment
 				
 				holder = new ContentViewHolder();
 				holder.Text = (TextView) view.findViewById(R.id.Text);
-				holder.Image = (ImageView) view.findViewById(R.id.Image);
 				holder.Text.setTypeface(fontRegular);
+				holder.Image = (ImageView) view.findViewById(R.id.Image);
+				holder.Video = (LinearLayout) view.findViewById(R.id.Video);
+				holder.App = (RelativeLayout) view.findViewById(R.id.App);
 				
 				view.setTag(holder);
 			}
@@ -305,6 +315,8 @@ public class FragmentArticle extends Fragment
 			{
 				holder.Text.setVisibility(View.VISIBLE);
 				holder.Image.setVisibility(View.GONE);
+				holder.Video.setVisibility(View.GONE);
+				holder.App.setVisibility(View.GONE);
 				
 				holder.Text.setText(Html.fromHtml(Content));
 			}
@@ -312,6 +324,8 @@ public class FragmentArticle extends Fragment
 			{
 				holder.Text.setVisibility(View.GONE);
 				holder.Image.setVisibility(View.VISIBLE);
+				holder.Video.setVisibility(View.GONE);
+				holder.App.setVisibility(View.GONE);
 				
 				Picasso.with(getActivity()).load(Content).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().into(holder.Image);
 			}
@@ -319,8 +333,26 @@ public class FragmentArticle extends Fragment
 			{
 				holder.Text.setVisibility(View.GONE);
 				holder.Image.setVisibility(View.GONE);
+				holder.Video.setVisibility(View.VISIBLE);
+				holder.App.setVisibility(View.GONE);
 				
 				// TODO Add Video Support
+			}
+			else if(Type == Data.CONTENT_TYPE_APP)
+			{
+				holder.Text.setVisibility(View.GONE);
+				holder.Image.setVisibility(View.GONE);
+				holder.Video.setVisibility(View.GONE);
+				holder.App.setVisibility(View.VISIBLE);
+				
+				// TODO Add Application Support
+			}
+			else
+			{
+				holder.Text.setVisibility(View.GONE);
+				holder.Image.setVisibility(View.GONE);
+				holder.Video.setVisibility(View.GONE);
+				holder.App.setVisibility(View.GONE);
 			}
 			
 			return view;
@@ -331,6 +363,8 @@ public class FragmentArticle extends Fragment
 	{
 		public TextView Text;
 		public ImageView Image;
+		public LinearLayout Video;
+		public RelativeLayout App;
 	}
 	
 	public static class ArticleContent
@@ -359,9 +393,9 @@ public class FragmentArticle extends Fragment
 	{
 		public void run()
 		{
-			adapter = new CommentFeedAdapter(getActivity(), commentList);
-			comments.setAdapter(adapter);
-			adapter.notifyDataSetChanged();
+			commentAdapter = new CommentFeedAdapter(getActivity(), commentList);
+			comments.setAdapter(commentAdapter);
+			commentAdapter.notifyDataSetChanged();
 			
 			txtLoadComments.setVisibility(View.GONE);
 			progressBar.setVisibility(View.GONE);

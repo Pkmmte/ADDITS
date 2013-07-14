@@ -20,5 +20,6 @@
     <string name="dummy_date">May 5, 8:55PM</string>
     <string name="dummy_comments">Load Comments</string>
     <string name="dummy_category">Articles</string>
+    <string name="get_it_on_google_play">Get it on Google Play</string>
     
 </resources>

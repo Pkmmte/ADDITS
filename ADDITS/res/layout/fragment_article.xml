@@ -95,7 +95,7 @@
             android:padding="@dimen/margin_medium"
             android:text="@string/dummy_desc"
             android:textSize="@dimen/text_primary" />
-        -->
+        
 
         <RelativeLayout
             android:id="@+id/playLayout"
@@ -155,6 +155,7 @@
                 android:layout_centerVertical="true"
                 android:src="@drawable/play_logo" />
         </RelativeLayout>
+        -->
     </RelativeLayout>
 
     <LinearLayout

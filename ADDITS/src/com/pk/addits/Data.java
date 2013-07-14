@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.pk.addits.FragmentArticle.ArticleContent;
 import com.pk.addits.FragmentArticle.CommentFeed;
 
 public class Data
@@ -50,6 +51,7 @@ public class Data
 	public static final Integer CONTENT_TYPE_TEXT = 1;
 	public static final Integer CONTENT_TYPE_IMAGE = 2;
 	public static final Integer CONTENT_TYPE_VIDEO = 3;
+	public static final Integer CONTENT_TYPE_APP = 4;
 	
 	public static int getHeightByPercent(Context context, double percent)
 	{
@@ -504,6 +506,13 @@ public class Data
 		
 		// Return Combination
 		return comments;
+	}
+	
+	public static List<ArticleContent> generateArticleContent(String Content)
+	{
+		List<ArticleContent> contentList = new ArrayList<ArticleContent>();
+		
+		return contentList;
 	}
 	
 	public static String pullLinks(String text)
