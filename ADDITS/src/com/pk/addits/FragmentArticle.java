@@ -141,11 +141,11 @@ public class FragmentArticle extends Fragment
 		/** Uncomment this for images **/
 		//txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		
-		//contentList = Data.generateArticleContent2(Article.getContent());
-		//contentAdapter = new ContentAdapter(getActivity(), contentList);
-		//lstContent.setAdapter(contentAdapter);
-		//contentAdapter.notifyDataSetChanged();
-		//lstContent.setExpanded(true);
+		contentList = Data.generateArticleContent(Article.getContent());
+		contentAdapter = new ContentAdapter(getActivity(), contentList);
+		lstContent.setAdapter(contentAdapter);
+		contentAdapter.notifyDataSetChanged();
+		lstContent.setExpanded(true);
 		
 		commentCard.setOnClickListener(new View.OnClickListener()
 		{
