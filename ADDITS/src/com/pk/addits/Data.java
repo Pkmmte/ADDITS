@@ -29,6 +29,10 @@ import android.os.Environment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.pk.addits.FragmentArticle.CommentFeed;
 
@@ -42,6 +46,10 @@ public class Data
 	public static final String FEED_URL = "http://addits.androiddissected.com/feed/";
 	public static final String MAIN_URL = "http://addits.androiddissected.com/";
 	public static final String TEMP_TAG = "temporary.xml";
+	
+	public static final Integer CONTENT_TYPE_TEXT = 1;
+	public static final Integer CONTENT_TYPE_IMAGE = 2;
+	public static final Integer CONTENT_TYPE_VIDEO = 3;
 	
 	public static int getHeightByPercent(Context context, double percent)
 	{
@@ -682,5 +690,26 @@ public class Data
 		}
 		
 		return oldDate.before(newDate);
+	}
+	
+	public static void setListViewHeightBasedOnChildren(ListView listView)
+	{
+		ListAdapter listAdapter = listView.getAdapter();
+		if (listAdapter == null) {
+			// pre-condition
+			return;
+		}
+		
+		int totalHeight = 0;
+		for (int i = 0; i < listAdapter.getCount(); i++)
+		{
+			View listItem = listAdapter.getView(i, null, listView);
+			listItem.measure(0, 0);
+			totalHeight += listItem.getMeasuredHeight();
+		}
+		
+		ViewGroup.LayoutParams params = listView.getLayoutParams();
+		params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+		listView.setLayoutParams(params);
 	}
 }

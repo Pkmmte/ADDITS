@@ -38,7 +38,6 @@ public class FragmentArticle extends Fragment
 	static Feed Article;
 	private Thread loadCommentsThread;
 	private Handler mHandler;
-	private List<CommentFeed> commentList;
 	private CommentFeedAdapter adapter;
 	static MenuItem shareItem;
 	static Menu optionsMenu;
@@ -48,12 +47,15 @@ public class FragmentArticle extends Fragment
 	TextView txtTitle;
 	TextView txtAuthor;
 	TextView txtDate;
-	TextView txtContent;
+	//TextView txtContent;
+	ListView lstContent;
+	private List<ArticleContent> contentList;
 	
 	FrameLayout commentCard;
 	TextView txtLoadComments;
 	ProgressBar progressBar;
 	ListView comments;
+	private List<CommentFeed> commentList;
 	
 	Typeface fontRegular;
 	Typeface fontBold;
@@ -91,8 +93,9 @@ public class FragmentArticle extends Fragment
 		txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
-		txtContent = (TextView) view.findViewById(R.id.txtContent);
-		p = new URLImageParser(txtContent, getActivity());
+		//txtContent = (TextView) view.findViewById(R.id.txtContent);
+		lstContent = (ListView) view.findViewById(R.id.ArticleContent);
+		//p = new URLImageParser(txtContent, getActivity());
 		
 		commentCard = (FrameLayout) view.findViewById(R.id.commentCard);
 		txtLoadComments = (TextView) view.findViewById(R.id.txtLoadComments);
@@ -106,7 +109,7 @@ public class FragmentArticle extends Fragment
 		txtTitle.setTypeface(fontBold);
 		txtAuthor.setTypeface(fontLight);
 		txtDate.setTypeface(fontLight);
-		txtContent.setTypeface(fontRegular);
+		//txtContent.setTypeface(fontRegular);
 		
 		return view;
 	}
@@ -130,7 +133,7 @@ public class FragmentArticle extends Fragment
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
 		txtDate.setText(Data.parseRelativeDate(Article.getDate()));
-		txtContent.setText(Html.fromHtml(Article.getContent()));
+		//txtContent.setText(Html.fromHtml(Article.getContent()));
 		/** Uncomment this for images **/
 		//txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		
@@ -247,6 +250,111 @@ public class FragmentArticle extends Fragment
 		}
 	}
 	
+	public class ContentAdapter extends BaseAdapter
+	{
+		private Context context;
+		
+		private List<ArticleContent> listItem;
+		
+		public ContentAdapter(Context context, List<ArticleContent> listItem)
+		{
+			this.context = context;
+			this.listItem = listItem;
+		}
+		
+		public int getCount()
+		{
+			return listItem.size();
+		}
+		
+		public Object getItem(int position)
+		{
+			return listItem.get(position);
+		}
+		
+		public long getItemId(int position)
+		{
+			return position;
+		}
+		
+		public View getView(int position, View view, ViewGroup viewGroup)
+		{
+			ContentViewHolder holder;
+			ArticleContent entry = listItem.get(position);
+			if (view == null)
+			{
+				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater.inflate(R.layout.fragment_article_content, null);
+				
+				holder = new ContentViewHolder();
+				holder.Text = (TextView) view.findViewById(R.id.Text);
+				holder.Image = (ImageView) view.findViewById(R.id.Image);
+				holder.Text.setTypeface(fontRegular);
+				
+				view.setTag(holder);
+			}
+			else
+			{
+				holder = (ContentViewHolder) view.getTag();
+			}
+			
+			int Type = entry.getType();
+			String Content = entry.getContent();
+			
+			if(Type == Data.CONTENT_TYPE_TEXT)
+			{
+				holder.Text.setVisibility(View.VISIBLE);
+				holder.Image.setVisibility(View.GONE);
+				
+				holder.Text.setText(Html.fromHtml(Content));
+			}
+			else if(Type == Data.CONTENT_TYPE_IMAGE)
+			{
+				holder.Text.setVisibility(View.GONE);
+				holder.Image.setVisibility(View.VISIBLE);
+				
+				Picasso.with(getActivity()).load(Content).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().into(holder.Image);
+			}
+			else if(Type == Data.CONTENT_TYPE_VIDEO)
+			{
+				holder.Text.setVisibility(View.GONE);
+				holder.Image.setVisibility(View.GONE);
+				
+				// TODO Add Video Support
+			}
+			
+			return view;
+		}
+	}
+	
+	private static class ContentViewHolder
+	{
+		public TextView Text;
+		public ImageView Image;
+	}
+	
+	public static class ArticleContent
+	{
+		int Type;
+		String Content;
+		
+		public ArticleContent(int Type, String Content)
+		{
+			this.Type = Type;
+			this.Content = Content;
+		}
+		
+		public int getType()
+		{
+			return Type;
+		}
+		
+		public String getContent()
+		{
+			return Content;
+		}
+	}
+	
 	Runnable loadComments = new Runnable()
 	{
 		public void run()
@@ -289,14 +397,14 @@ public class FragmentArticle extends Fragment
 		
 		public View getView(int position, View view, ViewGroup viewGroup)
 		{
-			ViewHolder holder;
+			CommentViewHolder holder;
 			CommentFeed entry = listItem.get(position);
 			if (view == null)
 			{
 				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				view = inflater.inflate(R.layout.commentfeed_item, null);
 				
-				holder = new ViewHolder();
+				holder = new CommentViewHolder();
 				holder.txtCreator = (TextView) view.findViewById(R.id.txtCreator);
 				holder.txtContent = (TextView) view.findViewById(R.id.txtContent);
 				holder.txtDate = (TextView) view.findViewById(R.id.txtDate);
@@ -309,7 +417,7 @@ public class FragmentArticle extends Fragment
 			}
 			else
 			{
-				holder = (ViewHolder) view.getTag();
+				holder = (CommentViewHolder) view.getTag();
 			}
 			
 			holder.txtCreator.setText(entry.getCreator());
@@ -320,7 +428,7 @@ public class FragmentArticle extends Fragment
 		}
 	}
 	
-	private static class ViewHolder
+	private static class CommentViewHolder
 	{
 		public TextView txtCreator;
 		public TextView txtContent;

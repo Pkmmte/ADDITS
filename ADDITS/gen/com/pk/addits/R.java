@@ -152,14 +152,16 @@ public final class R {
         public static final int transparent_selector=0x7f020042;
     }
     public static final class id {
+        public static final int ArticleContent=0x7f0b001c;
         public static final int Card=0x7f0b0014;
-        public static final int Content=0x7f0b0029;
-        public static final int GridView=0x7f0b0026;
-        public static final int Image=0x7f0b0028;
+        public static final int Content=0x7f0b002a;
+        public static final int GridView=0x7f0b0028;
+        public static final int Image=0x7f0b0027;
         public static final int ListView=0x7f0b0025;
-        public static final int MoarArticles=0x7f0b0027;
-        public static final int Share_Label=0x7f0b0030;
-        public static final int background=0x7f0b002d;
+        public static final int MoarArticles=0x7f0b0029;
+        public static final int Share_Label=0x7f0b0031;
+        public static final int Text=0x7f0b0026;
+        public static final int background=0x7f0b002e;
         public static final int commentCard=0x7f0b0023;
         public static final int content_frame=0x7f0b0003;
         public static final int divider=0x7f0b000b;
@@ -172,14 +174,13 @@ public final class R {
         public static final int fab__listview_background=0x7f0b000f;
         public static final int fab__scroll_view=0x7f0b0010;
         public static final int home_header=0x7f0b0001;
-        public static final int image_header=0x7f0b002c;
+        public static final int image_header=0x7f0b002d;
         public static final int imgPreview=0x7f0b0019;
         public static final int lblAuthor=0x7f0b001a;
         public static final int lblUnread=0x7f0b0015;
         public static final int left_drawer=0x7f0b0008;
-        public static final int linearLayout=0x7f0b001c;
         public static final int loading=0x7f0b0004;
-        public static final int loadingImage=0x7f0b002a;
+        public static final int loadingImage=0x7f0b002b;
         public static final int loadingText=0x7f0b0007;
         public static final int playBanner=0x7f0b001e;
         public static final int playDownload=0x7f0b0020;
@@ -187,12 +188,12 @@ public final class R {
         public static final int playLayoutTxt=0x7f0b001f;
         public static final int play_icon=0x7f0b0021;
         public static final int play_logo=0x7f0b0022;
-        public static final int progress=0x7f0b002f;
+        public static final int progress=0x7f0b0030;
         public static final int progressBar=0x7f0b0005;
         public static final int progressFinished=0x7f0b0006;
-        public static final int secondaryProgress=0x7f0b002e;
+        public static final int secondaryProgress=0x7f0b002f;
         public static final int slider_content=0x7f0b0000;
-        public static final int textLoading=0x7f0b002b;
+        public static final int textLoading=0x7f0b002c;
         public static final int txtAuthor=0x7f0b001b;
         public static final int txtCategory=0x7f0b0016;
         public static final int txtContent=0x7f0b000c;
@@ -223,11 +224,12 @@ public final class R {
         public static final int feed_item=0x7f040008;
         public static final int feed_item2=0x7f040009;
         public static final int fragment_article=0x7f04000a;
-        public static final int fragment_customization=0x7f04000b;
-        public static final int fragment_home=0x7f04000c;
-        public static final int fragment_home_slider=0x7f04000d;
-        public static final int fragment_loading=0x7f04000e;
-        public static final int header_light=0x7f04000f;
+        public static final int fragment_article_content=0x7f04000b;
+        public static final int fragment_customization=0x7f04000c;
+        public static final int fragment_home=0x7f04000d;
+        public static final int fragment_home_slider=0x7f04000e;
+        public static final int fragment_loading=0x7f04000f;
+        public static final int header_light=0x7f040010;
     }
     public static final class menu {
         public static final int article=0x7f0f0000;
