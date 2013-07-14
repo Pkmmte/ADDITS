@@ -140,8 +140,6 @@ public class FragmentArticle extends Fragment
 		txtContent.setText(Html.fromHtml(Article.getContent()));
 		/** Uncomment this for images **/
 		//txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
-		txtContent.setClickable(true);
-		txtContent.setMovementMethod(LinkMovementMethod.getInstance());
 		
 		//contentList = Data.generateArticleContent2(Article.getContent());
 		//contentAdapter = new ContentAdapter(getActivity(), contentList);
@@ -301,6 +299,7 @@ public class FragmentArticle extends Fragment
 				holder = new ContentViewHolder();
 				holder.Text = (TextView) view.findViewById(R.id.Text);
 				holder.Text.setTypeface(fontRegular);
+				holder.Text.setMovementMethod(LinkMovementMethod.getInstance());
 				holder.Image = (ImageView) view.findViewById(R.id.Image);
 				holder.Video = (LinearLayout) view.findViewById(R.id.Video);
 				holder.App = (RelativeLayout) view.findViewById(R.id.App);
