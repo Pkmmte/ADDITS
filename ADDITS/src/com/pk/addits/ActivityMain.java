@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -117,8 +118,16 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			{
 				selectItem(225);
 				
-				initializeFeedThread();
-				checkNewFeed();
+				if (feedThread == null)
+				{
+					initializeFeedThread();
+					feedThread.start();
+				}
+				else if (!feedThread.isAlive())
+				{
+					initializeFeedThread();
+					feedThread.start();
+				}
 			}
 			else
 			{
@@ -300,28 +309,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		return NewsFeed;
 	}
 	
-	private void checkNewFeed()
-	{
-		if (lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.isNetworkConnected(ActivityMain.this))
-		{
-			lastUpdateCheckTime = System.currentTimeMillis();
-			Editor editor = prefs.edit();
-			editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
-			editor.commit();
-			
-			if (feedThread == null)
-			{
-				initializeFeedThread();
-				feedThread.start();
-			}
-			else if (!feedThread.isAlive())
-			{
-				initializeFeedThread();
-				feedThread.start();
-			}
-		}
-	}
-	
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
 	{
 		List<XmlDom> entries = xml.tags("item");
@@ -331,8 +318,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		for (XmlDom item : entries)
 		{
 			String Title = item.text("title");
-			String des = android.text.Html.fromHtml(item.text("description")).toString();
-			String Description = des.substring(3, des.length());
+			String Description = Html.fromHtml(item.text("description").replaceAll("<img.+?>", "")).toString();
 			String Content = item.text("content:encoded");
 			String CommentFeed = item.text("wfw:commentRss");
 			String Author = item.text("dc:creator");
@@ -380,22 +366,26 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			{
 				try
 				{
-					/** Download Content **/
-					mHandler.post(new showProgress2("Downloading content..."));
-					
-					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
-					
-					while(true)
+					if (Data.isNetworkConnected(ActivityMain.this))
 					{
-						if(feedDownloaded)
-							break;
+						mHandler.post(new showProgress2("Downloading content..."));
+						
+						aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+						
+						while (true)
+						{
+							if (feedDownloaded)
+								break;
+						}
+						
+						mHandler.post(new showProgress2("Writing content..."));
+						Data.overwriteFeedXML(NewsFeed);
+						
+						mHandler.post(new showProgress2("Everything is up to date!"));
+						mHandler.postDelayed(new showProgress2(""), 5000);
 					}
-					
-					mHandler.post(new showProgress2("Writing content..."));
-					Data.overwriteFeedXML(NewsFeed);
-					
-					mHandler.post(new showProgress2("Everything is up to date!"));
-					mHandler.postDelayed(new showProgress2(""), 5000);
+					else
+						mHandler.post(new showProgress2("An internet connection is required!"));
 					
 				}
 				catch (Exception e)
@@ -425,49 +415,62 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					mHandler.post(new showHome());
 					/** Fetch Website Data **/
 					
-					mHandler.post(new showProgress("Checking for new content...", true, false, false));
-					
-					aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
-					
-					while(true)
+					if (lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.isNetworkConnected(ActivityMain.this))
 					{
-						if(newChecked)
-							break;
-					}
-					
-					if(newFound)
-					{
-						mHandler.post(new showProgress("Updating content...", true, false, false));
+						lastUpdateCheckTime = System.currentTimeMillis();
+						Editor editor = prefs.edit();
+						editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
+						editor.commit();
 						
-						// TODO Make sure read/favorite params don't get overwritten
-						aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+						mHandler.post(new showProgress("Checking for new content...", true, false, false));
 						
-						while(true)
+						aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
+						
+						while (true)
 						{
-							if(feedDownloaded)
+							if (newChecked)
 								break;
 						}
 						
-						mHandler.post(new showProgress("Writing content...", true, false, false));
+						if (newFound)
+						{
+							mHandler.post(new showProgress("Updating content...", true, false, false));
+							
+							// TODO Make sure read/favorite params don't get overwritten
+							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+							
+							while (true)
+							{
+								if (feedDownloaded)
+									break;
+							}
+							
+							mHandler.post(new showProgress("Writing content...", true, false, false));
+							
+							Data.overwriteFeedXML(NewsFeed);
+							Log.v("Happy Face", " New stuff found!");
+						}
+						else
+							Log.v("Sad Face", " No new found...");
 						
-						Data.overwriteFeedXML(NewsFeed);
-						Log.v("Happy Face", " New stuff found!");
+						mHandler.post(new showProgress("Everything is up to date!", true, false, true));
+						
+						while (true)
+						{
+							if (fragmentLoaded)
+							{
+								mHandler.post(new showProgress("", false, false, false));
+								break;
+							}
+						}
+						
+						mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
 					}
 					else
-						Log.v("Sad Face", " No new found...");
-					
-					mHandler.post(new showProgress("Everything is up to date!", true, false, true));
-					
-					while (true)
 					{
-						if (fragmentLoaded)
-						{
-							mHandler.post(new showProgress("", false, false, false));
-							break;
-						}
+						mHandler.post(new showProgress("Loading feed...", true, false, true));
+						mHandler.postDelayed(new showProgress("Loading feed...", false, true, true), 2500);
 					}
-					
-					mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
 				}
 				catch (Exception e)
 				{
