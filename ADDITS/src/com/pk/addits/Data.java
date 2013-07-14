@@ -4,7 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
@@ -15,8 +17,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.apache.http.util.ByteArrayBuffer;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.annotation.SuppressLint;
@@ -28,11 +38,8 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.util.Xml;
 import android.view.Display;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import com.pk.addits.FragmentArticle.ArticleContent;
 import com.pk.addits.FragmentArticle.CommentFeed;
@@ -511,8 +518,184 @@ public class Data
 	public static List<ArticleContent> generateArticleContent(String Content)
 	{
 		List<ArticleContent> contentList = new ArrayList<ArticleContent>();
+		XmlPullParser xrp = Xml.newPullParser();
+		
+		try
+		{
+			xrp.setInput(new StringReader(Content));
+			int eventType = xrp.getEventType();
+			
+			String p_text = "";
+			boolean p_active = false;
+			
+			while (eventType != XmlPullParser.END_DOCUMENT)
+			{
+				if (eventType == XmlPullParser.START_TAG)
+				{
+					String elemName = xrp.getName();
+					if (!p_active && elemName.equalsIgnoreCase("p"))
+					{
+						if (xrp.next() == XmlPullParser.TEXT)
+						{
+							p_active = true;
+							p_text = xrp.getText();
+							// if(containsLinks(xrp.getText()))
+							// {
+							
+							// }
+							// else
+						}
+					}
+					else if (p_active)
+					{
+						if (elemName.equalsIgnoreCase("em"))
+							p_text += "<em>";
+						else if (elemName.equalsIgnoreCase("strong"))
+							p_text += "<strong>";
+					}
+				}
+				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equalsIgnoreCase("p"))
+				{
+					if (p_active)
+					{
+						p_active = false;
+						contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, p_text + "\n\n"));
+					}
+				}
+				eventType = xrp.next();
+			}
+		}
+		catch (Exception e)
+		{
+			Log.e("Error Parsing Content", e.getMessage(), e);
+		}
 		
 		return contentList;
+	}
+	
+	public static List<ArticleContent> generateArticleContent2(String Content)
+	{
+		final List<ArticleContent> contentList = new ArrayList<ArticleContent>();
+		
+		try
+		{
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser saxParser = factory.newSAXParser();
+			
+			DefaultHandler handler = new DefaultHandler()
+			{
+				boolean bfname = false;
+				boolean blname = false;
+				boolean bnname = false;
+				boolean bsalary = false;
+				
+				public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
+				{
+					
+					System.out.println("Start Element :" + qName);
+					
+					if (qName.equalsIgnoreCase("FIRSTNAME"))
+					{
+						bfname = true;
+					}
+					
+					if (qName.equalsIgnoreCase("LASTNAME"))
+					{
+						blname = true;
+					}
+					
+					if (qName.equalsIgnoreCase("NICKNAME"))
+					{
+						bnname = true;
+					}
+					
+					if (qName.equalsIgnoreCase("SALARY"))
+					{
+						bsalary = true;
+					}
+					
+				}
+				
+				public void endElement(String uri, String localName, String qName) throws SAXException
+				{
+					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName));
+					System.out.println("End Element :" + qName);
+					
+				}
+				
+				public void characters(char ch[], int start, int length) throws SAXException
+				{
+					
+					if (bfname)
+					{
+						System.out.println("First Name : " + new String(ch, start, length));
+						bfname = false;
+					}
+					
+					if (blname)
+					{
+						System.out.println("Last Name : " + new String(ch, start, length));
+						blname = false;
+					}
+					
+					if (bnname)
+					{
+						System.out.println("Nick Name : " + new String(ch, start, length));
+						bnname = false;
+					}
+					
+					if (bsalary)
+					{
+						System.out.println("Salary : " + new String(ch, start, length));
+						bsalary = false;
+					}
+					
+				}
+				
+			};
+			
+			saxParser.parse(new InputSource(new StringReader(Content)), handler);
+			
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return contentList;
+	}
+	
+	public static String getInnerXml(XmlPullParser parser) throws XmlPullParserException, IOException
+	{
+		StringBuilder sb = new StringBuilder();
+		int depth = 1;
+		while (depth != 0)
+		{
+			switch (parser.next())
+			{
+				case XmlPullParser.END_TAG:
+					depth--;
+					if (depth > 0)
+					{
+						sb.append("</" + parser.getName() + ">");
+					}
+					break;
+				case XmlPullParser.START_TAG:
+					depth++;
+					StringBuilder attrs = new StringBuilder();
+					for (int i = 0; i < parser.getAttributeCount(); i++)
+					{
+						attrs.append(parser.getAttributeName(i) + "=\"" + parser.getAttributeValue(i) + "\" ");
+					}
+					sb.append("<" + parser.getName() + " " + attrs.toString() + ">");
+					break;
+				default:
+					sb.append(parser.getText());
+					break;
+			}
+		}
+		String content = sb.toString();
+		return content;
 	}
 	
 	public static String pullLinks(String text)
@@ -547,6 +730,36 @@ public class Data
 			link = link.replace("[", "").replace("]", "").replace("-150x150", "");
 		}
 		return link;
+	}
+	
+	public static boolean containsLinks(String text)
+	{
+		ArrayList<String> links = new ArrayList<String>();
+		
+		try
+		{
+			String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+			Pattern p = Pattern.compile(regex);
+			Matcher m = p.matcher(text);
+			while (m.find())
+			{
+				String urlStr = m.group();
+				if (urlStr.startsWith("(") && urlStr.endsWith(")"))
+				{
+					urlStr = urlStr.substring(1, urlStr.length() - 1);
+				}
+				links.add(urlStr);
+			}
+		}
+		catch (Exception e)
+		{
+			Log.w("containsLinks() Parse Error", e);
+		}
+		
+		if (links.size() > 0)
+			return true;
+		else
+			return false;
 	}
 	
 	public static void overwriteFeedXML(Feed[] Feeeeedz)
@@ -587,19 +800,7 @@ public class Data
 				sImage = sImage.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
 				sURL = sURL.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
 				
-				XMLbuilder.append("	<article\n" + 
-								  "		id=\"" + sID + "\"\n" + 
-								  "		title=\"" + sTitle + "\"\n" + 
-								  "		description=\"" + sDescription + "\"\n" + 
-								  "		content=\"" + sContent + "\"\n" + 
-								  "		commentfeed=\"" + sCommentFeed + "\"\n" + 
-								  "		author=\"" + sAuthor + "\"\n" + 
-								  "		date=\"" + sDate + "\"\n" + 
-								  "		category=\"" + sCategory + "\"\n" + 
-								  "		image=\"" + sImage + "\"\n" + 
-								  "		url=\"" + sURL + "\"\n" + 
-								  "		favorite=\"" + sFavorite + "\"\n" + 
-								  "		read=\"" + sRead + "\" />\n\n");
+				XMLbuilder.append("	<article\n" + "		id=\"" + sID + "\"\n" + "		title=\"" + sTitle + "\"\n" + "		description=\"" + sDescription + "\"\n" + "		content=\"" + sContent + "\"\n" + "		commentfeed=\"" + sCommentFeed + "\"\n" + "		author=\"" + sAuthor + "\"\n" + "		date=\"" + sDate + "\"\n" + "		category=\"" + sCategory + "\"\n" + "		image=\"" + sImage + "\"\n" + "		url=\"" + sURL + "\"\n" + "		favorite=\"" + sFavorite + "\"\n" + "		read=\"" + sRead + "\" />\n\n");
 			}
 			
 			XMLbuilder.append("</feed>");
@@ -673,7 +874,7 @@ public class Data
 		
 		return ago.toString();
 	}
-
+	
 	@SuppressLint("SimpleDateFormat")
 	public static boolean isNewerDate(String nDate, String oDate)
 	{
@@ -699,26 +900,5 @@ public class Data
 		}
 		
 		return oldDate.before(newDate);
-	}
-	
-	public static void setListViewHeightBasedOnChildren(ListView listView)
-	{
-		ListAdapter listAdapter = listView.getAdapter();
-		if (listAdapter == null) {
-			// pre-condition
-			return;
-		}
-		
-		int totalHeight = 0;
-		for (int i = 0; i < listAdapter.getCount(); i++)
-		{
-			View listItem = listAdapter.getView(i, null, listView);
-			listItem.measure(0, 0);
-			totalHeight += listItem.getMeasuredHeight();
-		}
-		
-		ViewGroup.LayoutParams params = listView.getLayoutParams();
-		params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-		listView.setLayoutParams(params);
 	}
 }

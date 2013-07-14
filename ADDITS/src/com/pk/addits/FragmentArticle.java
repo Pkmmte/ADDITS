@@ -49,7 +49,7 @@ public class FragmentArticle extends Fragment
 	TextView txtAuthor;
 	TextView txtDate;
 	//TextView txtContent;
-	ListView lstContent;
+	PkListView lstContent;
 	private List<ArticleContent> contentList;
 	private ContentAdapter contentAdapter;
 	
@@ -97,7 +97,7 @@ public class FragmentArticle extends Fragment
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
 		//txtContent = (TextView) view.findViewById(R.id.txtContent);
-		lstContent = (ListView) view.findViewById(R.id.ArticleContent);
+		lstContent = (PkListView) view.findViewById(R.id.ArticleContent);
 		//p = new URLImageParser(txtContent, getActivity());
 		
 		commentCard = (FrameLayout) view.findViewById(R.id.commentCard);
@@ -140,10 +140,11 @@ public class FragmentArticle extends Fragment
 		/** Uncomment this for images **/
 		//txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		
-		contentList = Data.generateArticleContent(Article.getContent());
+		contentList = Data.generateArticleContent2(Article.getContent());
 		contentAdapter = new ContentAdapter(getActivity(), contentList);
 		lstContent.setAdapter(contentAdapter);
 		contentAdapter.notifyDataSetChanged();
+		lstContent.setExpanded(true);
 		
 		commentCard.setOnClickListener(new View.OnClickListener()
 		{

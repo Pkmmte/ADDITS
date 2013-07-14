@@ -81,7 +81,7 @@
         android:background="@drawable/card_bg"
         android:orientation="vertical" >
 
-        <ListView
+        <com.pk.addits.PkListView
             android:id="@+id/ArticleContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
