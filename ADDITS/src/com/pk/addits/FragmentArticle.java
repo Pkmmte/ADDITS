@@ -49,7 +49,7 @@ public class FragmentArticle extends Fragment
 	TextView txtTitle;
 	TextView txtAuthor;
 	TextView txtDate;
-	TextView txtContent;
+	//TextView txtContent;
 	PkListView lstContent;
 	private List<ArticleContent> contentList;
 	private ContentAdapter contentAdapter;
@@ -97,7 +97,7 @@ public class FragmentArticle extends Fragment
 		txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
-		txtContent = (TextView) view.findViewById(R.id.txtContent);
+		//txtContent = (TextView) view.findViewById(R.id.txtContent);
 		lstContent = (PkListView) view.findViewById(R.id.ArticleContent);
 		//p = new URLImageParser(txtContent, getActivity());
 		
@@ -137,7 +137,7 @@ public class FragmentArticle extends Fragment
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
 		txtDate.setText(Data.parseRelativeDate(Article.getDate()));
-		txtContent.setText(Html.fromHtml(Article.getContent()));
+		//txtContent.setText(Html.fromHtml(Article.getContent()));
 		/** Uncomment this for images **/
 		//txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		
