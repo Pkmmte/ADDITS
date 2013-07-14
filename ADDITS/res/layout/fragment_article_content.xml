@@ -63,8 +63,21 @@
                 android:padding="@dimen/margin_medium"
                 android:text="@string/get_it_on_google_play"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_primary" />
+                android:textSize="@dimen/text_secondary" />
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/App_Icon"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/playLogo"
+            android:layout_toRightOf="@+id/App_Icon"
+            android:fontFamily="serif"
+            android:padding="@dimen/margin_medium"
+            android:text="@string/get_it_on_google_play"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_primary" />
 
         <ImageView
             android:id="@+id/App_Icon"
@@ -76,6 +89,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <ImageView
+            android:id="@+id/playLogo"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_alignParentRight="true"
