@@ -48,6 +48,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private boolean emptyFeed;
 	private static int lastHomeScrollPosition;
 	private static int lastHomeTopOffset;
+	private static int backPress;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -91,6 +92,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		emptyFeed = false;
 		lastHomeScrollPosition = 0;
 		lastHomeTopOffset = 0;
+		backPress = 0;
 		fragmentLoaded = false;
 		fragmentManager = getSupportFragmentManager();
 		
@@ -189,7 +191,16 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				return true;
 			}
 			else
-				finish();
+			{
+				if(backPress < 1)
+				{
+					backPress++;
+					Toast.makeText(ActivityMain.this, "Press back once more to exit", Toast.LENGTH_SHORT).show();
+					return true;
+				}
+				else
+					finish();
+			}
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -281,6 +292,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 		
 		articleShowing = false;
+		backPress = 0;
 		fragmentManager.beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.content_frame, fragment).commit();
 		if (position != 225)
 		{
@@ -303,6 +315,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		Fragment fragment = FragmentArticle.newInstance(article);
 		mTitle = article.getTitle();
 		articleShowing = true;
+		backPress = 0;
 		lastHomeScrollPosition = scrollPosition;
 		lastHomeTopOffset = topOffset;
 		
