@@ -43,6 +43,8 @@ public class FragmentHome extends Fragment
 	static FeedAdapter adapter;
 	static FadingActionBarHelperHome2 mFadingHelper;
 	static Context cntxt;
+	static int scrollPosition;
+	static int topOffset;
 	
 	static List<Feed> feedList;
 	static Feed[] NewsFeed;
@@ -60,6 +62,18 @@ public class FragmentHome extends Fragment
 	Typeface fontBold;
 	Typeface fontLight;
 	
+	public static FragmentHome newInstance(int lastScrollPosition, int lastTopOffset)
+	{
+		FragmentHome f = new FragmentHome();
+		Bundle bdl = new Bundle();
+		
+		bdl.putInt("Last Scroll Position", lastScrollPosition);
+		bdl.putInt("Last Top Offset", lastTopOffset);
+		f.setArguments(bdl);
+		
+		return f;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -72,6 +86,15 @@ public class FragmentHome extends Fragment
 		adapter = new FeedAdapter(getActivity(), feedList);
 		list.setAdapter(adapter);
 		currentSlide = 1;
+		scrollPosition = 0;
+		topOffset = 0;
+		
+		Bundle args = getArguments();
+		if(args != null)
+		{
+			scrollPosition = args.getInt("Last Scroll Position", 0);
+			topOffset = args.getInt("Last Top Offset", 0);
+		}
 		
 		return view;
 	}
@@ -124,7 +147,7 @@ public class FragmentHome extends Fragment
 					boolean Read = feedList.get(ID).isRead();
 					
 					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-					ActivityMain.callArticle(getActivity(), Article);
+					ActivityMain.callArticle(getActivity(), Article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
 				}
 				else if (currentSlideID != null)
 				{
@@ -142,7 +165,7 @@ public class FragmentHome extends Fragment
 					boolean Read = NewsFeed[currentSlideID].isRead();
 					
 					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-					ActivityMain.callArticle(getActivity(), Article);
+					ActivityMain.callArticle(getActivity(), Article, 0, 0);
 				}
 			}
 		});
@@ -189,6 +212,7 @@ public class FragmentHome extends Fragment
 				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
 			adapter.notifyDataSetChanged();
+			list.setSelectionFromTop(scrollPosition, topOffset);
 			populateSlide();
 		}
 	}

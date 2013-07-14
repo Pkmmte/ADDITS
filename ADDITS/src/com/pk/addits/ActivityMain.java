@@ -46,6 +46,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private Handler mHandler;
 	private AQuery aq;
 	private boolean emptyFeed;
+	private static int lastHomeScrollPosition;
+	private static int lastHomeTopOffset;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -87,6 +89,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
 		emptyFeed = false;
+		lastHomeScrollPosition = 0;
+		lastHomeTopOffset = 0;
 		fragmentLoaded = false;
 		fragmentManager = getSupportFragmentManager();
 		
@@ -176,7 +180,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		{
 			if (currentFragment.equals("Home") && articleShowing)
 			{
-				Fragment fragment = new FragmentHome();
+				Fragment fragment = FragmentHome.newInstance(lastHomeScrollPosition, lastHomeTopOffset);
 				mTitle = "Home";
 				actionBar.setTitle(mTitle);
 				articleShowing = false;
@@ -294,11 +298,13 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setTitle(mTitle);
 	}
 	
-	public static void callArticle(Context context, Feed article)
+	public static void callArticle(Context context, Feed article, int scrollPosition, int topOffset)
 	{
 		Fragment fragment = FragmentArticle.newInstance(article);
 		mTitle = article.getTitle();
 		articleShowing = true;
+		lastHomeScrollPosition = scrollPosition;
+		lastHomeTopOffset = topOffset;
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
 		fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right).replace(R.id.content_frame, fragment).commit();

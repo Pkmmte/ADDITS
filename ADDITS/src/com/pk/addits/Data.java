@@ -584,15 +584,24 @@ public class Data
 			
 			DefaultHandler handler = new DefaultHandler()
 			{
+				boolean p_active = false;
 				boolean bfname = false;
 				boolean blname = false;
 				boolean bnname = false;
 				boolean bsalary = false;
 				
-				public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException
+				public void startElement(String uri, String localName, String qName, Attributes attributes)
 				{
 					
 					System.out.println("Start Element :" + qName);
+					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName + "..." + localName));
+					
+					if(qName.equalsIgnoreCase("p"))
+					{
+						p_active = true;
+						contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "Roar"));
+					}
+					
 					
 					if (qName.equalsIgnoreCase("FIRSTNAME"))
 					{
@@ -616,14 +625,14 @@ public class Data
 					
 				}
 				
-				public void endElement(String uri, String localName, String qName) throws SAXException
+				public void endElement(String uri, String localName, String qName)
 				{
-					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName));
+					//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, localName));
 					System.out.println("End Element :" + qName);
 					
 				}
 				
-				public void characters(char ch[], int start, int length) throws SAXException
+				public void characters(char ch[], int start, int length)
 				{
 					
 					if (bfname)
