@@ -192,7 +192,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			}
 			else
 			{
-				if(backPress < 1)
+				if (backPress < 1)
 				{
 					backPress++;
 					Toast.makeText(ActivityMain.this, "Press back once more to exit", Toast.LENGTH_SHORT).show();
@@ -443,47 +443,58 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						
 						mHandler.post(new showProgress("Checking for new content...", true, false, false));
 						
-						aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
-						
-						while (true)
+						try
 						{
-							if (newChecked)
-								break;
-						}
-						
-						if (newFound)
-						{
-							mHandler.post(new showProgress("Updating content...", true, false, false));
-							
-							// TODO Make sure read/favorite params don't get overwritten
-							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
 							
 							while (true)
 							{
-								if (feedDownloaded)
+								if (newChecked)
 									break;
 							}
 							
-							mHandler.post(new showProgress("Writing content...", true, false, false));
-							
-							Data.overwriteFeedXML(NewsFeed);
-							Log.v("Happy Face", " New stuff found!");
-						}
-						else
-							Log.v("Sad Face", " No new found...");
-						
-						mHandler.post(new showProgress("Everything is up to date!", true, false, true));
-						
-						while (true)
-						{
-							if (fragmentLoaded)
+							if (newFound)
 							{
-								mHandler.post(new showProgress("", false, false, false));
-								break;
+								mHandler.post(new showProgress("Updating content...", true, false, false));
+								
+								// TODO Make sure read/favorite params don't get overwritten
+								aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+								
+								while (true)
+								{
+									if (feedDownloaded)
+										break;
+								}
+								
+								mHandler.post(new showProgress("Writing content...", true, false, false));
+								
+								Data.overwriteFeedXML(NewsFeed);
+								Log.v("Happy Face", " New stuff found!");
 							}
+							else
+								Log.v("Sad Face", " No new found...");
+							
+							mHandler.post(new showProgress("Everything is up to date!", true, false, true));
+							
+							if (newFound)
+							{
+								while (true)
+								{
+									if (fragmentLoaded)
+									{
+										mHandler.post(new showProgress("", false, false, false));
+										break;
+									}
+								}
+							}
+							
+							mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
 						}
-						
-						mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
+						catch (Exception e)
+						{
+							mHandler.post(new showProgress("Error updating feed!", true, false, true));
+							mHandler.postDelayed(new showProgress("Error updating feed!", false, true, true), 2500);
+						}
 					}
 					else
 					{
