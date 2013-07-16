@@ -331,8 +331,7 @@ public class FragmentArticle extends Fragment
 				holder.Video.setVisibility(View.GONE);
 				holder.App.setVisibility(View.GONE);
 				
-				Picasso.with(getActivity()).load(Content).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().into(holder.Image);
-				Toast.makeText(context, "Loading Image... " + Content, Toast.LENGTH_SHORT).show();
+				Picasso.with(context).load(Content).skipCache().into(holder.Image);
 			}
 			else if(Type == Data.CONTENT_TYPE_VIDEO)
 			{

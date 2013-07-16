@@ -600,7 +600,7 @@ public class Data
 					if (qName.equalsIgnoreCase("p"))
 					{
 						sb = new StringBuilder();
-						contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName + "..." + localName));
+						//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName + "..." + localName));
 						p_active = true;
 					}
 					else if (p_active)
