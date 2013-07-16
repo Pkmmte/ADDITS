@@ -389,19 +389,26 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					{
 						mHandler.post(new showProgress2("Downloading content..."));
 						
-						aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
-						
-						while (true)
+						try
 						{
-							if (feedDownloaded)
-								break;
+							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+							
+							while (true)
+							{
+								if (feedDownloaded)
+									break;
+							}
+							
+							mHandler.post(new showProgress2("Writing content..."));
+							Data.overwriteFeedXML(NewsFeed);
+							
+							mHandler.post(new showProgress2("Everything is up to date!"));
+							mHandler.postDelayed(new showProgress2(""), 4000);
 						}
-						
-						mHandler.post(new showProgress2("Writing content..."));
-						Data.overwriteFeedXML(NewsFeed);
-						
-						mHandler.post(new showProgress2("Everything is up to date!"));
-						mHandler.postDelayed(new showProgress2(""), 5000);
+						catch (Exception e)
+						{
+							mHandler.post(new showProgress2("Error downloading feed!"));
+						}
 					}
 					else
 						mHandler.post(new showProgress2("An internet connection is required!"));

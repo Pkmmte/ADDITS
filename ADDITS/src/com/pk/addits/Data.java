@@ -36,6 +36,10 @@ import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
+import android.sax.Element;
+import android.sax.EndElementListener;
+import android.sax.EndTextElementListener;
+import android.sax.RootElement;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.Xml;
@@ -576,6 +580,7 @@ public class Data
 	public static List<ArticleContent> generateArticleContent2(String Content)
 	{
 		final List<ArticleContent> contentList = new ArrayList<ArticleContent>();
+		String sContent = "<article>" + Content + "</article>";
 		
 		try
 		{
@@ -584,73 +589,81 @@ public class Data
 			
 			DefaultHandler handler = new DefaultHandler()
 			{
+				StringBuilder sb;
 				boolean p_active = false;
-				boolean bfname = false;
-				boolean blname = false;
-				boolean bnname = false;
 				boolean bsalary = false;
 				
 				public void startElement(String uri, String localName, String qName, Attributes attributes)
 				{
-					
 					System.out.println("Start Element :" + qName);
-					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName + "..." + localName));
 					
-					if(qName.equalsIgnoreCase("p"))
+					if (qName.equalsIgnoreCase("p"))
 					{
+						sb = new StringBuilder();
+						contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName + "..." + localName));
 						p_active = true;
-						contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "Roar"));
 					}
-					
-					
-					if (qName.equalsIgnoreCase("FIRSTNAME"))
+					else if (p_active)
 					{
-						bfname = true;
-					}
-					
-					if (qName.equalsIgnoreCase("LASTNAME"))
-					{
-						blname = true;
-					}
-					
-					if (qName.equalsIgnoreCase("NICKNAME"))
-					{
-						bnname = true;
-					}
-					
-					if (qName.equalsIgnoreCase("SALARY"))
-					{
-						bsalary = true;
+						int length = attributes.getLength();
+						if (qName.equalsIgnoreCase("img"))
+						{
+							String imgSource = "";
+							for (int i = 0; i < length; i++)
+							{
+								if(attributes.getQName(i).equalsIgnoreCase("src"))
+								{
+									imgSource = attributes.getValue(i).trim();
+									break;
+								}
+							}
+
+							contentList.add(new ArticleContent(Data.CONTENT_TYPE_IMAGE, imgSource));
+							p_active = false;
+						}
+						else
+						{
+							sb.append("<" + qName);
+							for (int i = 0; i < length; i++)
+							{
+								sb.append(" " + attributes.getQName(i));
+								sb.append("=\"" + attributes.getValue(i) + "\"");
+							}
+							sb.append(">");
+						}
 					}
 					
 				}
 				
 				public void endElement(String uri, String localName, String qName)
 				{
-					//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, localName));
+					// contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, localName));
 					System.out.println("End Element :" + qName);
 					
+					if (p_active)
+					{
+						if (qName.equalsIgnoreCase("p"))
+						{
+							contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, sb.toString().trim()));
+							p_active = false;
+						}
+						else
+						{
+							sb.append("</" + qName + ">");
+						}
+					}
 				}
 				
 				public void characters(char ch[], int start, int length)
 				{
 					
-					if (bfname)
+					if (sb != null && p_active)
 					{
-						System.out.println("First Name : " + new String(ch, start, length));
-						bfname = false;
-					}
-					
-					if (blname)
-					{
-						System.out.println("Last Name : " + new String(ch, start, length));
-						blname = false;
-					}
-					
-					if (bnname)
-					{
-						System.out.println("Nick Name : " + new String(ch, start, length));
-						bnname = false;
+						System.out.println("P : " + new String(ch, start, length));
+						for (int i = start; i < start + length; i++)
+						{
+							sb.append(ch[i]);
+						}
 					}
 					
 					if (bsalary)
@@ -663,12 +676,63 @@ public class Data
 				
 			};
 			
-			saxParser.parse(new InputSource(new StringReader(Content)), handler);
+			saxParser.parse(new InputSource(new StringReader(sContent)), handler);
 			
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+		
+		return contentList;
+	}
+	
+	static String pContent;
+	static ArticleContent ac;
+	
+	public static List<ArticleContent> generateArticleContent3(String Content)
+	{
+		final List<ArticleContent> contentList = new ArrayList<ArticleContent>();
+		String sContent = "<article>" + Content + "</article>";
+		
+		RootElement root = new RootElement("article");
+		Element pElement = root.getChild("p");
+		Element imgElement = root.getChild("img");
+		pContent = "";
+		
+		// On every </item> tag occurrence we add the current Item object
+		// to the Items container.
+		pElement.setEndElementListener(new EndElementListener()
+		{
+			public void end()
+			{
+				Log.v("Roar", "End Element");
+				contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, pContent));
+			}
+		});
+		
+		pElement.setEndTextElementListener(new EndTextElementListener()
+		{
+			public void end(String body)
+			{
+				Log.v("Roar", "End Text");
+				pContent = body;
+			}
+		});
+		
+		// and so on
+		
+		// here we actually parse the InputStream and return the resulting
+		// Channel object.
+		try
+		{
+			Xml.parse(sContent, root.getContentHandler());
+			return contentList;
+		}
+		catch (SAXException e)
+		{
+			Log.v("Oh noes!", "SAXException");
+			// handle the exception
 		}
 		
 		return contentList;

@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.squareup.picasso.Picasso;
@@ -141,7 +142,7 @@ public class FragmentArticle extends Fragment
 		/** Uncomment this for images **/
 		//txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		
-		contentList = Data.generateArticleContent(Article.getContent());
+		contentList = Data.generateArticleContent2(Article.getContent());
 		contentAdapter = new ContentAdapter(getActivity(), contentList);
 		lstContent.setAdapter(contentAdapter);
 		contentAdapter.notifyDataSetChanged();
@@ -331,6 +332,7 @@ public class FragmentArticle extends Fragment
 				holder.App.setVisibility(View.GONE);
 				
 				Picasso.with(getActivity()).load(Content).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().into(holder.Image);
+				Toast.makeText(context, "Loading Image... " + Content, Toast.LENGTH_SHORT).show();
 			}
 			else if(Type == Data.CONTENT_TYPE_VIDEO)
 			{
@@ -374,6 +376,12 @@ public class FragmentArticle extends Fragment
 	{
 		int Type;
 		String Content;
+		
+		public ArticleContent()
+		{
+			this.Type = 0;
+			this.Content = "";
+		}
 		
 		public ArticleContent(int Type, String Content)
 		{
