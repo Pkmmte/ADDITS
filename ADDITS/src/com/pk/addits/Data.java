@@ -47,9 +47,12 @@ import android.view.Display;
 
 import com.pk.addits.FragmentArticle.ArticleContent;
 import com.pk.addits.FragmentArticle.CommentFeed;
+import org.apache.http.impl.io.*;
 
 public class Data
 {
+	public static final String API_KEY_YOUTUBE = "AIzaSyCkM13XkYpzqEyjRX11F8IoiHLmd1TrKoU";
+	
 	public static final String PREFS_TAG = "AndroidDissectedPreferences";
 	public static final String PREF_TAG_LAST_UPDATE_CHECK_TIME = "Last Update Check Time";
 	public static final String PREF_TAG_FIRST_TIME = "First Time";
@@ -619,6 +622,32 @@ public class Data
 							}
 
 							contentList.add(new ArticleContent(Data.CONTENT_TYPE_IMAGE, imgSource));
+							p_active = false;
+						}
+						else if (qName.equalsIgnoreCase("iframe"))
+						{
+							String ID = "";
+							for (int i = 0; i < length; i++)
+							{
+								if (attributes.getQName(i).equalsIgnoreCase("src"))
+								{
+									String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+
+									Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+									Matcher matcher = compiledPattern.matcher(attributes.getValue(i).trim());
+									StringBuilder IDB = new StringBuilder();
+									
+									while(matcher.find())
+									{
+										IDB.append(matcher.group());
+									}
+									
+									ID = IDB.toString();
+									break;
+								}
+							}
+
+							contentList.add(new ArticleContent(Data.CONTENT_TYPE_VIDEO, ID));
 							p_active = false;
 						}
 						else

@@ -16,6 +16,8 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -36,6 +38,11 @@ import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayer.OnInitializedListener;
+import com.google.android.youtube.player.YouTubePlayer.Provider;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.squareup.picasso.Picasso;
 
@@ -142,9 +149,10 @@ public class FragmentArticle extends Fragment
 		
 		actionBar.setTitle(Article.getTitle());
 		if (Article.getImage().length() > 0)
-			Picasso.with(getActivity()).load(Article.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().into(imgHeader);
+			Picasso.with(getActivity()).load(Article.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).skipCache().fit().into(imgHeader);
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
+		imgHeader.setAdjustViewBounds(true);
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
@@ -343,7 +351,7 @@ public class FragmentArticle extends Fragment
 				holder.Video.setVisibility(View.GONE);
 				holder.App.setVisibility(View.GONE);
 				
-				Picasso.with(context).load(Content).skipCache().into(holder.Image);
+				Picasso.with(context).load(Content).error(R.drawable.loading_image_error).skipCache().into(holder.Image);
 				holder.Image.setOnClickListener(new View.OnClickListener()
 				{
 					@Override
@@ -360,7 +368,29 @@ public class FragmentArticle extends Fragment
 				holder.Video.setVisibility(View.VISIBLE);
 				holder.App.setVisibility(View.GONE);
 				
-				// TODO Add Video Support
+				YouTubePlayerSupportFragment fragment = new YouTubePlayerSupportFragment();
+				FragmentManager fragmentManager = getChildFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+				fragmentTransaction.add(R.id.Video, fragment);
+				fragmentTransaction.commit();
+
+				fragment.initialize(Data.API_KEY_YOUTUBE, new OnInitializedListener()
+				{
+					@Override
+					public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored)
+					{
+						if (!wasRestored)
+						{
+							player.loadVideo(Content);
+						}
+					}
+					
+					@Override
+					public void onInitializationFailure(Provider provider, YouTubeInitializationResult arg1)
+					{
+						// ...
+					}
+				});
 			}
 			else if (Type == Data.CONTENT_TYPE_APP)
 			{
