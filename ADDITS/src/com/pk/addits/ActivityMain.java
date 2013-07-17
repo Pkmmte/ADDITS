@@ -29,6 +29,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -695,6 +696,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		// thumbnail.
 		thumbView.setAlpha(0f);
 		expandedImageView.setVisibility(View.VISIBLE);
+		Animation animation = new AlphaAnimation(0.0f, 1.0f);
+	    animation.setDuration(350);
+	    container.setAnimation(animation);
+	    animation.start();
+	    container.setClickable(false);
 		
 		// Set the pivot point for SCALE_X and SCALE_Y transformations
 		// to the top-left corner of the zoomed-in view (the default

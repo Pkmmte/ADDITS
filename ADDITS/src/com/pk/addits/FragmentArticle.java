@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -298,7 +297,6 @@ public class FragmentArticle extends Fragment
 				view = inflater.inflate(R.layout.fragment_article_content, null);
 				
 				holder = new ContentViewHolder();
-				holder.Container = (LinearLayout) view.findViewById(R.id.Container);
 				holder.Text = (TextView) view.findViewById(R.id.Text);
 				holder.Text.setTypeface(fontRegular);
 				holder.Text.setMovementMethod(LinkMovementMethod.getInstance());
@@ -375,7 +373,6 @@ public class FragmentArticle extends Fragment
 	
 	private static class ContentViewHolder
 	{
-		public LinearLayout Container;
 		public TextView Text;
 		public ZoomImageView Image;
 		public FrameLayout Video;
