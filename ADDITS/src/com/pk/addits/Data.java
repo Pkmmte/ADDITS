@@ -47,7 +47,6 @@ import android.view.Display;
 
 import com.pk.addits.FragmentArticle.ArticleContent;
 import com.pk.addits.FragmentArticle.CommentFeed;
-import org.apache.http.impl.io.*;
 
 public class Data
 {
@@ -602,7 +601,7 @@ public class Data
 				public void startElement(String uri, String localName, String qName, Attributes attributes)
 				{
 					System.out.println("Start Element :" + qName);
-					//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[" + qName + "]"));
+					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[" + qName + "]"));
 					
 					if (qName.equalsIgnoreCase("p"))
 					{
@@ -697,7 +696,7 @@ public class Data
 				
 				public void endElement(String uri, String localName, String qName)
 				{
-					//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[/" + qName + "]"));
+					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[/" + qName + "]"));
 					System.out.println("End Element :" + qName);
 					
 					if (p_active)
@@ -871,7 +870,10 @@ public class Data
 					urlStr = urlStr.substring(1, urlStr.length() - 1);
 				}
 				String format = urlStr.substring(urlStr.length() - 4);
-				if (format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".gif"))
+				String lformat = urlStr.substring(urlStr.length() - 5);
+				if (format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".gif"))
+					links.add(urlStr);
+				else if (lformat.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".webp"))
 					links.add(urlStr);
 			}
 		}

@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:fontFamily="serif"
-        android:padding="@dimen/margin_medium"
+        android:paddingLeft="@dimen/margin_medium"
+        android:paddingRight="@dimen/margin_medium"
+        android:paddingTop="@dimen/margin_medium"
         android:text="@string/placeholder"
         android:textSize="@dimen/text_primary" />
 
