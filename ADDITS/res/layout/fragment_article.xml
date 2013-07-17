@@ -73,20 +73,11 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/VideoPlayer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/Info"
-        android:layout_marginLeft="@dimen/margin_small"
-        android:layout_marginRight="@dimen/margin_small"
-        android:orientation="vertical" />
-
     <RelativeLayout
         android:id="@+id/Content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/VideoPlayer"
+        android:layout_below="@+id/Info"
         android:layout_marginLeft="@dimen/margin_small"
         android:layout_marginRight="@dimen/margin_small"
         android:background="@drawable/card_bg" >
@@ -95,79 +86,6 @@
             android:id="@+id/ArticleContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <!--
-        <TextView
-            android:id="@+id/txtContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:fontFamily="serif"
-			android:clickable="true"
-            android:padding="@dimen/margin_medium"
-            android:text="@string/dummy_desc"
-            android:textSize="@dimen/text_primary" />
-        
-
-        <RelativeLayout
-            android:id="@+id/playLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/ArticleContent"
-            android:background="@color/addits_green"
-            android:orientation="vertical" >
-
-            <ImageView
-                android:id="@+id/playBanner"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:contentDescription="@string/placeholder"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_web" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/button_black_transparent_selector" />
-
-            <RelativeLayout
-                android:id="@+id/playLayoutTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" >
-
-                <TextView
-                    android:id="@+id/playDownload"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:fontFamily="sans-serif"
-                    android:gravity="right"
-                    android:padding="@dimen/margin_medium"
-                    android:text="Get it on Google Play"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_primary" />
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/play_icon"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/ic_launcher" />
-
-            <ImageView
-                android:id="@+id/play_logo"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/play_logo" />
-        </RelativeLayout>
-        -->
     </RelativeLayout>
 
     <LinearLayout
@@ -242,12 +160,5 @@
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/expanded_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/placeholder"
-        android:visibility="invisible" />
 
 </RelativeLayout>
