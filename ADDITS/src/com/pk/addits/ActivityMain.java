@@ -35,6 +35,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -46,6 +47,7 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.XmlDom;
+import com.pk.addits.R.anim;
 import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
@@ -87,6 +89,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private boolean newChecked;
 	private boolean feedDownloaded;
 	
+	public static View contentFrameColor;
 	public static RelativeLayout container;
 	public static ImageView expandedImageView;
 	private static Animator mCurrentAnimator;
@@ -112,6 +115,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		fragmentLoaded = false;
 		fragmentManager = getSupportFragmentManager();
 		
+		contentFrameColor = findViewById(R.id.content_frame_color);
 		container = (RelativeLayout) findViewById(R.id.container);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -639,7 +643,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 	}
 	
-	public static void zoomImageFromThumb(final View thumbView, String imgURL, Context context)
+	public static void zoomImageFromThumb(final View thumbView, String imgURL, final Context context)
 	{
 		// If there's an animation in progress, cancel it
 		// immediately and proceed with this one.
@@ -696,10 +700,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		// thumbnail.
 		thumbView.setAlpha(0f);
 		expandedImageView.setVisibility(View.VISIBLE);
-		Animation animation = new AlphaAnimation(0.0f, 1.0f);
-	    animation.setDuration(350);
-	    container.setAnimation(animation);
-	    animation.start();
+		Animation dAnim = AnimationUtils.loadAnimation(context, R.anim.alpha_darken);
+	    dAnim.setFillAfter(true);
+	    contentFrameColor.setAnimation(dAnim);
+	    dAnim.start();
 	    container.setClickable(false);
 		
 		// Set the pivot point for SCALE_X and SCALE_Y transformations
@@ -771,6 +775,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				});
 				set.start();
 				mCurrentAnimator = set;
+				
+				Animation bAnim = AnimationUtils.loadAnimation(context, R.anim.alpha_brighten);
+			    bAnim.setFillAfter(true);
+			    contentFrameColor.setAnimation(bAnim);
+			    bAnim.start();
 			}
 		});
 	}
