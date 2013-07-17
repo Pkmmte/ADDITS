@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.squareup.picasso.Picasso;
@@ -38,6 +39,7 @@ public class FragmentArticle extends Fragment
 	View view;
 	static FadingActionBarHelper mFadingHelper;
 	static Feed Article;
+	private Thread markReadThread;
 	private Thread loadCommentsThread;
 	private Handler mHandler;
 	static MenuItem shareItem;
@@ -69,6 +71,7 @@ public class FragmentArticle extends Fragment
 		FragmentArticle f = new FragmentArticle();
 		Bundle bundle = new Bundle();
 		
+		bundle.putInt("ID", article.getID());
 		bundle.putString("Title", article.getTitle());
 		bundle.putString("Description", article.getDescription());
 		bundle.putString("Content", article.getContent());
@@ -146,7 +149,7 @@ public class FragmentArticle extends Fragment
 		lstContent.setAdapter(contentAdapter);
 		contentAdapter.notifyDataSetChanged();
 		lstContent.setExpanded(true);
-		lstContent.setDividerHeight(0);
+		//lstContent.setDividerHeight(0);
 		
 		commentCard.setOnClickListener(new View.OnClickListener()
 		{
@@ -170,7 +173,7 @@ public class FragmentArticle extends Fragment
 			}
 		});
 		
-		// ActivityMain.overwriteFeedXML();
+		markRead();
 	}
 	
 	@Override
@@ -229,6 +232,34 @@ public class FragmentArticle extends Fragment
 		shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
 		if (mShareActionProvider != null)
 			mShareActionProvider.setShareIntent(shareIntent);
+	}
+	
+	private void markRead()
+	{
+		if(markReadThread == null)
+		{
+			initializeMarkReadThread();
+			markReadThread.start();
+		}
+		else if(!markReadThread.isAlive())
+		{
+			initializeMarkReadThread();
+			markReadThread.start();
+		}
+	}
+	
+	private void initializeMarkReadThread()
+	{
+		markReadThread = new Thread()
+		{
+			public void run()
+			{
+				ActivityMain.NewsFeed[Article.getID()].setRead(true);
+				ActivityMain.overwriteFeedXML();
+				
+				stopThread(this);
+			}
+		};
 	}
 	
 	private void initializeLoadCommentsThread()
