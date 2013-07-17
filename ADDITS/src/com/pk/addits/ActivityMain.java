@@ -403,7 +403,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							Data.overwriteFeedXML(NewsFeed);
 							
 							mHandler.post(new showProgress2("Everything is up to date!"));
-							mHandler.postDelayed(new showProgress2(""), 4000);
+							mHandler.postDelayed(new showProgress2(""), 3500);
 						}
 						catch (Exception e)
 						{

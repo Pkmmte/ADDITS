@@ -73,15 +73,23 @@
         </LinearLayout>
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/Content"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/VideoPlayer"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Info"
         android:layout_marginLeft="@dimen/margin_small"
         android:layout_marginRight="@dimen/margin_small"
-        android:background="@drawable/card_bg"
-        android:orientation="vertical" >
+        android:orientation="vertical" />
+
+    <RelativeLayout
+        android:id="@+id/Content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/VideoPlayer"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:layout_marginRight="@dimen/margin_small"
+        android:background="@drawable/card_bg" >
 
         <com.pk.addits.PkListView
             android:id="@+id/ArticleContent"

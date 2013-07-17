@@ -25,10 +25,10 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_ab_logo" />
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/Video"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:orientation="vertical" />
 
     <RelativeLayout

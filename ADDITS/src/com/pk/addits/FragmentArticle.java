@@ -82,6 +82,7 @@ public class FragmentArticle extends Fragment
 	private static Animator mCurrentAnimator;
 	private static int mShortAnimationDuration;
 	static ImageView expandedImageView;
+	FragmentManager fragMan;
 	
 	public static FragmentArticle newInstance(Feed article)
 	{
@@ -133,6 +134,7 @@ public class FragmentArticle extends Fragment
 		txtAuthor.setTypeface(fontLight);
 		txtDate.setTypeface(fontLight);
 		// txtContent.setTypeface(fontRegular);
+		fragMan = getChildFragmentManager();
 		
 		return view;
 	}
@@ -186,6 +188,29 @@ public class FragmentArticle extends Fragment
 					initializeLoadCommentsThread();
 					loadCommentsThread.start();
 				}
+			}
+		});
+		
+		YouTubePlayerSupportFragment fragment = new YouTubePlayerSupportFragment();
+		FragmentTransaction fragmentTransaction = fragMan.beginTransaction();
+		fragmentTransaction.add(R.id.VideoPlayer, fragment);
+		fragmentTransaction.commit();
+
+		fragment.initialize(Data.API_KEY_YOUTUBE, new OnInitializedListener()
+		{
+			@Override
+			public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored)
+			{
+				if (!wasRestored)
+				{
+					player.loadVideo("N-xHcvug3WI");
+				}
+			}
+			
+			@Override
+			public void onInitializationFailure(Provider provider, YouTubeInitializationResult arg1)
+			{
+				// ...
 			}
 		});
 		
@@ -322,7 +347,8 @@ public class FragmentArticle extends Fragment
 				holder.Text.setTypeface(fontRegular);
 				holder.Text.setMovementMethod(LinkMovementMethod.getInstance());
 				holder.Image = (ZoomImageView) view.findViewById(R.id.Image);
-				holder.Video = (LinearLayout) view.findViewById(R.id.Video);
+				//holder.Video = view.f
+				holder.Video = (FrameLayout) view.findViewById(R.id.Video);
 				holder.App = (RelativeLayout) view.findViewById(R.id.App);
 				
 				view.setTag(holder);
@@ -368,10 +394,14 @@ public class FragmentArticle extends Fragment
 				holder.Video.setVisibility(View.VISIBLE);
 				holder.App.setVisibility(View.GONE);
 				
-				YouTubePlayerSupportFragment fragment = new YouTubePlayerSupportFragment();
-				FragmentManager fragmentManager = getChildFragmentManager();
-				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+				YouTubePlayerSupportFragment fragment = YouTubePlayerSupportFragment.newInstance();
+				//LinearLayout fragContainer = new LinearLayout(context);
+				//fragContainer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+				//fragContainer.setId(R.id.video_fragment);
+				//holder.Video.addView(fragContainer);
+				FragmentTransaction fragmentTransaction = fragMan.beginTransaction();
 				fragmentTransaction.add(R.id.Video, fragment);
+				//fragmentTransaction.add(R.id.Video, fragment);
 				fragmentTransaction.commit();
 
 				fragment.initialize(Data.API_KEY_YOUTUBE, new OnInitializedListener()
@@ -381,7 +411,7 @@ public class FragmentArticle extends Fragment
 					{
 						if (!wasRestored)
 						{
-							player.loadVideo(Content);
+							player.loadVideo("N-xHcvug3WI");
 						}
 					}
 					
@@ -418,7 +448,7 @@ public class FragmentArticle extends Fragment
 		public LinearLayout Container;
 		public TextView Text;
 		public ZoomImageView Image;
-		public LinearLayout Video;
+		public FrameLayout Video;
 		public RelativeLayout App;
 	}
 	
