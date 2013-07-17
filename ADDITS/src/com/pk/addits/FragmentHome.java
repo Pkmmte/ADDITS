@@ -34,6 +34,7 @@ import android.widget.TextView;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
+import android.graphics.drawable.*;
 
 public class FragmentHome extends Fragment
 {
@@ -305,7 +306,7 @@ public class FragmentHome extends Fragment
 				holder = new ViewHolder();
 				holder.Card = (LinearLayout) view.findViewById(R.id.Card);
 				holder.lblUnread = view.findViewById(R.id.lblUnread);
-				holder.lblAuthor = (RelativeLayout) view.findViewById(R.id.lblAuthor);
+				holder.drkRead = (FrameLayout) view.findViewById(R.id.drkRead);
 				holder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 				holder.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 				holder.txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
@@ -343,20 +344,12 @@ public class FragmentHome extends Fragment
 			{
 				holder.lblUnread.setVisibility(View.INVISIBLE);
 				if (entry.getImage().length() > 0)
-				{
-					int height = holder.imgPreview.getHeight() + holder.lblAuthor.getHeight();
-					holder.lblAuthor.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, height));
-				}
+					holder.drkRead.setForeground(new ColorDrawable(context.getResources().getColor(R.color.black_trans)));
 			}
 			else
 			{
 				holder.lblUnread.setVisibility(View.VISIBLE);
-				if (entry.getImage().length() > 0)
-				{
-					RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-					layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-					holder.lblAuthor.setLayoutParams(layoutParams);
-				}
+				holder.drkRead.setForeground(new ColorDrawable(context.getResources().getColor(R.color.transparent)));
 			}
 			
 			Animation cardAnimation = AnimationUtils.loadAnimation(context, R.anim.card_anim_list);
@@ -370,7 +363,7 @@ public class FragmentHome extends Fragment
 	{
 		public LinearLayout Card;
 		public View lblUnread;
-		public RelativeLayout lblAuthor;
+		public FrameLayout drkRead;
 		public TextView txtTitle;
 		public TextView txtDescription;
 		public TextView txtAuthor;

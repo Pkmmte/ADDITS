@@ -173,7 +173,8 @@ public class FragmentArticle extends Fragment
 			}
 		});
 		
-		markRead();
+		if(!Article.isRead())
+			markRead();
 	}
 	
 	@Override

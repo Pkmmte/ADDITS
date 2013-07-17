@@ -176,6 +176,7 @@ public final class R {
         public static final int content_frame_color=0x7f0b0006;
         public static final int divider=0x7f0b000f;
         public static final int drawer_layout=0x7f0b0003;
+        public static final int drkRead=0x7f0b001d;
         public static final int expanded_image=0x7f0b000b;
         public static final int fab__container=0x7f0b0015;
         public static final int fab__content_top_margin=0x7f0b0016;
@@ -186,8 +187,7 @@ public final class R {
         public static final int fab__scroll_view=0x7f0b0014;
         public static final int home_header=0x7f0b0001;
         public static final int image_header=0x7f0b0032;
-        public static final int imgPreview=0x7f0b001d;
-        public static final int lblAuthor=0x7f0b001e;
+        public static final int imgPreview=0x7f0b001e;
         public static final int lblUnread=0x7f0b0019;
         public static final int left_drawer=0x7f0b000c;
         public static final int loading=0x7f0b0007;

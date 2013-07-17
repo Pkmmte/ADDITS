@@ -110,9 +110,14 @@
                         android:text="@string/dummy_desc"
                         android:textSize="@dimen/text_primary" />
 
-                    <RelativeLayout
+                    <FrameLayout
+						android:id="@+id/drkRead"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" >
+						
+						<RelativeLayout
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content" >
 
                         <ImageView
                             android:id="@+id/imgPreview"
@@ -123,7 +128,6 @@
                             android:src="@drawable/loading_image_banner" />
 
                         <RelativeLayout
-                            android:id="@+id/lblAuthor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
@@ -141,7 +145,8 @@
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/text_secondary" />
                         </RelativeLayout>
-                    </RelativeLayout>
+						</RelativeLayout>
+					</FrameLayout>
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>
