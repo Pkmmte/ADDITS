@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.squareup.picasso.Picasso;
+import java.util.concurrent.*;
 
 public class FragmentArticle extends Fragment
 {
@@ -40,6 +42,7 @@ public class FragmentArticle extends Fragment
 	static FadingActionBarHelper mFadingHelper;
 	static Feed Article;
 	private Thread markReadThread;
+	private Thread loadContentThread;
 	private Thread loadCommentsThread;
 	private Handler mHandler;
 	static MenuItem shareItem;
@@ -131,11 +134,12 @@ public class FragmentArticle extends Fragment
 		configureShare();
 		
 		actionBar.setTitle(Article.getTitle());
+		imgHeader.setAdjustViewBounds(false);
+		imgHeader.setScaleType(ScaleType.CENTER_CROP);
 		if (Article.getImage().length() > 0)
-			Picasso.with(getActivity()).load(Article.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).skipCache().fit().into(imgHeader);
+			Picasso.with(getActivity()).load(Article.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).skipCache().into(imgHeader);
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
-		imgHeader.setAdjustViewBounds(true);
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
@@ -144,12 +148,8 @@ public class FragmentArticle extends Fragment
 		/** Uncomment this for images **/
 		// txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		
-		contentList = Data.generateArticleContent2(Article.getContent());
-		contentAdapter = new ContentAdapter(getActivity(), contentList);
-		lstContent.setAdapter(contentAdapter);
-		contentAdapter.notifyDataSetChanged();
-		lstContent.setExpanded(true);
-		//lstContent.setDividerHeight(0);
+		initializeLoadContentThread();
+		loadContentThread.start();
 		
 		commentCard.setOnClickListener(new View.OnClickListener()
 		{
@@ -257,6 +257,22 @@ public class FragmentArticle extends Fragment
 			{
 				ActivityMain.NewsFeed[Article.getID()].setRead(true);
 				ActivityMain.overwriteFeedXML();
+				
+				stopThread(this);
+			}
+		};
+	}
+	
+	private void initializeLoadContentThread()
+	{
+		loadContentThread = new Thread()
+		{
+			public void run()
+			{
+				contentList = Data.generateArticleContent2(Article.getContent());
+				contentAdapter = new ContentAdapter(getActivity(), contentList);
+				lstContent.setAdapter(contentAdapter);
+				mHandler.post(loadContent);
 				
 				stopThread(this);
 			}
@@ -450,6 +466,16 @@ public class FragmentArticle extends Fragment
 			
 			txtLoadComments.setVisibility(View.GONE);
 			progressBar.setVisibility(View.GONE);
+		}
+	};
+	
+	Runnable loadContent = new Runnable()
+	{
+		public void run()
+		{
+			contentAdapter.notifyDataSetChanged();
+			lstContent.setExpanded(true);
+			//lstContent.setDividerHeight(0);
 		}
 	};
 	
