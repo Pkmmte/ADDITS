@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
@@ -23,10 +22,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.http.util.ByteArrayBuffer;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.annotation.SuppressLint;
@@ -36,10 +33,6 @@ import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
-import android.sax.Element;
-import android.sax.EndElementListener;
-import android.sax.EndTextElementListener;
-import android.sax.RootElement;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.util.Xml;
@@ -556,57 +549,6 @@ public class Data
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-		
-		return contentList;
-	}
-	
-	static String pContent;
-	static ArticleContent ac;
-	
-	public static List<ArticleContent> generateArticleContent3(String Content)
-	{
-		final List<ArticleContent> contentList = new ArrayList<ArticleContent>();
-		String sContent = "<article>" + Content + "</article>";
-		
-		RootElement root = new RootElement("article");
-		Element pElement = root.getChild("p");
-		Element imgElement = root.getChild("img");
-		pContent = "";
-		
-		// On every </item> tag occurrence we add the current Item object
-		// to the Items container.
-		pElement.setEndElementListener(new EndElementListener()
-		{
-			public void end()
-			{
-				Log.v("Roar", "End Element");
-				contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, pContent));
-			}
-		});
-		
-		pElement.setEndTextElementListener(new EndTextElementListener()
-		{
-			public void end(String body)
-			{
-				Log.v("Roar", "End Text");
-				pContent = body;
-			}
-		});
-		
-		// and so on
-		
-		// here we actually parse the InputStream and return the resulting
-		// Channel object.
-		try
-		{
-			Xml.parse(sContent, root.getContentHandler());
-			return contentList;
-		}
-		catch (SAXException e)
-		{
-			Log.v("Oh noes!", "SAXException");
-			// handle the exception
 		}
 		
 		return contentList;
