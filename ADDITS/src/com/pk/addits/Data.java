@@ -122,28 +122,6 @@ public class Data
 		tempFile.renameTo(file);
 	}
 	
-	public static boolean compareFeedItem(Feed f1, Feed f2)
-	{
-		if (!f1.getAuthor().equalsIgnoreCase(f2.getAuthor()))
-			return true;
-		if (!f1.getCategory().equalsIgnoreCase(f2.getCategory()))
-			return true;
-		if (!f1.getCommentFeed().equalsIgnoreCase(f2.getCommentFeed()))
-			return true;
-		if (!f1.getContent().equalsIgnoreCase(f2.getContent()))
-			return true;
-		if (!f1.getDescription().equalsIgnoreCase(f2.getDescription()))
-			return true;
-		if (!f1.getImage().equalsIgnoreCase(f2.getImage()))
-			return true;
-		if (!f1.getTitle().equalsIgnoreCase(f2.getTitle()))
-			return true;
-		if (!f1.getURL().equalsIgnoreCase(f2.getURL()))
-			return true;
-		
-		return false;
-	}
-	
 	public static Feed[] retrieveFeed()
 	{
 		int count = 0;
