@@ -593,18 +593,31 @@ public class Data
 			DefaultHandler handler = new DefaultHandler()
 			{
 				StringBuilder sb;
+				StringBuilder tsb;
+				
 				boolean p_active = false;
+				boolean h2_active = false;
 				boolean bsalary = false;
 				
 				public void startElement(String uri, String localName, String qName, Attributes attributes)
 				{
 					System.out.println("Start Element :" + qName);
+					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[" + qName + "]"));
 					
 					if (qName.equalsIgnoreCase("p"))
 					{
 						sb = new StringBuilder();
+						tsb = new StringBuilder();
+						sb.append("<p>");
 						//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName + "..." + localName));
 						p_active = true;
+					}
+					else if (qName.equalsIgnoreCase("h2"))
+					{
+						sb = new StringBuilder();
+						tsb = new StringBuilder();
+						sb.append("<h2>");
+						h2_active = true;
 					}
 					else if (p_active)
 					{
@@ -614,15 +627,15 @@ public class Data
 							String imgSource = "";
 							for (int i = 0; i < length; i++)
 							{
-								if(attributes.getQName(i).equalsIgnoreCase("src"))
+								if (attributes.getQName(i).equalsIgnoreCase("src"))
 								{
 									imgSource = attributes.getValue(i).trim();
 									break;
 								}
 							}
-
+							
 							contentList.add(new ArticleContent(Data.CONTENT_TYPE_IMAGE, imgSource));
-							p_active = false;
+							//p_active = false;
 						}
 						else if (qName.equalsIgnoreCase("iframe"))
 						{
@@ -632,12 +645,12 @@ public class Data
 								if (attributes.getQName(i).equalsIgnoreCase("src"))
 								{
 									String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
-
+									
 									Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
 									Matcher matcher = compiledPattern.matcher(attributes.getValue(i).trim());
 									StringBuilder IDB = new StringBuilder();
 									
-									while(matcher.find())
+									while (matcher.find())
 									{
 										IDB.append(matcher.group());
 									}
@@ -646,35 +659,68 @@ public class Data
 									break;
 								}
 							}
-
+							
 							contentList.add(new ArticleContent(Data.CONTENT_TYPE_VIDEO, ID));
 							p_active = false;
 						}
 						else
 						{
 							sb.append("<" + qName);
+							tsb.append("<" + qName);
 							for (int i = 0; i < length; i++)
 							{
 								sb.append(" " + attributes.getQName(i));
 								sb.append("=\"" + attributes.getValue(i) + "\"");
+								tsb.append(" " + attributes.getQName(i));
+								tsb.append("=\"" + attributes.getValue(i) + "\"");
 							}
 							sb.append(">");
+							tsb.append(">");
 						}
 					}
-					
+					else if (h2_active)
+					{
+						int length = attributes.getLength();
+
+						sb.append("<" + qName);
+						tsb.append("<" + qName);
+						for (int i = 0; i < length; i++)
+						{
+							sb.append(" " + attributes.getQName(i));
+							sb.append("=\"" + attributes.getValue(i) + "\"");
+							tsb.append(" " + attributes.getQName(i));
+							tsb.append("=\"" + attributes.getValue(i) + "\"");
+						}
+						sb.append(">");
+						tsb.append(">");
+					}
 				}
 				
 				public void endElement(String uri, String localName, String qName)
 				{
-					// contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, localName));
+					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[/" + qName + "]"));
 					System.out.println("End Element :" + qName);
 					
 					if (p_active)
 					{
-						if (qName.equalsIgnoreCase("p"))
+						if (qName.equalsIgnoreCase("p") && (sb.length() - tsb.length()) > 0)
 						{
+							sb.append("</p>");
 							contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, sb.toString().trim()));
 							p_active = false;
+						}
+						else
+						{
+							sb.append("</" + qName + ">");
+						}
+					}
+					else if (h2_active)
+					{
+						if (qName.equalsIgnoreCase("h2") && (sb.length() - tsb.length()) > 0)
+						{
+							sb.append("</h2>");
+							contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, sb.toString().trim()));
+							h2_active = false;
 						}
 						else
 						{
@@ -689,6 +735,15 @@ public class Data
 					if (sb != null && p_active)
 					{
 						System.out.println("P : " + new String(ch, start, length));
+						for (int i = start; i < start + length; i++)
+						{
+							sb.append(ch[i]);
+						}
+					}
+					
+					if (sb != null && h2_active)
+					{
+						System.out.println("H2 : " + new String(ch, start, length));
 						for (int i = start; i < start + length; i++)
 						{
 							sb.append(ch[i]);
