@@ -602,14 +602,13 @@ public class Data
 				public void startElement(String uri, String localName, String qName, Attributes attributes)
 				{
 					System.out.println("Start Element :" + qName);
-					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[" + qName + "]"));
+					//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[" + qName + "]"));
 					
 					if (qName.equalsIgnoreCase("p"))
 					{
 						sb = new StringBuilder();
 						tsb = new StringBuilder();
 						sb.append("<p>");
-						//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, qName + "..." + localName));
 						p_active = true;
 					}
 					else if (qName.equalsIgnoreCase("h2"))
@@ -698,7 +697,7 @@ public class Data
 				
 				public void endElement(String uri, String localName, String qName)
 				{
-					contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[/" + qName + "]"));
+					//contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "[/" + qName + "]"));
 					System.out.println("End Element :" + qName);
 					
 					if (p_active)

@@ -146,6 +146,7 @@ public class FragmentArticle extends Fragment
 		lstContent.setAdapter(contentAdapter);
 		contentAdapter.notifyDataSetChanged();
 		lstContent.setExpanded(true);
+		lstContent.setDividerHeight(0);
 		
 		commentCard.setOnClickListener(new View.OnClickListener()
 		{

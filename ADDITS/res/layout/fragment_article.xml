@@ -85,7 +85,8 @@
         <com.pk.addits.PkListView
             android:id="@+id/ArticleContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:dividerHeight="0dp" />
     </RelativeLayout>
 
     <LinearLayout

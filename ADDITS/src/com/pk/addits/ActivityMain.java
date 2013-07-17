@@ -29,13 +29,11 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -47,7 +45,6 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.XmlDom;
-import com.pk.addits.R.anim;
 import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
@@ -89,6 +86,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private boolean newChecked;
 	private boolean feedDownloaded;
 	
+	public static boolean imageExpanded;
 	public static View contentFrameColor;
 	public static RelativeLayout container;
 	public static ImageView expandedImageView;
@@ -133,6 +131,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		newFound = false;
 		newChecked = false;
 		feedDownloaded = false;
+		imageExpanded = false;
 		
 		if (savedInstanceState == null)
 		{
@@ -205,11 +204,18 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		{
 			if (currentFragment.equals("Home") && articleShowing)
 			{
-				Fragment fragment = FragmentHome.newInstance(lastHomeScrollPosition, lastHomeTopOffset);
-				mTitle = "Home";
-				actionBar.setTitle(mTitle);
-				articleShowing = false;
-				fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_left, R.anim.plus_page_out_left).replace(R.id.content_frame, fragment).commit();
+				if (imageExpanded)
+				{
+					expandedImageView.performClick();
+				}
+				else
+				{
+					Fragment fragment = FragmentHome.newInstance(lastHomeScrollPosition, lastHomeTopOffset);
+					mTitle = "Home";
+					actionBar.setTitle(mTitle);
+					articleShowing = false;
+					fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_left, R.anim.plus_page_out_left).replace(R.id.content_frame, fragment).commit();
+				}
 				
 				return true;
 			}
@@ -701,10 +707,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		thumbView.setAlpha(0f);
 		expandedImageView.setVisibility(View.VISIBLE);
 		Animation dAnim = AnimationUtils.loadAnimation(context, R.anim.alpha_darken);
-	    dAnim.setFillAfter(true);
-	    contentFrameColor.setAnimation(dAnim);
-	    dAnim.start();
-	    container.setClickable(false);
+		dAnim.setFillAfter(true);
+		contentFrameColor.setAnimation(dAnim);
+		dAnim.start();
+		container.setClickable(false);
+		imageExpanded = true;
 		
 		// Set the pivot point for SCALE_X and SCALE_Y transformations
 		// to the top-left corner of the zoomed-in view (the default
@@ -776,10 +783,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				set.start();
 				mCurrentAnimator = set;
 				
+				imageExpanded = false;
 				Animation bAnim = AnimationUtils.loadAnimation(context, R.anim.alpha_brighten);
-			    bAnim.setFillAfter(true);
-			    contentFrameColor.setAnimation(bAnim);
-			    bAnim.start();
+				bAnim.setFillAfter(true);
+				contentFrameColor.setAnimation(bAnim);
+				bAnim.start();
 			}
 		});
 	}
