@@ -64,7 +64,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	
-	public static Feed[] NewsFeed;
+	public static Article[] NewsFeed;
 	public static String currentFragment;
 	public static boolean articleShowing;
 	
@@ -339,7 +339,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setTitle(mTitle);
 	}
 	
-	public static void callArticle(Context context, Feed article, int scrollPosition, int topOffset)
+	public static void callArticle(Context context, Article article, int scrollPosition, int topOffset)
 	{
 		Fragment fragment = FragmentArticle.newInstance(article);
 		mTitle = article.getTitle();
@@ -352,7 +352,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right).replace(R.id.content_frame, fragment).commit();
 	}
 	
-	public static Feed[] getFeed()
+	public static Article[] getFeed()
 	{
 		return NewsFeed;
 	}
@@ -360,7 +360,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
 	{
 		List<XmlDom> entries = xml.tags("item");
-		NewsFeed = new Feed[entries.size()];
+		NewsFeed = new Article[entries.size()];
 		int count = 0;
 		
 		for (XmlDom item : entries)
@@ -375,7 +375,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			String Image = Data.pullLinks(item.text("description"));
 			String URL = item.text("link");
 			
-			NewsFeed[count] = new Feed(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false);
+			NewsFeed[count] = new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false);
 			count++;
 		}
 		
@@ -401,10 +401,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		return;
 	}
 	
-	public static void overwriteFeedXML()
-	{
-		Data.overwriteFeedXML(NewsFeed);
-	}
+	//public static void overwriteFeedXML()
+	//{
+	//	Data.overwriteFeedXML(NewsFeed);
+	//}
 	
 	private void initializeEmptyFeedThread()
 	{
@@ -429,7 +429,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							}
 							
 							mHandler.post(new showProgress2("Writing content..."));
-							Data.overwriteFeedXML(NewsFeed);
+							//Data.overwriteFeedXML(NewsFeed);
 							
 							mHandler.post(new showProgress2("Everything is up to date!"));
 							mHandler.postDelayed(new showProgress2(""), 3500);
@@ -504,7 +504,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								
 								mHandler.post(new showProgress("Writing content...", true, false, false));
 								
-								Data.overwriteFeedXML(NewsFeed);
+								//Data.overwriteFeedXML(NewsFeed);
 								Log.v("Happy Face", " New stuff found!");
 							}
 							else

@@ -115,7 +115,7 @@ public class Data
 		tempFile.renameTo(file);
 	}
 	
-	public static Feed[] retrieveFeed()
+	public static Article[] retrieveFeed()
 	{
 		int count = 0;
 		
@@ -149,7 +149,7 @@ public class Data
 			Log.w("[Feed Count] XML Parse Error", e);
 		}
 		
-		Feed[] Feeeeedz = new Feed[count];
+		Article[] Feeeeedz = new Article[count];
 		
 		try
 		{
@@ -186,7 +186,7 @@ public class Data
 						boolean Favorite = Boolean.parseBoolean(xrp.getAttributeValue(null, "favorite"));
 						boolean Read = Boolean.parseBoolean(xrp.getAttributeValue(null, "read"));
 						
-						Feeeeedz[feedCount] = new Feed(feedCount, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+						Feeeeedz[feedCount] = new Article(feedCount, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 						feedCount++;
 					}
 				}
@@ -621,7 +621,7 @@ public class Data
 			return false;
 	}
 	
-	public static void overwriteFeedXML(Feed[] Feeeeedz)
+	/*public static void overwriteFeedXML(Feed[] Feeeeedz)
 	{
 		File sdCard = Environment.getExternalStorageDirectory();
 		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
@@ -673,7 +673,7 @@ public class Data
 		{
 			Log.w("XML Write Error", e);
 		}
-	}
+	}*/
 	
 	public static boolean isNetworkConnected(Context context)
 	{

@@ -40,7 +40,7 @@ public class FragmentArticle extends Fragment
 	static ShareActionProvider mShareActionProvider;
 	View view;
 	static FadingActionBarHelper mFadingHelper;
-	static Feed Article;
+	static Article Article;
 	private Thread markReadThread;
 	private Thread loadContentThread;
 	private Thread loadCommentsThread;
@@ -69,7 +69,7 @@ public class FragmentArticle extends Fragment
 	Typeface fontBold;
 	Typeface fontLight;
 	
-	public static FragmentArticle newInstance(Feed article)
+	public static FragmentArticle newInstance(Article article)
 	{
 		FragmentArticle f = new FragmentArticle();
 		Bundle bundle = new Bundle();
@@ -222,7 +222,7 @@ public class FragmentArticle extends Fragment
 		boolean Favorite = args.getBoolean("Favorite");
 		boolean Read = args.getBoolean("Read");
 		
-		Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+		Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 	}
 	
 	public static void configureShare()
@@ -256,7 +256,7 @@ public class FragmentArticle extends Fragment
 			public void run()
 			{
 				ActivityMain.NewsFeed[Article.getID()].setRead(true);
-				ActivityMain.overwriteFeedXML();
+				//ActivityMain.overwriteFeedXML();
 				
 				stopThread(this);
 			}

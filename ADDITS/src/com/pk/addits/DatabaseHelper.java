@@ -90,7 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		return article;
 	}
 
-	// Getting All Contacts
+	// Getting All Articles
 	public List<Article> getAllArticles()
 	{
 		List<Article> articleList = new ArrayList<Article>();
@@ -148,7 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	}
 
 	// Getting Article Count
-	public int getProfileCount()
+	public int getArticleCount()
 	{
 		String countQuery = "SELECT  * FROM " + TABLE_ARTICLES;
 		SQLiteDatabase db = this.getReadableDatabase();

@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -29,12 +30,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.squareup.picasso.Picasso;
-import android.graphics.drawable.*;
 
 public class FragmentHome extends Fragment
 {
@@ -47,8 +46,8 @@ public class FragmentHome extends Fragment
 	static int scrollPosition;
 	static int topOffset;
 	
-	static List<Feed> feedList;
-	static Feed[] NewsFeed;
+	static List<Article> feedList;
+	static Article[] NewsFeed;
 	
 	static int currentSlide;
 	static Timer timer;
@@ -81,7 +80,7 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		
 		cntxt = getActivity();
-		feedList = new ArrayList<Feed>();
+		feedList = new ArrayList<Article>();
 		list = (ListView) view.findViewById(android.R.id.list);
 		
 		adapter = new FeedAdapter(getActivity(), feedList);
@@ -147,7 +146,7 @@ public class FragmentHome extends Fragment
 					boolean Favorite = feedList.get(ID).isFavorite();
 					boolean Read = feedList.get(ID).isRead();
 					
-					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					ActivityMain.callArticle(getActivity(), Article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
 				}
 				else if (currentSlideID != null)
@@ -165,7 +164,7 @@ public class FragmentHome extends Fragment
 					boolean Favorite = NewsFeed[currentSlideID].isFavorite();
 					boolean Read = NewsFeed[currentSlideID].isRead();
 					
-					Feed Article = new Feed(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					ActivityMain.callArticle(getActivity(), Article, 0, 0);
 				}
 			}
@@ -210,7 +209,7 @@ public class FragmentHome extends Fragment
 			feedList.clear();
 			
 			for (int x = 0; x < NewsFeed.length; x++)
-				feedList.add(new Feed(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
+				feedList.add(new Article(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
 			adapter.notifyDataSetChanged();
 			list.setSelectionFromTop(scrollPosition, topOffset);
@@ -271,9 +270,9 @@ public class FragmentHome extends Fragment
 	{
 		private Context context;
 		
-		private List<Feed> listItem;
+		private List<Article> listItem;
 		
-		public FeedAdapter(Context context, List<Feed> listItem)
+		public FeedAdapter(Context context, List<Article> listItem)
 		{
 			this.context = context;
 			this.listItem = listItem;
@@ -284,7 +283,7 @@ public class FragmentHome extends Fragment
 			return listItem.size();
 		}
 		
-		public Feed getItem(int position)
+		public Article getItem(int position)
 		{
 			return listItem.get(position);
 		}
@@ -297,7 +296,7 @@ public class FragmentHome extends Fragment
 		public View getView(int position, View view, ViewGroup viewGroup)
 		{
 			final ViewHolder holder;
-			Feed entry = listItem.get(position);
+			Article entry = listItem.get(position);
 			if (view == null)
 			{
 				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
