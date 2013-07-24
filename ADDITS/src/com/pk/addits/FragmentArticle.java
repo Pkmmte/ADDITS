@@ -177,6 +177,8 @@ public class FragmentArticle extends Fragment
 		
 		if(!Article.isRead())
 			markRead();
+		
+		configureShare();
 	}
 	
 	@Override
@@ -203,7 +205,7 @@ public class FragmentArticle extends Fragment
 	{
 		if (shareItem != null && optionsMenu != null)
 			shareItem.setVisible(!drawerOpen);
-		if (!drawerOpen)
+		if (!drawerOpen && Article != null)
 			configureShare();
 	}
 	

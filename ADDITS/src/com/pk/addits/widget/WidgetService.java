@@ -76,6 +76,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
 		// In onDestroy() you should tear down anything that was setup for your data source,
 		// eg. cursors, connections, etc.
 		articleList.clear();
+		db.close();
 	}
 	
 	public int getCount()
