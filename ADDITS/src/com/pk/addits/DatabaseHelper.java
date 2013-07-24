@@ -150,12 +150,18 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	// Getting Article Count
 	public int getArticleCount()
 	{
+		int count = 0;
 		String countQuery = "SELECT  * FROM " + TABLE_ARTICLES;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(countQuery, null);
-		cursor.close();
+		
+		if(cursor != null && !cursor.isClosed())
+		{
+			count = cursor.getCount();
+			cursor.close();
+		}
 
 		// return count
-		return cursor.getCount();
+		return count;
 	}
 }

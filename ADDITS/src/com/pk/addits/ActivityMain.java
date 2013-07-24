@@ -1,6 +1,6 @@
 package com.pk.addits;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.animation.Animator;
@@ -15,7 +15,6 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -49,6 +48,9 @@ import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
 {
+	public static DatabaseHelper db = null;
+	public static List<Article> articleList;
+	
 	private ActionBar actionBar;
 	private SharedPreferences prefs;
 	private Thread feedThread;
@@ -64,7 +66,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	
-	public static Article[] NewsFeed;
+	//public static Article[] NewsFeed;
 	public static String currentFragment;
 	public static boolean articleShowing;
 	
@@ -98,6 +100,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		db = new DatabaseHelper(ActivityMain.this);
 		
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -136,13 +140,16 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		if (savedInstanceState == null)
 		{
 			mHandler = new Handler();
-			File sdCard = Environment.getExternalStorageDirectory();
-			File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG);
-			dir.mkdirs();
-			File file = new File(dir, Data.FEED_TAG);
-			emptyFeed = !file.exists();
+			//File sdCard = Environment.getExternalStorageDirectory();
+			//File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG);
+			//dir.mkdirs();
+			//File file = new File(dir, Data.FEED_TAG);
+			if(db.getArticleCount() < 5)
+				emptyFeed = true;
+			else
+				emptyFeed = false;
 			
-			if (file.exists())
+			if (!emptyFeed)
 			{
 				selectItem(225);
 				
@@ -352,15 +359,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right).replace(R.id.content_frame, fragment).commit();
 	}
 	
-	public static Article[] getFeed()
-	{
-		return NewsFeed;
-	}
+	//public static Article[] getFeed()
+	//{
+	//	return NewsFeed;
+	//}
 	
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
 	{
 		List<XmlDom> entries = xml.tags("item");
-		NewsFeed = new Article[entries.size()];
+		//NewsFeed = new Article[entries.size()];
 		int count = 0;
 		
 		for (XmlDom item : entries)
@@ -375,7 +382,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			String Image = Data.pullLinks(item.text("description"));
 			String URL = item.text("link");
 			
-			NewsFeed[count] = new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false);
+			articleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
+			db.addArticle(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
+			//NewsFeed[count] = new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false);
 			count++;
 		}
 		
@@ -390,7 +399,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		for (XmlDom item : entries)
 		{
 			String date = item.text("pubDate");
-			if (Data.isNewerDate(date, NewsFeed[0].getDate()))
+			if (Data.isNewerDate(date, articleList.get(0).getDate()))
 			{
 				newFound = true;
 				newChecked = true;
@@ -420,6 +429,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						
 						try
 						{
+							articleList = new ArrayList<Article>();
 							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 							
 							while (true)
@@ -446,6 +456,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				catch (Exception e)
 				{
 					Log.v("DownloadFile", "ERROR: " + e.getMessage());
+					
+					try
+					{
+						mHandler.post(new showProgress2("An unknown error occurred!!"));
+					}
+					catch (Exception ee)
+					{
+						Log.v("Show Message", "ERROR: " + e.getMessage());
+					}
 				}
 				
 				stopThread(this);
@@ -464,8 +483,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					Log.v("Loading Feed!", "");
 					mHandler.post(new showProgress("Loading feed...", true, true, false));
 					
-					NewsFeed = Data.retrieveFeed().clone();
-					Log.v("Feed Loaded! ", "" + NewsFeed.length);
+					articleList = db.getAllArticles();
+					//NewsFeed = Data.retrieveFeed().clone();
+					Log.v("Feed Loaded! ", "" + articleList.size());
 					
 					mHandler.post(new showHome());
 					/** Fetch Website Data **/

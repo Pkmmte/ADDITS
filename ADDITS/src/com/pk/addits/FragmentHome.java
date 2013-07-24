@@ -46,8 +46,8 @@ public class FragmentHome extends Fragment
 	static int scrollPosition;
 	static int topOffset;
 	
-	static List<Article> feedList;
-	static Article[] NewsFeed;
+	//static List<Article> feedList;
+	//static Article[] NewsFeed;
 	
 	static int currentSlide;
 	static Timer timer;
@@ -80,10 +80,10 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		
 		cntxt = getActivity();
-		feedList = new ArrayList<Article>();
+		//feedList = new ArrayList<Article>();
 		list = (ListView) view.findViewById(android.R.id.list);
 		
-		adapter = new FeedAdapter(getActivity(), feedList);
+		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
 		list.setAdapter(adapter);
 		currentSlide = 1;
 		scrollPosition = 0;
@@ -104,7 +104,7 @@ public class FragmentHome extends Fragment
 	{
 		super.onStart();
 		fm = getChildFragmentManager();
-		NewsFeed = ActivityMain.getFeed();
+		//NewsFeed = ActivityMain.getFeed();
 		fontRegular = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
 		fontBold = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
 		fontLight = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
@@ -115,7 +115,7 @@ public class FragmentHome extends Fragment
 			@Override
 			public boolean handleMessage(Message msg)
 			{
-				if (mFadingHelper.mLastScrollPosition < 10 && NewsFeed != null)
+				if (mFadingHelper.mLastScrollPosition < 10 && ActivityMain.articleList != null)
 					populateSlide();
 				
 				return false;
@@ -133,36 +133,36 @@ public class FragmentHome extends Fragment
 			{
 				if(position > 0)
 				{
-					int ID = feedList.get(position - 1).getID();
-					String Title = feedList.get(ID).getTitle();
-					String Description = feedList.get(ID).getDescription();
-					String Content = feedList.get(ID).getContent();
-					String CommentFeed = feedList.get(ID).getCommentFeed();
-					String Author = feedList.get(ID).getAuthor();
-					String Date = feedList.get(ID).getDate();
-					String Category = feedList.get(ID).getCategory();
-					String Image = feedList.get(ID).getImage();
-					String URL = feedList.get(ID).getURL();
-					boolean Favorite = feedList.get(ID).isFavorite();
-					boolean Read = feedList.get(ID).isRead();
+					int ID = ActivityMain.articleList.get(position - 1).getID();
+					String Title = ActivityMain.articleList.get(ID).getTitle();
+					String Description = ActivityMain.articleList.get(ID).getDescription();
+					String Content = ActivityMain.articleList.get(ID).getContent();
+					String CommentFeed = ActivityMain.articleList.get(ID).getCommentFeed();
+					String Author = ActivityMain.articleList.get(ID).getAuthor();
+					String Date = ActivityMain.articleList.get(ID).getDate();
+					String Category = ActivityMain.articleList.get(ID).getCategory();
+					String Image = ActivityMain.articleList.get(ID).getImage();
+					String URL = ActivityMain.articleList.get(ID).getURL();
+					boolean Favorite = ActivityMain.articleList.get(ID).isFavorite();
+					boolean Read = ActivityMain.articleList.get(ID).isRead();
 					
 					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					ActivityMain.callArticle(getActivity(), Article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
 				}
 				else if (currentSlideID != null)
 				{
-					int ID = NewsFeed[currentSlideID].getID();
-					String Title = NewsFeed[currentSlideID].getTitle();
-					String Description = NewsFeed[currentSlideID].getDescription();
-					String Content = NewsFeed[currentSlideID].getContent();
-					String CommentFeed = NewsFeed[currentSlideID].getCommentFeed();
-					String Author = NewsFeed[currentSlideID].getAuthor();
-					String Date = NewsFeed[currentSlideID].getDate();
-					String Category = NewsFeed[currentSlideID].getCategory();
-					String Image = NewsFeed[currentSlideID].getImage();
-					String URL = NewsFeed[currentSlideID].getURL();
-					boolean Favorite = NewsFeed[currentSlideID].isFavorite();
-					boolean Read = NewsFeed[currentSlideID].isRead();
+					int ID = ActivityMain.articleList.get(currentSlideID).getID();
+					String Title = ActivityMain.articleList.get(currentSlideID).getTitle();
+					String Description = ActivityMain.articleList.get(currentSlideID).getDescription();
+					String Content = ActivityMain.articleList.get(currentSlideID).getContent();
+					String CommentFeed = ActivityMain.articleList.get(currentSlideID).getCommentFeed();
+					String Author = ActivityMain.articleList.get(currentSlideID).getAuthor();
+					String Date = ActivityMain.articleList.get(currentSlideID).getDate();
+					String Category = ActivityMain.articleList.get(currentSlideID).getCategory();
+					String Image = ActivityMain.articleList.get(currentSlideID).getImage();
+					String URL = ActivityMain.articleList.get(currentSlideID).getURL();
+					boolean Favorite = ActivityMain.articleList.get(currentSlideID).isFavorite();
+					boolean Read = ActivityMain.articleList.get(currentSlideID).isRead();
 					
 					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					ActivityMain.callArticle(getActivity(), Article, 0, 0);
@@ -196,20 +196,20 @@ public class FragmentHome extends Fragment
 	
 	public static void updateState()
 	{
-		NewsFeed = ActivityMain.getFeed();
+		//NewsFeed = ActivityMain.getFeed();
 		
-		if (NewsFeed == null)
+		if (ActivityMain.articleList == null)
 		{
-			feedList.clear();
+			//feedList.clear();
 		}
 		else
 		{
 			Log.v("Guess what!", "VAGINA!!!!");
 			//feedList = new ArrayList<Feed>();
-			feedList.clear();
+			//feedList.clear();
 			
-			for (int x = 0; x < NewsFeed.length; x++)
-				feedList.add(new Article(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
+			//for (int x = 0; x < NewsFeed.length; x++)
+			//	feedList.add(new Article(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
 			adapter.notifyDataSetChanged();
 			list.setSelectionFromTop(scrollPosition, topOffset);
@@ -225,16 +225,16 @@ public class FragmentHome extends Fragment
 		String sImage = "";
 		String sCategory = "";
 		
-		if (NewsFeed != null)
+		if (ActivityMain.articleList != null)
 		{
 			Random generator = new Random();
-			int r = generator.nextInt(NewsFeed.length);
-			sTitle = NewsFeed[r].getTitle();
-			sAuthor = NewsFeed[r].getAuthor();
-			sDate = Data.parseDate(cntxt, NewsFeed[r].getDate());
-			sImage = NewsFeed[r].getImage();
-			sCategory = NewsFeed[r].getCategory();
-			currentSlideID = NewsFeed[r].getID();
+			int r = generator.nextInt(ActivityMain.articleList.size());
+			sTitle = ActivityMain.articleList.get(r).getTitle();
+			sAuthor = ActivityMain.articleList.get(r).getAuthor();
+			sDate = Data.parseDate(cntxt, ActivityMain.articleList.get(r).getDate());
+			sImage = ActivityMain.articleList.get(r).getImage();
+			sCategory = ActivityMain.articleList.get(r).getCategory();
+			currentSlideID = ActivityMain.articleList.get(r).getID();
 			
 			if(sImage.length() < 1)
 			{

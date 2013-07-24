@@ -255,7 +255,7 @@ public class FragmentArticle extends Fragment
 		{
 			public void run()
 			{
-				ActivityMain.NewsFeed[Article.getID()].setRead(true);
+				//ActivityMain.NewsFeed[Article.getID()].setRead(true);
 				//ActivityMain.overwriteFeedXML();
 				
 				stopThread(this);
