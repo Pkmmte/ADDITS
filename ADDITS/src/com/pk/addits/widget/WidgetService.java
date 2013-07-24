@@ -97,6 +97,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
 		// which is set on the collection view in StackWidgetProvider.
 		Bundle extras = new Bundle();
 		extras.putInt(WidgetProvider.EXTRA_ITEM, position);
+		extras.putInt(WidgetProvider.EXTRA_ID, articleList.get(position).getID());
 		Intent fillInIntent = new Intent();
 		fillInIntent.putExtras(extras);
 		rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);

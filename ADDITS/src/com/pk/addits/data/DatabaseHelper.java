@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	}
 
 	// Getting single article
-	Article getArticle(int id)
+	public Article getArticle(int id)
 	{
 		SQLiteDatabase db = this.getReadableDatabase();
 

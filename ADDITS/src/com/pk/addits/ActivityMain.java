@@ -47,6 +47,7 @@ import com.androidquery.util.XmlDom;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
 import com.pk.addits.models.Article;
+import com.pk.addits.widget.WidgetProvider;
 import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
@@ -361,6 +362,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
 		fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right).replace(R.id.content_frame, fragment).commit();
+
+		Toast.makeText(context, "You called?", Toast.LENGTH_SHORT).show();
 	}
 	
 	//public static Article[] getFeed()
@@ -433,7 +436,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						try
 						{
 							articleList = new ArrayList<Article>();
-							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+							mHandler.post(new aqDownloadFeed());
+							//aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 							//aq.sync(callback);
 							
 							while (true)
@@ -635,11 +639,45 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						ProgressFinished.setVisibility(View.VISIBLE);
 					}
 				}
+				
+				if(Progress.equals("Loading feed...") && getIntent().hasExtra(WidgetProvider.EXTRA_ID))
+				{
+					Article article = db.getArticle(getIntent().getExtras().getInt(WidgetProvider.EXTRA_ID));
+					if(article == null)
+						Toast.makeText(ActivityMain.this, "Null...", Toast.LENGTH_SHORT).show();
+					else
+					{
+						Toast.makeText(ActivityMain.this, "ID: " + article.getID() + "\n" + 
+								"Title: " + article.getTitle() + "\n" + 
+								"Description: " + article.getDescription() + "\n" + 
+								"Date: " + article.getDate() + "\n" + 
+								"Author: " + article.getAuthor() + "\n" + 
+								"Image: " + article.getImage() + "\n", Toast.LENGTH_LONG).show();
+					}
+					Fragment fragment = FragmentArticle.newInstance(article);
+					mTitle = article.getTitle();
+					articleShowing = true;
+					backPress = 0;
+					lastHomeScrollPosition = 0;
+					lastHomeTopOffset = 0;
+					
+					fragmentManager.beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.content_frame, fragment).commit();
+					//callArticle(ActivityMain.this, article, 0, 0);
+				}
 			}
 			else
 			{
-				if (currentFragment.equals("Home") && !articleShowing)
+				if (getIntent().hasExtra(WidgetProvider.EXTRA_ID))
+				{
+					//Toast.makeText(ActivityMain.this, "Y U NO CALL MEH?!", Toast.LENGTH_SHORT).show();
+					Article article = db.getArticle(getIntent().getExtras().getInt(WidgetProvider.EXTRA_ID));
+					callArticle(ActivityMain.this, article, 0, 0);
+				}
+				else if (currentFragment.equals("Home") && !articleShowing)
+				{
+					//Toast.makeText(ActivityMain.this, "I called home...", Toast.LENGTH_SHORT).show();
 					FragmentHome.updateState();
+				}
 			}
 		}
 	}
@@ -675,6 +713,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		{
 			selectItem(0);
 			fragmentLoaded = true;
+		}
+	}
+	
+	public class aqDownloadFeed implements Runnable
+	{
+		@Override
+		public void run()
+		{
+			aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 		}
 	}
 	

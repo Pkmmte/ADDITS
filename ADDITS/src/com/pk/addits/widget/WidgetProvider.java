@@ -9,10 +9,14 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.pk.addits.ActivityMain;
 import com.pk.addits.R;
 
 public class WidgetProvider extends AppWidgetProvider
 {
+	public static final String ARTICLE_ACTION = "com.pk.addits.widget.ARTICLE_ACTION";
+	public static final String EXTRA_ID = "com.pk.addits.widget.EXTRA_ID";
+	
 	public static final String TOAST_ACTION = "com.example.android.stackwidget.TOAST_ACTION";
 	public static final String EXTRA_ITEM = "com.example.android.stackwidget.EXTRA_ITEM";
 	
@@ -42,7 +46,20 @@ public class WidgetProvider extends AppWidgetProvider
 		{
 			//int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 			int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
+			int viewID = intent.getIntExtra(EXTRA_ID, 0);
+			Toast.makeText(context, "Touched view " + viewIndex + "\nID: " + viewID, Toast.LENGTH_SHORT).show();
+		}
+		if (intent.getAction().equals(ARTICLE_ACTION))
+		{
+			//int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+			int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
 			Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
+
+			int viewID = intent.getIntExtra(EXTRA_ID, 0);
+			Intent articleIntent = new Intent(context, ActivityMain.class);
+			articleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			articleIntent.putExtra(EXTRA_ID, viewID);
+			context.startActivity(articleIntent);
 		}
 		super.onReceive(context, intent);
 	}
@@ -73,7 +90,7 @@ public class WidgetProvider extends AppWidgetProvider
 			// setup a pending intent template, and the individual items can set a fillInIntent
 			// to create unique before on an item to item basis.
 			Intent toastIntent = new Intent(context, WidgetProvider.class);
-			toastIntent.setAction(WidgetProvider.TOAST_ACTION);
+			toastIntent.setAction(WidgetProvider.ARTICLE_ACTION);
 			toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 			intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 			PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
