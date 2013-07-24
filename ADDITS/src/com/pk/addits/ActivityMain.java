@@ -91,6 +91,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private boolean fragmentLoaded;
 	private boolean newChecked;
 	private boolean feedDownloaded;
+	private boolean fromWidget;
 	
 	public static boolean imageExpanded;
 	public static View contentFrameColor;
@@ -120,6 +121,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		backPress = 0;
 		currentFragment = "Loading";
 		fragmentLoaded = false;
+		fromWidget = false;
 		fragmentManager = getSupportFragmentManager();
 		
 		contentFrameColor = findViewById(R.id.content_frame_color);
@@ -142,13 +144,18 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		feedDownloaded = false;
 		imageExpanded = false;
 		
+		if(getIntent().hasExtra(WidgetProvider.EXTRA_ID))
+		{
+			Article article = db.getArticle(getIntent().getExtras().getInt(WidgetProvider.EXTRA_ID) - 1);
+			fromWidget = true;
+			callArticle(ActivityMain.this, article, 0, 0);
+		}
 		if (savedInstanceState == null)
 		{
 			mHandler = new Handler();
-			//File sdCard = Environment.getExternalStorageDirectory();
-			//File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + Data.PACKAGE_TAG);
-			//dir.mkdirs();
-			//File file = new File(dir, Data.FEED_TAG);
+			if(!fromWidget)
+				selectItem(225);
+			
 			if(db.getArticleCount() < 5)
 				emptyFeed = true;
 			else
@@ -156,8 +163,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			
 			if (!emptyFeed)
 			{
-				selectItem(225);
-				
 				if (feedThread == null)
 				{
 					initializeFeedThread();
@@ -171,7 +176,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			}
 			else
 			{
-				selectItem(225);
 				initializeEmptyFeedThread();
 				emptyFeedThread.start();
 			}
@@ -362,8 +366,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
 		fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right).replace(R.id.content_frame, fragment).commit();
-
-		Toast.makeText(context, "You called?", Toast.LENGTH_SHORT).show();
 	}
 	
 	//public static Article[] getFeed()
@@ -496,7 +498,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					//NewsFeed = Data.retrieveFeed().clone();
 					Log.v("Feed Loaded! ", "" + articleList.size());
 					
-					mHandler.post(new showHome());
+					if(!fromWidget)
+						mHandler.post(new showHome());
 					/** Fetch Website Data **/
 					
 					if (lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.isNetworkConnected(ActivityMain.this))
@@ -639,41 +642,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						ProgressFinished.setVisibility(View.VISIBLE);
 					}
 				}
-				
-				if(Progress.equals("Loading feed...") && getIntent().hasExtra(WidgetProvider.EXTRA_ID))
-				{
-					Article article = db.getArticle(getIntent().getExtras().getInt(WidgetProvider.EXTRA_ID));
-					if(article == null)
-						Toast.makeText(ActivityMain.this, "Null...", Toast.LENGTH_SHORT).show();
-					else
-					{
-						Toast.makeText(ActivityMain.this, "ID: " + article.getID() + "\n" + 
-								"Title: " + article.getTitle() + "\n" + 
-								"Description: " + article.getDescription() + "\n" + 
-								"Date: " + article.getDate() + "\n" + 
-								"Author: " + article.getAuthor() + "\n" + 
-								"Image: " + article.getImage() + "\n", Toast.LENGTH_LONG).show();
-					}
-					Fragment fragment = FragmentArticle.newInstance(article);
-					mTitle = article.getTitle();
-					articleShowing = true;
-					backPress = 0;
-					lastHomeScrollPosition = 0;
-					lastHomeTopOffset = 0;
-					
-					fragmentManager.beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.content_frame, fragment).commit();
-					//callArticle(ActivityMain.this, article, 0, 0);
-				}
 			}
 			else
 			{
-				if (getIntent().hasExtra(WidgetProvider.EXTRA_ID))
-				{
-					//Toast.makeText(ActivityMain.this, "Y U NO CALL MEH?!", Toast.LENGTH_SHORT).show();
-					Article article = db.getArticle(getIntent().getExtras().getInt(WidgetProvider.EXTRA_ID));
-					callArticle(ActivityMain.this, article, 0, 0);
-				}
-				else if (currentFragment.equals("Home") && !articleShowing)
+				if (currentFragment.equals("Home") && !articleShowing && !fromWidget)
 				{
 					//Toast.makeText(ActivityMain.this, "I called home...", Toast.LENGTH_SHORT).show();
 					FragmentHome.updateState();

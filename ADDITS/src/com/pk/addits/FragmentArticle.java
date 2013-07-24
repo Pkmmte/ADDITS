@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +36,7 @@ import com.pk.addits.models.Article;
 import com.pk.addits.views.PkListView;
 import com.pk.addits.views.ZoomImageView;
 import com.squareup.picasso.Picasso;
+import android.widget.*;
 
 public class FragmentArticle extends Fragment
 {
@@ -43,6 +45,7 @@ public class FragmentArticle extends Fragment
 	View view;
 	static FadingActionBarHelper mFadingHelper;
 	static Article Article;
+	private Thread loadHeaderImageThread;
 	private Thread markReadThread;
 	private Thread loadContentThread;
 	private Thread loadCommentsThread;
@@ -50,6 +53,7 @@ public class FragmentArticle extends Fragment
 	static MenuItem shareItem;
 	static Menu optionsMenu;
 	URLImageParser p;
+	private Bitmap bm;
 	
 	ImageView imgHeader;
 	TextView txtTitle;
@@ -133,15 +137,19 @@ public class FragmentArticle extends Fragment
 		actionBar = getActivity().getActionBar();
 		retrieveArguments();
 		mHandler = new Handler();
-		configureShare();
 		
 		actionBar.setTitle(Article.getTitle());
 		imgHeader.setAdjustViewBounds(false);
 		imgHeader.setScaleType(ScaleType.CENTER_CROP);
 		if (Article.getImage().length() > 0)
-			Picasso.with(getActivity()).load(Article.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).skipCache().into(imgHeader);
+		{
+			initializeLoadHeaderImageThread();
+			loadHeaderImageThread.start();
+			
+		}
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
+		//mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
@@ -266,6 +274,44 @@ public class FragmentArticle extends Fragment
 			}
 		};
 	}
+
+	private void initializeLoadHeaderImageThread()
+	{
+		loadHeaderImageThread = new Thread()
+		{
+			public void run()
+			{
+				try
+				{
+					bm = Picasso.with(getActivity()).load(Article.getImage()).skipCache().get();
+					mHandler.post(loadImage);
+				}
+				catch (Exception e)
+				{
+					mHandler.post(loadFail);
+				}
+
+				stopThread(this);
+			}
+		};
+	}
+
+	Runnable loadImage = new Runnable()
+	{
+		public void run()
+		{
+			imgHeader.setImageBitmap(bm);
+			mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
+		}
+	};
+
+	Runnable loadFail = new Runnable()
+	{
+		public void run()
+		{
+			Toast.makeText(getActivity(), "FAIL...", Toast.LENGTH_SHORT).show();
+		}
+	};
 	
 	private void initializeLoadContentThread()
 	{

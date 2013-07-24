@@ -60,6 +60,15 @@ public class Data
 	public static final Integer CONTENT_TYPE_VIDEO = 3;
 	public static final Integer CONTENT_TYPE_APP = 4;
 	
+	public static int getWidthByPercent(Context context, double percent)
+	{
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = (int) (size.x * percent);
+		return width;
+	}
+	
 	public static int getHeightByPercent(Context context, double percent)
 	{
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();

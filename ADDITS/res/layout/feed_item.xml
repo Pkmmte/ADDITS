@@ -124,8 +124,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/feed_image"
                             android:contentDescription="@string/placeholder"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/loading_image_banner" />
+                            android:scaleType="centerCrop" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"

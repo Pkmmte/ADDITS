@@ -87,6 +87,7 @@ public class FragmentHome extends Fragment
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
 		list.setAdapter(adapter);
 		currentSlide = 1;
+		currentSlideID = 1;
 		scrollPosition = 0;
 		topOffset = 0;
 		
@@ -135,6 +136,9 @@ public class FragmentHome extends Fragment
 				if(position > 0)
 				{
 					int ID = ActivityMain.articleList.get(position - 1).getID();
+					Article article = ActivityMain.db.getArticle(ID);
+					
+					/*
 					String Title = ActivityMain.articleList.get(ID).getTitle();
 					String Description = ActivityMain.articleList.get(ID).getDescription();
 					String Content = ActivityMain.articleList.get(ID).getContent();
@@ -147,13 +151,15 @@ public class FragmentHome extends Fragment
 					boolean Favorite = ActivityMain.articleList.get(ID).isFavorite();
 					boolean Read = ActivityMain.articleList.get(ID).isRead();
 					
-					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-					ActivityMain.callArticle(getActivity(), Article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
+					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);*/
+					ActivityMain.callArticle(getActivity(), article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
 				}
 				else if (currentSlideID != null)
 				{
-					int ID = ActivityMain.articleList.get(currentSlideID).getID();
-					String Title = ActivityMain.articleList.get(currentSlideID).getTitle();
+					int ID = ActivityMain.articleList.get(currentSlideID - 1).getID();
+					Article article = ActivityMain.db.getArticle(ID);
+					
+					/*String Title = ActivityMain.articleList.get(currentSlideID).getTitle();
 					String Description = ActivityMain.articleList.get(currentSlideID).getDescription();
 					String Content = ActivityMain.articleList.get(currentSlideID).getContent();
 					String CommentFeed = ActivityMain.articleList.get(currentSlideID).getCommentFeed();
@@ -165,8 +171,8 @@ public class FragmentHome extends Fragment
 					boolean Favorite = ActivityMain.articleList.get(currentSlideID).isFavorite();
 					boolean Read = ActivityMain.articleList.get(currentSlideID).isRead();
 					
-					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-					ActivityMain.callArticle(getActivity(), Article, 0, 0);
+					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);*/
+					ActivityMain.callArticle(getActivity(), article, 0, 0);
 				}
 			}
 		});
@@ -333,12 +339,13 @@ public class FragmentHome extends Fragment
 			holder.txtDate.setText(Data.parseDate(context, entry.getDate()));
 			holder.txtCategory.setText(entry.getCategory());
 			
+			//holder.imgPreview.
 			if (entry.getImage().length() > 0)
-				Picasso.with(context).load(entry.getImage()).error(R.drawable.loading_image_error).fit().skipCache().into(holder.imgPreview);
+				Picasso.with(context).load(entry.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).skipCache().into(holder.imgPreview);
 			else
 				holder.imgPreview.setVisibility(View.GONE);
 			
-			holder.imgPreview.setAdjustViewBounds(false);
+			//holder.imgPreview.setAdjustViewBounds(false);
 			
 			if (entry.isRead())
 			{

@@ -28,10 +28,10 @@ public class FadingActionBarHelper
 {
 	protected static final String TAG = "FadingActionBarHelper";
 	private Drawable mActionBarBackgroundDrawable;
-	private FrameLayout mHeaderContainer;
+	public FrameLayout mHeaderContainer;
 	private int mActionBarBackgroundResId;
 	private int mHeaderLayoutResId;
-	private View mHeaderView;
+	public View mHeaderView;
 	private int mContentLayoutResId;
 	private View mContentView;
 	private ActionBar mActionBar;
@@ -335,7 +335,7 @@ public class FadingActionBarHelper
 	    }
 	}
 	
-	private void updateHeaderHeight(int headerHeight)
+	public void updateHeaderHeight(int headerHeight)
 	{
 		ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) mMarginView.getLayoutParams();
 		params.height = headerHeight;
