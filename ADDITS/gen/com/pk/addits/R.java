@@ -33,10 +33,11 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int addits_gray_dark=0x7f0a001b;
-        public static final int addits_green=0x7f0a001a;
+        public static final int addits_gray_dark=0x7f0a001c;
+        public static final int addits_green=0x7f0a001b;
         public static final int black=0x7f0a0013;
         public static final int black_light=0x7f0a0014;
+        public static final int black_light_transparent=0x7f0a001a;
         public static final int black_trans=0x7f0a0018;
         public static final int black_transparent=0x7f0a0019;
         public static final int cyan=0x7f0a0000;
@@ -147,11 +148,12 @@ public final class R {
         public static final int progressbar_indeterminate_holo8=0x7f02003b;
         public static final int radial=0x7f02003c;
         public static final int shadow_author=0x7f02003d;
-        public static final int shadow_vertical_270=0x7f02003e;
-        public static final int shadow_vertical_90=0x7f02003f;
-        public static final int share=0x7f020040;
-        public static final int slider_loading=0x7f020041;
-        public static final int transparent_selector=0x7f020042;
+        public static final int shadow_loading=0x7f02003e;
+        public static final int shadow_vertical_270=0x7f02003f;
+        public static final int shadow_vertical_90=0x7f020040;
+        public static final int share=0x7f020041;
+        public static final int slider_loading=0x7f020042;
+        public static final int transparent_selector=0x7f020043;
     }
     public static final class id {
         public static final int App=0x7f0c002a;
