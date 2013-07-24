@@ -82,7 +82,7 @@
         android:layout_marginRight="@dimen/margin_small"
         android:background="@drawable/card_bg" >
 
-        <com.pk.addits.PkListView
+        <com.pk.addits.views.PkListView
             android:id="@+id/ArticleContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

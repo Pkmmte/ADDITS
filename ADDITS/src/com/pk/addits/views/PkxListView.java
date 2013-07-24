@@ -1,25 +1,43 @@
-package com.pk.addits;
+package com.pk.addits.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.LayoutParams;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.GridView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
-public class PkGridView extends GridView implements OnTouchListener, OnScrollListener
+public class PkxListView extends ListView implements OnTouchListener, OnScrollListener
 {
 	
 	private int listViewTouchAction;
 	private static final int MAXIMUM_LIST_ITEMS_VIEWABLE = 50;
 	
-	public PkGridView(Context context, AttributeSet attrs)
+	public PkxListView(Context context)
+	{
+	    super(context);
+		listViewTouchAction = -1;
+		setOnScrollListener(this);
+		setOnTouchListener(this);
+	}
+	
+	public PkxListView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		listViewTouchAction = -1;
+		setOnScrollListener(this);
+		setOnTouchListener(this);
+	}
+	
+	public PkxListView(Context context, AttributeSet attrs, int defaultStyle)
+	{
+		super(context, attrs, defaultStyle);
 		listViewTouchAction = -1;
 		setOnScrollListener(this);
 		setOnTouchListener(this);

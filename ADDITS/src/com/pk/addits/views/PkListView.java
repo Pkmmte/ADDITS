@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -46,6 +46,7 @@ import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.XmlDom;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
+import com.pk.addits.models.Article;
 import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener

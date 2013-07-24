@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import com.pk.addits.data.Data;
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
+import com.pk.addits.models.Article;
 import com.squareup.picasso.Picasso;
 
 public class FragmentHome extends Fragment

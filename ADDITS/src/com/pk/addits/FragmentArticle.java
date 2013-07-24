@@ -31,6 +31,9 @@ import android.widget.TextView;
 
 import com.pk.addits.data.Data;
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
+import com.pk.addits.models.Article;
+import com.pk.addits.views.PkListView;
+import com.pk.addits.views.ZoomImageView;
 import com.squareup.picasso.Picasso;
 
 public class FragmentArticle extends Fragment

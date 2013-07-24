@@ -9,7 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.pk.addits.Article;
+import com.pk.addits.models.Article;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {

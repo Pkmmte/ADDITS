@@ -17,7 +17,7 @@
         android:text="@string/placeholder"
         android:textSize="@dimen/text_primary" />
 
-    <com.pk.addits.ZoomImageView
+    <com.pk.addits.views.ZoomImageView
         android:id="@+id/Image"
         android:layout_width="200dp"
         android:layout_height="200dp"
