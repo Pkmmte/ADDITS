@@ -3,6 +3,8 @@ package com.pk.addits;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -42,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.XmlDom;
 import com.pk.addits.data.Data;
@@ -438,15 +441,16 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						try
 						{
 							articleList = new ArrayList<Article>();
-							mHandler.post(new aqDownloadFeed());
-							//aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
-							//aq.sync(callback);
+							//mHandler.post(new aqDownloadFeed());
+							AjaxCallback<JSONObject> cb = new AjaxCallback<JSONObject>();
+							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+							aq.sync(cb);
 							
-							while (true)
-							{
-								if (feedDownloaded)
-									break;
-							}
+							//while (true)
+							//{
+							//	if (feedDownloaded)
+							//		break;
+							//}
 							
 							mHandler.post(new showProgress2("Writing content..."));
 							for(int x = 0; x < articleList.size(); x++)
@@ -513,26 +517,30 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						
 						try
 						{
+							AjaxCallback<JSONObject> cb = new AjaxCallback<JSONObject>();
 							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
+							aq.sync(cb);
 							
-							while (true)
-							{
-								if (newChecked)
-									break;
-							}
+							//while (true)
+							//{
+							//	if (newChecked)
+							//		break;
+							//}
 							
 							if (newFound)
 							{
 								mHandler.post(new showProgress("Updating content...", true, false, false));
 								
 								// TODO Make sure read/favorite params don't get overwritten
+								AjaxCallback<JSONObject> cbs = new AjaxCallback<JSONObject>();
 								aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+								aq.sync(cbs);
 								
-								while (true)
-								{
-									if (feedDownloaded)
-										break;
-								}
+								//while (true)
+								//{
+								//	if (feedDownloaded)
+								//		break;
+								//}
 								
 								mHandler.post(new showProgress("Writing content...", true, false, false));
 								
