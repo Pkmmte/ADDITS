@@ -441,7 +441,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							mHandler.post(new showProgress2("Writing content..."));
 							for(int x = 0; x < articleList.size(); x++)
 								db.addArticle(articleList.get(x));
-							//Data.overwriteFeedXML(NewsFeed);
 							
 							mHandler.post(new showProgress2("Everything is up to date!"));
 							mHandler.postDelayed(new showProgress2(""), 3500);
@@ -461,7 +460,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					
 					try
 					{
-						mHandler.post(new showProgress2("An unknown error occurred!!"));
+						mHandler.post(new showProgress2("Oh noez!\nAn unknown error occurred!!!"));
 					}
 					catch (Exception ee)
 					{
@@ -526,6 +525,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								
 								mHandler.post(new showProgress("Writing content...", true, false, false));
 								
+								for(int x = 0; x < articleList.size(); x++)
+								{
+									db.addArticle(articleList.get(x));
+								}
 								//Data.overwriteFeedXML(NewsFeed);
 								Log.v("Happy Face", " New stuff found!");
 							}

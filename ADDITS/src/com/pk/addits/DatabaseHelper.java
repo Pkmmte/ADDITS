@@ -140,11 +140,18 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	}
 
 	// Deleting single Article
-	public void deleteProfile(Article article)
+	public void deleteArticle(Article article)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(TABLE_ARTICLES, KEY_ID + " = ?", new String[] { String.valueOf(article.getID()) });
 		db.close();
+	}
+	
+	public void removeAll()
+	{
+	    // EXPERIMENTAL!!!
+	    SQLiteDatabase db = this.getWritableDatabase();
+	    db.delete(DatabaseHelper.TABLE_ARTICLES, null, null);
 	}
 
 	// Getting Article Count
