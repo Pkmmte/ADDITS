@@ -11,8 +11,8 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.pk.addits.Article;
-import com.pk.addits.DatabaseHelper;
 import com.pk.addits.R;
+import com.pk.addits.data.DatabaseHelper;
 import com.squareup.picasso.Picasso;
 
 public class WidgetService extends RemoteViewsService

@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.data;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -38,6 +38,7 @@ import android.util.Log;
 import android.util.Xml;
 import android.view.Display;
 
+import com.pk.addits.Article;
 import com.pk.addits.FragmentArticle.ArticleContent;
 import com.pk.addits.FragmentArticle.CommentFeed;
 

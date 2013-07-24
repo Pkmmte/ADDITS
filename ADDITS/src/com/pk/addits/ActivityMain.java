@@ -44,6 +44,8 @@ import android.widget.Toast;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.XmlDom;
+import com.pk.addits.data.Data;
+import com.pk.addits.data.DatabaseHelper;
 import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
@@ -114,6 +116,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		lastHomeScrollPosition = 0;
 		lastHomeTopOffset = 0;
 		backPress = 0;
+		currentFragment = "Loading";
 		fragmentLoaded = false;
 		fragmentManager = getSupportFragmentManager();
 		

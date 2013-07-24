@@ -28,11 +28,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.pk.addits.data.Data;
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.squareup.picasso.Picasso;
-import java.util.concurrent.*;
 
 public class FragmentArticle extends Fragment
 {
