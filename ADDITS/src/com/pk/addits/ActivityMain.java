@@ -383,7 +383,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			String URL = item.text("link");
 			
 			articleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
-			db.addArticle(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
 			//NewsFeed[count] = new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false);
 			count++;
 		}
@@ -431,6 +430,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						{
 							articleList = new ArrayList<Article>();
 							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+							//aq.sync(callback);
 							
 							while (true)
 							{
@@ -439,6 +439,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							}
 							
 							mHandler.post(new showProgress2("Writing content..."));
+							for(int x = 0; x < articleList.size(); x++)
+								db.addArticle(articleList.get(x));
 							//Data.overwriteFeedXML(NewsFeed);
 							
 							mHandler.post(new showProgress2("Everything is up to date!"));
