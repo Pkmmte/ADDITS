@@ -321,7 +321,7 @@ public class FragmentArticle extends Fragment
 			{
 				contentList = Data.generateArticleContent(Article.getContent());
 				contentAdapter = new ContentAdapter(getActivity(), contentList);
-				mHandler.post(loadContent);
+				mHandler.postDelayed(loadContent, 500);
 				
 				stopThread(this);
 			}
@@ -338,7 +338,7 @@ public class FragmentArticle extends Fragment
 				{
 					Data.downloadCommentFeed(Article.getCommentFeed());
 					commentList = Data.retrieveCommentFeed(getActivity());
-					mHandler.post(loadComments);
+					mHandler.postDelayed(loadComments, 250);
 				}
 				catch (Exception e)
 				{
