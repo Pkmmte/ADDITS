@@ -387,6 +387,33 @@ public class Data
 								contentList.add(new ArticleContent(Data.CONTENT_TYPE_IMAGE, imgSource));
 								
 							}
+							else if (elemName.equalsIgnoreCase("iframe"))
+							{
+								System.out.println("I found the iFrame!");
+								String ID = "";
+								int numAtribs = xrp.getAttributeCount();
+								for (int i = 0; i < numAtribs; i++)
+								{
+									if (xrp.getAttributeName(i).equalsIgnoreCase("src"))
+									{
+										String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
+										
+										Pattern compiledPattern = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+										Matcher matcher = compiledPattern.matcher(xrp.getAttributeValue(i).trim());
+										StringBuilder IDB = new StringBuilder();
+										
+										while (matcher.find())
+										{
+											IDB.append(matcher.group());
+										}
+										
+										ID = IDB.toString();
+										break;
+									}
+								}
+								
+								contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "ID: " + ID));
+							}
 							else if (elemName.equalsIgnoreCase("button"))
 								p_active = false; // Nope.
 						}
@@ -436,7 +463,6 @@ public class Data
 								}
 								
 								contentList.add(new ArticleContent(Data.CONTENT_TYPE_IMAGE, imgSource));
-								
 							}
 						}
 					}
