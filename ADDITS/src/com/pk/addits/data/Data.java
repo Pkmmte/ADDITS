@@ -327,9 +327,9 @@ public class Data
 			xrp.setInput(new StringReader(Content));
 			int eventType = xrp.getEventType();
 			
-			String p_text = "";
 			StringBuilder builder = new StringBuilder();
 			boolean p_active = false;
+			boolean h4_active = false;
 			boolean img_active = false;
 			
 			while (eventType != XmlPullParser.END_DOCUMENT)
@@ -353,6 +353,10 @@ public class Data
 								builder.append("<strong>");
 							else if (elemName.equalsIgnoreCase("br"))
 								builder.append("<br />");
+							else if (elemName.equalsIgnoreCase("h1"))
+								builder.append("<h1>");
+							else if (elemName.equalsIgnoreCase("h2"))
+								builder.append("<h2>");
 							else if (elemName.equalsIgnoreCase("a"))
 							{
 								builder.append("<a ");
@@ -386,6 +390,55 @@ public class Data
 							else if (elemName.equalsIgnoreCase("button"))
 								p_active = false; // Nope.
 						}
+						else if (!h4_active && elemName.equalsIgnoreCase("h4"))
+						{
+							h4_active = true;
+							builder = new StringBuilder();
+							builder.append("<h4>");
+						}
+						else if (h4_active)
+						{
+							if (elemName.equalsIgnoreCase("em"))
+								builder.append("<em>");
+							else if (elemName.equalsIgnoreCase("strong"))
+								builder.append("<strong>");
+							else if (elemName.equalsIgnoreCase("br"))
+								builder.append("<br />");
+							else if (elemName.equalsIgnoreCase("h1"))
+								builder.append("<h1>");
+							else if (elemName.equalsIgnoreCase("h2"))
+								builder.append("<h2>");
+							else if (elemName.equalsIgnoreCase("a"))
+							{
+								builder.append("<a ");
+								int numAtribs = xrp.getAttributeCount();
+								for (int i = 0; i < numAtribs; i++)
+								{
+									if (xrp.getAttributeName(i).equalsIgnoreCase("href"))
+									{
+										builder.append(" href=\"" + xrp.getAttributeValue(i) + "\"");
+									}
+								}
+								builder.append(">");
+							}
+							else if (elemName.equalsIgnoreCase("img"))
+							{
+								img_active = true;
+								String imgSource = "";
+								int numAtribs = xrp.getAttributeCount();
+								for (int i = 0; i < numAtribs; i++)
+								{
+									if (xrp.getAttributeName(i).equalsIgnoreCase("src"))
+									{
+										imgSource = xrp.getAttributeValue(i).trim();
+										break;
+									}
+								}
+								
+								contentList.add(new ArticleContent(Data.CONTENT_TYPE_IMAGE, imgSource));
+								
+							}
+						}
 					}
 					else if (eventType == XmlPullParser.END_TAG)
 					{
@@ -410,13 +463,35 @@ public class Data
 								builder.append("</em>");
 							else if (elemName.equalsIgnoreCase("strong"))
 								builder.append("</strong>");
+							else if (elemName.equalsIgnoreCase("h1"))
+								builder.append("</h1>");
+							else if (elemName.equalsIgnoreCase("h2"))
+								builder.append("</h2>");
 							else if (elemName.equalsIgnoreCase("a"))
 								builder.append("</a>");
+						}
+						else if (h4_active && elemName.equalsIgnoreCase("h4"))
+						{
+							builder.append("</h4>");
+							if (img_active)
+							{
+								if (Html.fromHtml(builder.toString()).toString().trim().length() > 0)
+									contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, builder.toString() + "\n\n"));
+							}
+							else
+								contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, builder.toString() + "\n\n"));
+							
+							h4_active = false;
+							img_active = false;
 						}
 					}
 					else if (eventType == XmlPullParser.TEXT)
 					{
 						if (p_active)
+						{
+							builder.append(xrp.getText());
+						}
+						else if (h4_active)
 						{
 							builder.append(xrp.getText());
 						}
