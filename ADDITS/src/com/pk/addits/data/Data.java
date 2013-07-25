@@ -343,7 +343,7 @@ public class Data
 						{
 							p_active = true;
 							builder = new StringBuilder();
-							builder.append("<p>");
+							//builder.append("<p>");
 						}
 						else if (p_active)
 						{
@@ -392,7 +392,7 @@ public class Data
 						String elemName = xrp.getName();
 						if (p_active && elemName.equalsIgnoreCase("p"))
 						{
-							builder.append("</p>");
+							//builder.append("</p>");
 							if (img_active)
 							{
 								if (Html.fromHtml(builder.toString()).toString().trim().length() > 0)

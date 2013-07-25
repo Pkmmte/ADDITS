@@ -525,7 +525,7 @@ public class FragmentArticle extends Fragment
 			lstContent.setAdapter(contentAdapter);
 			contentAdapter.notifyDataSetChanged();
 			lstContent.setExpanded(true);
-			lstContent.setDividerHeight(0);
+			//lstContent.setDividerHeight(0);
 		}
 	};
 	

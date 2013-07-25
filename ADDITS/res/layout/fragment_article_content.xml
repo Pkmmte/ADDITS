@@ -11,9 +11,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:fontFamily="serif"
-        android:paddingLeft="@dimen/margin_medium"
-        android:paddingRight="@dimen/margin_medium"
-        android:paddingTop="@dimen/margin_medium"
+        android:padding="@dimen/margin_medium"
         android:text="@string/placeholder"
         android:textSize="@dimen/text_primary" />
 
@@ -23,6 +21,7 @@
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:contentDescription="@string/placeholder"
+        android:layout_marginBottom="@dimen/margin_medium"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_ab_logo" />
 
