@@ -319,7 +319,7 @@ public class FragmentArticle extends Fragment
 		{
 			public void run()
 			{
-				contentList = Data.generateArticleContent2(Article.getContent());
+				contentList = Data.generateArticleContent(Article.getContent());
 				contentAdapter = new ContentAdapter(getActivity(), contentList);
 				lstContent.setAdapter(contentAdapter);
 				mHandler.post(loadContent);

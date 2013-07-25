@@ -327,43 +327,75 @@ public class Data
 			int eventType = xrp.getEventType();
 			
 			String p_text = "";
+			StringBuilder builder = new StringBuilder();
 			boolean p_active = false;
 			
 			while (eventType != XmlPullParser.END_DOCUMENT)
 			{
-				if (eventType == XmlPullParser.START_TAG)
+				try
 				{
-					String elemName = xrp.getName();
-					if (!p_active && elemName.equalsIgnoreCase("p"))
+					if (eventType == XmlPullParser.START_TAG)
 					{
-						if (xrp.next() == XmlPullParser.TEXT)
+						String elemName = xrp.getName();
+						if (!p_active && elemName.equalsIgnoreCase("p"))
 						{
 							p_active = true;
-							p_text = xrp.getText();
-							// if(containsLinks(xrp.getText()))
-							// {
-							
-							// }
-							// else
+							builder = new StringBuilder();
+						}
+						else if (p_active)
+						{
+							if (elemName.equalsIgnoreCase("em"))
+								builder.append("<em>");
+							else if (elemName.equalsIgnoreCase("strong"))
+								builder.append("<strong>");
+							else if (elemName.equalsIgnoreCase("a"))
+							{
+								builder.append("<a ");
+								int numAtribs = xrp.getAttributeCount();
+								for (int i = 0; i < numAtribs; i++)
+								{
+									if(xrp.getAttributeName(i).equalsIgnoreCase("href"))
+									{
+										builder.append(" href=\"" + xrp.getAttributeValue(i) + "\"");
+									}
+								}
+								builder.append(">");
+							}
+							else if (elemName.equalsIgnoreCase("button"))
+								p_active = false; // Nope.
 						}
 					}
-					else if (p_active)
+					else if (eventType == XmlPullParser.END_TAG)
 					{
-						if (elemName.equalsIgnoreCase("em"))
-							p_text += "<em>";
-						else if (elemName.equalsIgnoreCase("strong"))
-							p_text += "<strong>";
+						String elemName = xrp.getName();
+						if (p_active && elemName.equalsIgnoreCase("p"))
+						{
+							p_active = false;
+							contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, builder.toString() + "\n\n"));
+						}
+						else if (p_active)
+						{
+							if (elemName.equalsIgnoreCase("em"))
+								builder.append("</em>");
+							else if (elemName.equalsIgnoreCase("strong"))
+								builder.append("</strong>");
+							else if (elemName.equalsIgnoreCase("a"))
+								builder.append("</a>");
+						}
 					}
+					else if (eventType == XmlPullParser.TEXT)
+					{
+						if (p_active)
+						{
+							builder.append(xrp.getText());
+						}
+					}
+					eventType = xrp.next();
 				}
-				else if (eventType == XmlPullParser.END_TAG && xrp.getName().equalsIgnoreCase("p"))
+				catch (Exception e)
 				{
-					if (p_active)
-					{
-						p_active = false;
-						contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, p_text + "\n\n"));
-					}
+					Log.v("HAX", "xrp.next() error");
 				}
-				eventType = xrp.next();
 			}
 		}
 		catch (Exception e)
@@ -428,7 +460,7 @@ public class Data
 							}
 							
 							contentList.add(new ArticleContent(Data.CONTENT_TYPE_IMAGE, imgSource));
-							//p_active = false;
+							// p_active = false;
 						}
 						else if (qName.equalsIgnoreCase("iframe"))
 						{
@@ -456,8 +488,9 @@ public class Data
 							contentList.add(new ArticleContent(Data.CONTENT_TYPE_VIDEO, ID));
 							p_active = false;
 						}
-						else
+						else if (!qName.equalsIgnoreCase("div") && !qName.equalsIgnoreCase("button"))
 						{
+							System.out.println("HAX :" + qName);
 							sb.append("<" + qName);
 							tsb.append("<" + qName);
 							for (int i = 0; i < length; i++)
@@ -474,7 +507,7 @@ public class Data
 					else if (h2_active)
 					{
 						int length = attributes.getLength();
-
+						
 						sb.append("<" + qName);
 						tsb.append("<" + qName);
 						for (int i = 0; i < length; i++)
@@ -631,59 +664,31 @@ public class Data
 			return false;
 	}
 	
-	/*public static void overwriteFeedXML(Feed[] Feeeeedz)
-	{
-		File sdCard = Environment.getExternalStorageDirectory();
-		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
-		dir.mkdirs();
-		File file = new File(dir, FEED_TAG);
-		
-		try
-		{
-			StringBuilder XMLbuilder = new StringBuilder();
-			XMLbuilder.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<feed>\n");
-			
-			for (int x = 0; x < Feeeeedz.length; x++)
-			{
-				int sID = Feeeeedz[x].getID();
-				String sTitle = Feeeeedz[x].getTitle();
-				String sDescription = Feeeeedz[x].getDescription();
-				String sContent = Feeeeedz[x].getContent();
-				String sCommentFeed = Feeeeedz[x].getCommentFeed();
-				String sAuthor = Feeeeedz[x].getAuthor();
-				String sDate = Feeeeedz[x].getDate();
-				String sCategory = Feeeeedz[x].getCategory();
-				String sImage = Feeeeedz[x].getImage();
-				String sURL = Feeeeedz[x].getURL();
-				boolean sFavorite = Feeeeedz[x].isFavorite();
-				boolean sRead = Feeeeedz[x].isRead();
-				
-				// Fix "&" Sign
-				sTitle = sTitle.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				sDescription = sDescription.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				sContent = sContent.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				sCommentFeed = sCommentFeed.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				sAuthor = sAuthor.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				sDate = sDate.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				sCategory = sCategory.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				sImage = sImage.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				sURL = sURL.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-				
-				XMLbuilder.append("	<article\n" + "		id=\"" + sID + "\"\n" + "		title=\"" + sTitle + "\"\n" + "		description=\"" + sDescription + "\"\n" + "		content=\"" + sContent + "\"\n" + "		commentfeed=\"" + sCommentFeed + "\"\n" + "		author=\"" + sAuthor + "\"\n" + "		date=\"" + sDate + "\"\n" + "		category=\"" + sCategory + "\"\n" + "		image=\"" + sImage + "\"\n" + "		url=\"" + sURL + "\"\n" + "		favorite=\"" + sFavorite + "\"\n" + "		read=\"" + sRead + "\" />\n\n");
-			}
-			
-			XMLbuilder.append("</feed>");
-			String XML = XMLbuilder.toString();
-			
-			FileOutputStream f = new FileOutputStream(file);
-			f.write(XML.getBytes());
-			f.close();
-		}
-		catch (Exception e)
-		{
-			Log.w("XML Write Error", e);
-		}
-	}*/
+	/*
+	 * public static void overwriteFeedXML(Feed[] Feeeeedz) { File sdCard = Environment.getExternalStorageDirectory(); File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
+	 * dir.mkdirs(); File file = new File(dir, FEED_TAG);
+	 * 
+	 * try { StringBuilder XMLbuilder = new StringBuilder(); XMLbuilder.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<feed>\n");
+	 * 
+	 * for (int x = 0; x < Feeeeedz.length; x++) { int sID = Feeeeedz[x].getID(); String sTitle = Feeeeedz[x].getTitle(); String sDescription = Feeeeedz[x].getDescription(); String sContent =
+	 * Feeeeedz[x].getContent(); String sCommentFeed = Feeeeedz[x].getCommentFeed(); String sAuthor = Feeeeedz[x].getAuthor(); String sDate = Feeeeedz[x].getDate(); String sCategory =
+	 * Feeeeedz[x].getCategory(); String sImage = Feeeeedz[x].getImage(); String sURL = Feeeeedz[x].getURL(); boolean sFavorite = Feeeeedz[x].isFavorite(); boolean sRead = Feeeeedz[x].isRead();
+	 * 
+	 * // Fix "&" Sign sTitle = sTitle.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sDescription = sDescription.replace("&", "&amp;").replace("\"",
+	 * "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sContent = sContent.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sCommentFeed =
+	 * sCommentFeed.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sAuthor = sAuthor.replace("&", "&amp;").replace("\"", "&quot;").replace("<",
+	 * "&lt;").replace(">", "&gt;"); sDate = sDate.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sCategory = sCategory.replace("&", "&amp;").replace("\"",
+	 * "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sImage = sImage.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sURL = sURL.replace("&",
+	 * "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
+	 * 
+	 * XMLbuilder.append("	<article\n" + "		id=\"" + sID + "\"\n" + "		title=\"" + sTitle + "\"\n" + "		description=\"" + sDescription + "\"\n" + "		content=\"" + sContent + "\"\n" +
+	 * "		commentfeed=\"" + sCommentFeed + "\"\n" + "		author=\"" + sAuthor + "\"\n" + "		date=\"" + sDate + "\"\n" + "		category=\"" + sCategory + "\"\n" + "		image=\"" + sImage + "\"\n" + "		url=\""
+	 * + sURL + "\"\n" + "		favorite=\"" + sFavorite + "\"\n" + "		read=\"" + sRead + "\" />\n\n"); }
+	 * 
+	 * XMLbuilder.append("</feed>"); String XML = XMLbuilder.toString();
+	 * 
+	 * FileOutputStream f = new FileOutputStream(file); f.write(XML.getBytes()); f.close(); } catch (Exception e) { Log.w("XML Write Error", e); } }
+	 */
 	
 	public static boolean isNetworkConnected(Context context)
 	{
