@@ -92,7 +92,7 @@
         android:id="@+id/Comments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/Content"
+        android:layout_below="@id/Content"
         android:orientation="vertical" >
 
         <FrameLayout

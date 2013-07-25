@@ -29,6 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pk.addits.data.Data;
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
@@ -36,7 +37,6 @@ import com.pk.addits.models.Article;
 import com.pk.addits.views.PkListView;
 import com.pk.addits.views.ZoomImageView;
 import com.squareup.picasso.Picasso;
-import android.widget.*;
 
 public class FragmentArticle extends Fragment
 {
@@ -289,7 +289,7 @@ public class FragmentArticle extends Fragment
 				}
 				catch (Exception e)
 				{
-					mHandler.post(loadFail);
+					// mHandler.post(loadFail);
 				}
 				
 				stopThread(this);
@@ -448,7 +448,7 @@ public class FragmentArticle extends Fragment
 				holder.App.setVisibility(View.GONE);
 				
 				String VideoPreviewURL = "http://img.youtube.com/vi/" + Content + "/hqdefault.jpg";
-				Picasso.with(context).load(VideoPreviewURL ).error(R.drawable.loading_image_error).skipCache().fit().into(holder.VideoPreview);
+				Picasso.with(context).load(VideoPreviewURL).error(R.drawable.loading_image_error).skipCache().fit().into(holder.VideoPreview);
 				// TODO Add Video Support
 			}
 			else if (Type == Data.CONTENT_TYPE_APP)
@@ -530,6 +530,7 @@ public class FragmentArticle extends Fragment
 			contentAdapter.notifyDataSetChanged();
 			lstContent.setExpanded(true);
 			// lstContent.setDividerHeight(0);
+			
 		}
 	};
 	
