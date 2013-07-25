@@ -15,7 +15,7 @@ import com.pk.addits.data.DatabaseHelper;
 import com.pk.addits.models.Article;
 import com.squareup.picasso.Picasso;
 
-public class WidgetService extends RemoteViewsService
+public class WidgetStackService extends RemoteViewsService
 {
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent)
@@ -96,8 +96,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
 		// Next, we set a fill-intent which will be used to fill-in the pending intent template
 		// which is set on the collection view in StackWidgetProvider.
 		Bundle extras = new Bundle();
-		extras.putInt(WidgetProvider.EXTRA_ITEM, position);
-		extras.putInt(WidgetProvider.EXTRA_ID, articleList.get(position).getID());
+		extras.putInt(WidgetStackProvider.EXTRA_ITEM, position);
+		extras.putInt(WidgetStackProvider.EXTRA_ID, articleList.get(position).getID());
 		Intent fillInIntent = new Intent();
 		fillInIntent.putExtras(extras);
 		rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);

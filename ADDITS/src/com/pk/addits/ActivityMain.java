@@ -50,7 +50,7 @@ import com.androidquery.util.XmlDom;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
 import com.pk.addits.models.Article;
-import com.pk.addits.widget.WidgetProvider;
+import com.pk.addits.widget.WidgetStackProvider;
 import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
@@ -149,9 +149,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		imageExpanded = false;
 		inBackground = false;
 		
-		if(getIntent().hasExtra(WidgetProvider.EXTRA_ID))
+		if(getIntent().hasExtra(WidgetStackProvider.EXTRA_ID))
 		{
-			Article article = db.getArticle(getIntent().getExtras().getInt(WidgetProvider.EXTRA_ID) - 1);
+			Article article = db.getArticle(getIntent().getExtras().getInt(WidgetStackProvider.EXTRA_ID) - 1);
 			fromWidget = true;
 			callArticle(ActivityMain.this, article, 0, 0);
 		}

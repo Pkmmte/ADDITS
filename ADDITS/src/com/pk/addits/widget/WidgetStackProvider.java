@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.pk.addits.ActivityMain;
 import com.pk.addits.R;
 
-public class WidgetProvider extends AppWidgetProvider
+public class WidgetStackProvider extends AppWidgetProvider
 {
 	public static final String ARTICLE_ACTION = "com.pk.addits.widget.ARTICLE_ACTION";
 	public static final String EXTRA_ID = "com.pk.addits.widget.EXTRA_ID";
@@ -73,7 +73,7 @@ public class WidgetProvider extends AppWidgetProvider
 			
 			// Here we setup the intent which points to the StackViewService which will
 			// provide the views for this collection.
-			Intent intent = new Intent(context, WidgetService.class);
+			Intent intent = new Intent(context, WidgetStackService.class);
 			intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 			// When intents are compared, the extras are ignored, so we need to embed the extras
 			// into the data so that the extras will not be ignored.
@@ -89,8 +89,8 @@ public class WidgetProvider extends AppWidgetProvider
 			// cannot setup their own pending intents, instead, the collection as a whole can
 			// setup a pending intent template, and the individual items can set a fillInIntent
 			// to create unique before on an item to item basis.
-			Intent toastIntent = new Intent(context, WidgetProvider.class);
-			toastIntent.setAction(WidgetProvider.ARTICLE_ACTION);
+			Intent toastIntent = new Intent(context, WidgetStackProvider.class);
+			toastIntent.setAction(WidgetStackProvider.ARTICLE_ACTION);
 			toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 			intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 			PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
