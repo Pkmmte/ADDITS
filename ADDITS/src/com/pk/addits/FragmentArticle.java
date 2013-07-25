@@ -149,7 +149,7 @@ public class FragmentArticle extends Fragment
 		}
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
-		//mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
+		// mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
@@ -183,7 +183,7 @@ public class FragmentArticle extends Fragment
 			}
 		});
 		
-		if(!Article.isRead())
+		if (!Article.isRead())
 			markRead();
 		
 		configureShare();
@@ -249,12 +249,12 @@ public class FragmentArticle extends Fragment
 	
 	private void markRead()
 	{
-		if(markReadThread == null)
+		if (markReadThread == null)
 		{
 			initializeMarkReadThread();
 			markReadThread.start();
 		}
-		else if(!markReadThread.isAlive())
+		else if (!markReadThread.isAlive())
 		{
 			initializeMarkReadThread();
 			markReadThread.start();
@@ -267,14 +267,14 @@ public class FragmentArticle extends Fragment
 		{
 			public void run()
 			{
-				//ActivityMain.NewsFeed[Article.getID()].setRead(true);
-				//ActivityMain.overwriteFeedXML();
+				// ActivityMain.NewsFeed[Article.getID()].setRead(true);
+				// ActivityMain.overwriteFeedXML();
 				
 				stopThread(this);
 			}
 		};
 	}
-
+	
 	private void initializeLoadHeaderImageThread()
 	{
 		loadHeaderImageThread = new Thread()
@@ -290,12 +290,12 @@ public class FragmentArticle extends Fragment
 				{
 					mHandler.post(loadFail);
 				}
-
+				
 				stopThread(this);
 			}
 		};
 	}
-
+	
 	Runnable loadImage = new Runnable()
 	{
 		public void run()
@@ -304,7 +304,7 @@ public class FragmentArticle extends Fragment
 			mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
 		}
 	};
-
+	
 	Runnable loadFail = new Runnable()
 	{
 		public void run()
@@ -399,8 +399,8 @@ public class FragmentArticle extends Fragment
 				holder.Text.setTypeface(fontRegular);
 				holder.Text.setMovementMethod(LinkMovementMethod.getInstance());
 				holder.Image = (ZoomImageView) view.findViewById(R.id.Image);
-				//holder.Video = view.f
 				holder.Video = (FrameLayout) view.findViewById(R.id.Video);
+				holder.VideoPreview = (ImageView) view.findViewById(R.id.VideoPreview);
 				holder.App = (RelativeLayout) view.findViewById(R.id.App);
 				
 				view.setTag(holder);
@@ -446,6 +446,8 @@ public class FragmentArticle extends Fragment
 				holder.Video.setVisibility(View.VISIBLE);
 				holder.App.setVisibility(View.GONE);
 				
+				String VideoPreviewURL = "http://img.youtube.com/vi/" + Content + "/hqdefault.jpg";
+				Picasso.with(context).load(VideoPreviewURL ).error(R.drawable.loading_image_error).skipCache().fit().into(holder.VideoPreview);
 				// TODO Add Video Support
 			}
 			else if (Type == Data.CONTENT_TYPE_APP)
@@ -474,6 +476,7 @@ public class FragmentArticle extends Fragment
 		public TextView Text;
 		public ZoomImageView Image;
 		public FrameLayout Video;
+		public ImageView VideoPreview;
 		public RelativeLayout App;
 	}
 	
@@ -525,7 +528,7 @@ public class FragmentArticle extends Fragment
 			lstContent.setAdapter(contentAdapter);
 			contentAdapter.notifyDataSetChanged();
 			lstContent.setExpanded(true);
-			//lstContent.setDividerHeight(0);
+			// lstContent.setDividerHeight(0);
 		}
 	};
 	

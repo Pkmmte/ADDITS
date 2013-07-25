@@ -412,7 +412,7 @@ public class Data
 									}
 								}
 								
-								contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, "ID: " + ID));
+								contentList.add(new ArticleContent(Data.CONTENT_TYPE_VIDEO, ID));
 							}
 							else if (elemName.equalsIgnoreCase("button"))
 								p_active = false; // Nope.
@@ -477,7 +477,7 @@ public class Data
 								if (Html.fromHtml(builder.toString()).toString().trim().length() > 0)
 									contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, builder.toString() + "\n\n"));
 							}
-							else
+							else// if (Html.fromHtml(builder.toString()).toString().trim().length() > 0)
 								contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, builder.toString() + "\n\n"));
 							
 							p_active = false;

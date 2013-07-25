@@ -20,16 +20,27 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:contentDescription="@string/placeholder"
         android:layout_marginBottom="@dimen/margin_medium"
+        android:contentDescription="@string/placeholder"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_ab_logo" />
 
     <FrameLayout
         android:id="@+id/Video"
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        android:orientation="vertical" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" >
+
+        <ImageView
+            android:id="@+id/VideoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon_video" />
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/App"
