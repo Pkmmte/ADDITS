@@ -321,7 +321,6 @@ public class FragmentArticle extends Fragment
 			{
 				contentList = Data.generateArticleContent(Article.getContent());
 				contentAdapter = new ContentAdapter(getActivity(), contentList);
-				lstContent.setAdapter(contentAdapter);
 				mHandler.post(loadContent);
 				
 				stopThread(this);
@@ -523,9 +522,10 @@ public class FragmentArticle extends Fragment
 	{
 		public void run()
 		{
+			lstContent.setAdapter(contentAdapter);
 			contentAdapter.notifyDataSetChanged();
 			lstContent.setExpanded(true);
-			//lstContent.setDividerHeight(0);
+			lstContent.setDividerHeight(0);
 		}
 	};
 	
