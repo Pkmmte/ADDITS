@@ -283,7 +283,8 @@ public class FragmentArticle extends Fragment
 			{
 				try
 				{
-					bm = Picasso.with(getActivity()).load(Article.getImage()).skipCache().get();
+					Bitmap bp = Picasso.with(getActivity()).load(Article.getImage()).skipCache().get();
+					bm = Bitmap.createScaledBitmap(bp, Data.getWidthByPercent(getActivity(), 1.0), Data.getHeightByPercent(getActivity(), 0.3), false);
 					mHandler.post(loadImage);
 				}
 				catch (Exception e)
