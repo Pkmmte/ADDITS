@@ -41,17 +41,19 @@ public class WidgetArticleProvider extends AppWidgetProvider
 	@Override
 	public void onDisabled(Context context)
 	{
-		ComponentName component = new ComponentName("com.pk.addits", "com.pk.addits.widget.WidgetArticleProvider");
-		PackageManager pm = context.getPackageManager();
-		pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+		super.onDisabled(context);
+		//ComponentName component = new ComponentName("com.pk.addits", "com.pk.addits.widget.WidgetArticleProvider");
+		//PackageManager pm = context.getPackageManager();
+		//pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
 	}
 	
 	@Override
 	public void onEnabled(Context context)
 	{
-		ComponentName component = new ComponentName("com.pk.addits", "com.pk.addits.widget.WidgetArticleProvider");
-		PackageManager pm = context.getPackageManager();
-		pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+		super.onEnabled(context);
+		//ComponentName component = new ComponentName("com.pk.addits", "com.pk.addits.widget.WidgetArticleProvider");
+		//PackageManager pm = context.getPackageManager();
+		//pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 	}
 	
 	@Override
