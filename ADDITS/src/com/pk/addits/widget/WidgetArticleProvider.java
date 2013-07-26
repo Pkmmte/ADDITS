@@ -1,5 +1,6 @@
 package com.pk.addits.widget;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,13 +11,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.widget.RemoteViews;
 
 import com.pk.addits.R;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
 import com.pk.addits.models.Article;
+import com.squareup.picasso.Picasso;
 
 public class WidgetArticleProvider extends AppWidgetProvider
 {
@@ -60,6 +62,7 @@ public class WidgetArticleProvider extends AppWidgetProvider
 	
 	private class MyTime extends TimerTask
 	{
+		Context mContext;
 		Article currentArticle;
 		RemoteViews remoteViews;
 		AppWidgetManager appWidgetManager;
@@ -67,6 +70,7 @@ public class WidgetArticleProvider extends AppWidgetProvider
 		
 		public MyTime(Context context, AppWidgetManager appWidgetManager)
 		{
+			mContext = context;
 			this.appWidgetManager = appWidgetManager;
 			currentArticle = new Article();
 			remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_article);
@@ -82,6 +86,15 @@ public class WidgetArticleProvider extends AppWidgetProvider
 			remoteViews.setTextViewText(R.id.txtTitle, currentArticle.getTitle());
 			remoteViews.setTextViewText(R.id.txtAuthor, currentArticle.getAuthor());
 			remoteViews.setTextViewText(R.id.txtDate, Data.parseRelativeDate(currentArticle.getDate()));
+			try
+			{
+				Bitmap bm = Picasso.with(mContext).load(currentArticle.getImage()).skipCache().get();
+				remoteViews.setImageViewBitmap(R.id.articlePreview, bm);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
 			appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 		}
 	}
