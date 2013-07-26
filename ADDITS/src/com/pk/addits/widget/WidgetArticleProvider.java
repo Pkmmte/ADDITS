@@ -2,14 +2,21 @@ package com.pk.addits.widget;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.pk.addits.data.DatabaseHelper;
-import com.pk.addits.models.Article;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.RemoteViews;
+
+import com.pk.addits.R;
+import com.pk.addits.data.Data;
+import com.pk.addits.data.DatabaseHelper;
+import com.pk.addits.models.Article;
 
 public class WidgetArticleProvider extends AppWidgetProvider
 {
@@ -37,72 +44,45 @@ public class WidgetArticleProvider extends AppWidgetProvider
 	@Override
 	public void onEnabled(Context context)
 	{
-		db = new DatabaseHelper(context);
-		articleList = db.getAllArticles();
 		
 		super.onEnabled(context);
 	}
 	
 	@Override
-	public void onReceive(Context context, Intent intent)
-	{
-		// AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-		/*if (intent.getAction().equals(TOAST_ACTION))
-		{
-			// int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-			int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-			int viewID = intent.getIntExtra(EXTRA_ID, 0);
-			Toast.makeText(context, "Touched view " + viewIndex + "\nID: " + viewID, Toast.LENGTH_SHORT).show();
-		}
-		if (intent.getAction().equals(ARTICLE_ACTION))
-		{
-			// int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-			int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-			Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
-			
-			int viewID = intent.getIntExtra(EXTRA_ID, 0);
-			Intent articleIntent = new Intent(context, ActivityMain.class);
-			articleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			articleIntent.putExtra(EXTRA_ID, viewID);
-			context.startActivity(articleIntent);
-		}*/
-		super.onReceive(context, intent);
-	}
-	
-	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
-		// update each of the widgets with the remote adapter
-		/*for (int i = 0; i < appWidgetIds.length; ++i)
+		db = new DatabaseHelper(context);
+		articleList = db.getAllArticles();
+		
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(new MyTime(context, appWidgetManager), 1, 10000);
+	}
+	
+	private class MyTime extends TimerTask
+	{
+		Article currentArticle;
+		RemoteViews remoteViews;
+		AppWidgetManager appWidgetManager;
+		ComponentName thisWidget;
+		
+		public MyTime(Context context, AppWidgetManager appWidgetManager)
 		{
-			
-			// Here we setup the intent which points to the StackViewService which will
-			// provide the views for this collection.
-			Intent intent = new Intent(context, WidgetStackService.class);
-			intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-			// When intents are compared, the extras are ignored, so we need to embed the extras
-			// into the data so that the extras will not be ignored.
-			intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-			RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_stack);
-			rv.setRemoteAdapter(R.id.stack_view, intent);
-			
-			// The empty view is displayed when the collection has no items. It should be a sibling
-			// of the collection view.
-			rv.setEmptyView(R.id.stack_view, R.id.empty_view);
-			
-			// Here we setup the a pending intent template. Individuals items of a collection
-			// cannot setup their own pending intents, instead, the collection as a whole can
-			// setup a pending intent template, and the individual items can set a fillInIntent
-			// to create unique before on an item to item basis.
-			Intent toastIntent = new Intent(context, WidgetStackProvider.class);
-			toastIntent.setAction(WidgetStackProvider.ARTICLE_ACTION);
-			toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-			intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-			PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			rv.setPendingIntentTemplate(R.id.stack_view, toastPendingIntent);
-			
-			appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
-		}*/
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
+			this.appWidgetManager = appWidgetManager;
+			currentArticle = new Article();
+			remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_article);
+			thisWidget = new ComponentName(context, WidgetArticleProvider.class);
+		}
+		
+		@Override
+		public void run()
+		{
+			Random generator = new Random();
+			int r = generator.nextInt(articleList.size());
+			currentArticle = db.getArticle(articleList.get(r).getID());
+			remoteViews.setTextViewText(R.id.txtTitle, currentArticle.getTitle());
+			remoteViews.setTextViewText(R.id.txtAuthor, currentArticle.getAuthor());
+			remoteViews.setTextViewText(R.id.txtDate, Data.parseRelativeDate(currentArticle.getDate()));
+			appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+		}
 	}
 }

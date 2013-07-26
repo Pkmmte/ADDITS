@@ -153,13 +153,14 @@ public final class R {
         public static final int progressbar_indeterminate_holo8=0x7f020040;
         public static final int radial=0x7f020041;
         public static final int refresh=0x7f020042;
-        public static final int shadow_author=0x7f020043;
-        public static final int shadow_loading=0x7f020044;
-        public static final int shadow_vertical_270=0x7f020045;
-        public static final int shadow_vertical_90=0x7f020046;
-        public static final int share=0x7f020047;
-        public static final int slider_loading=0x7f020048;
-        public static final int transparent_selector=0x7f020049;
+        public static final int shadow_article_widget=0x7f020043;
+        public static final int shadow_author=0x7f020044;
+        public static final int shadow_loading=0x7f020045;
+        public static final int shadow_vertical_270=0x7f020046;
+        public static final int shadow_vertical_90=0x7f020047;
+        public static final int share=0x7f020048;
+        public static final int slider_loading=0x7f020049;
+        public static final int transparent_selector=0x7f02004a;
     }
     public static final class id {
         public static final int App=0x7f0c002b;
