@@ -1,19 +1,21 @@
 package com.pk.addits.widget;
 
-import android.app.PendingIntent;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pk.addits.data.DatabaseHelper;
+import com.pk.addits.models.Article;
+
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import com.pk.addits.ActivityMain;
-import com.pk.addits.R;
-
-public class WidgetStackProvider extends AppWidgetProvider
+public class WidgetArticleProvider extends AppWidgetProvider
 {
+	public static DatabaseHelper db = null;
+	private List<Article> articleList = new ArrayList<Article>();
+	
 	public static final String ARTICLE_ACTION = "com.pk.addits.widget.ARTICLE_ACTION";
 	public static final String EXTRA_ID = "com.pk.addits.widget.EXTRA_ID";
 	
@@ -35,32 +37,35 @@ public class WidgetStackProvider extends AppWidgetProvider
 	@Override
 	public void onEnabled(Context context)
 	{
+		db = new DatabaseHelper(context);
+		articleList = db.getAllArticles();
+		
 		super.onEnabled(context);
 	}
 	
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		//AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-		if (intent.getAction().equals(TOAST_ACTION))
+		// AppWidgetManager mgr = AppWidgetManager.getInstance(context);
+		/*if (intent.getAction().equals(TOAST_ACTION))
 		{
-			//int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+			// int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 			int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
 			int viewID = intent.getIntExtra(EXTRA_ID, 0);
 			Toast.makeText(context, "Touched view " + viewIndex + "\nID: " + viewID, Toast.LENGTH_SHORT).show();
 		}
 		if (intent.getAction().equals(ARTICLE_ACTION))
 		{
-			//int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+			// int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 			int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
 			Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
-
+			
 			int viewID = intent.getIntExtra(EXTRA_ID, 0);
 			Intent articleIntent = new Intent(context, ActivityMain.class);
 			articleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			articleIntent.putExtra(EXTRA_ID, viewID);
 			context.startActivity(articleIntent);
-		}
+		}*/
 		super.onReceive(context, intent);
 	}
 	
@@ -68,7 +73,7 @@ public class WidgetStackProvider extends AppWidgetProvider
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
 		// update each of the widgets with the remote adapter
-		for (int i = 0; i < appWidgetIds.length; ++i)
+		/*for (int i = 0; i < appWidgetIds.length; ++i)
 		{
 			
 			// Here we setup the intent which points to the StackViewService which will
@@ -97,7 +102,7 @@ public class WidgetStackProvider extends AppWidgetProvider
 			rv.setPendingIntentTemplate(R.id.stack_view, toastPendingIntent);
 			
 			appWidgetManager.updateAppWidget(appWidgetIds[i], rv);
-		}
+		}*/
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 }
