@@ -42,18 +42,18 @@ public class WidgetArticleProvider extends AppWidgetProvider
 	public void onDisabled(Context context)
 	{
 		super.onDisabled(context);
-		//ComponentName component = new ComponentName("com.pk.addits", "com.pk.addits.widget.WidgetArticleProvider");
-		//PackageManager pm = context.getPackageManager();
-		//pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+		// ComponentName component = new ComponentName("com.pk.addits", "com.pk.addits.widget.WidgetArticleProvider");
+		// PackageManager pm = context.getPackageManager();
+		// pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
 	}
 	
 	@Override
 	public void onEnabled(Context context)
 	{
 		super.onEnabled(context);
-		//ComponentName component = new ComponentName("com.pk.addits", "com.pk.addits.widget.WidgetArticleProvider");
-		//PackageManager pm = context.getPackageManager();
-		//pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+		// ComponentName component = new ComponentName("com.pk.addits", "com.pk.addits.widget.WidgetArticleProvider");
+		// PackageManager pm = context.getPackageManager();
+		// pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
 	}
 	
 	@Override
@@ -87,20 +87,28 @@ public class WidgetArticleProvider extends AppWidgetProvider
 		public void run()
 		{
 			Random generator = new Random();
-			int r = generator.nextInt(articleList.size());
-			currentArticle = db.getArticle(articleList.get(r).getID());
+			while (true)
+			{
+				int r = generator.nextInt(articleList.size());
+				if (articleList.get(r).getImage().length() > 0)
+				{
+					currentArticle = db.getArticle(articleList.get(r).getID());
+					break;
+				}
+			}
 			remoteViews.setTextViewText(R.id.txtTitle, currentArticle.getTitle());
 			remoteViews.setTextViewText(R.id.txtAuthor, currentArticle.getAuthor());
 			remoteViews.setTextViewText(R.id.txtDate, Data.parseRelativeDate(currentArticle.getDate()));
 			try
 			{
-				Bitmap bm = Picasso.with(mContext).load(currentArticle.getImage()).resize(500, 220).get();
+				Bitmap bm = Picasso.with(mContext).load(currentArticle.getImage()).resize(500, 220).skipCache().get();
 				remoteViews.setImageViewBitmap(R.id.articlePreview, bm);
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
+			
 			appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 		}
 	}
