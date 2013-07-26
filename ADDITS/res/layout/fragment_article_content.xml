@@ -29,7 +29,8 @@
         android:id="@+id/Video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" >
+        android:layout_gravity="center_horizontal"
+        android:foreground="@drawable/transparent_selector" >
 
         <ImageView
             android:id="@+id/VideoPreview"

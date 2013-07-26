@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -449,7 +450,14 @@ public class FragmentArticle extends Fragment
 				
 				String VideoPreviewURL = "http://img.youtube.com/vi/" + Content + "/hqdefault.jpg";
 				Picasso.with(context).load(VideoPreviewURL).error(R.drawable.loading_image_error).skipCache().fit().into(holder.VideoPreview);
-				// TODO Add Video Support
+				holder.Video.setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View view)
+					{
+						context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + Content)));
+					}
+				});
 			}
 			else if (Type == Data.CONTENT_TYPE_APP)
 			{
