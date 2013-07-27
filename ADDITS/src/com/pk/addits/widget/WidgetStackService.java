@@ -108,7 +108,10 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
 		// interim.
 		try
 		{
-			Bitmap bm = Picasso.with(mContext).load(articleList.get(position).getImage()).resize(150, 90).skipCache().get();
+			String IMG = articleList.get(position).getImage();
+			String imgURL = IMG.substring(0, IMG.lastIndexOf(".")) + "-150x150" + IMG.substring(IMG.lastIndexOf("."), IMG.length());
+			
+			Bitmap bm = Picasso.with(mContext).load(imgURL).get();
 			rv.setImageViewBitmap(R.id.widget_image, bm);
 			Thread.sleep(500);
 		}
