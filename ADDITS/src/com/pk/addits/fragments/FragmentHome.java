@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.fragments;
 
 import java.util.List;
 import java.util.Random;
@@ -31,6 +31,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.pk.addits.ActivityMain;
+import com.pk.addits.R;
+import com.pk.addits.Slider;
 import com.pk.addits.data.Data;
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.pk.addits.models.Article;

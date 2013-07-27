@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.fragments;
 
 import java.util.List;
 
@@ -32,6 +32,9 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.pk.addits.ActivityMain;
+import com.pk.addits.R;
+import com.pk.addits.URLImageParser;
 import com.pk.addits.data.Data;
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.pk.addits.models.Article;

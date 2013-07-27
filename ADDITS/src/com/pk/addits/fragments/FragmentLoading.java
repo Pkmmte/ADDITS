@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.fragments;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.pk.addits.R;
 
 public class FragmentLoading extends Fragment
 {

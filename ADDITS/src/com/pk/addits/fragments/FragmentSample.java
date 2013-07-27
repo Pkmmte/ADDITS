@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.pk.addits.R;
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 
 public class FragmentSample extends Fragment
