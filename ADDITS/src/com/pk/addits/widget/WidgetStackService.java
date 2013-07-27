@@ -100,7 +100,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
 		extras.putInt(WidgetStackProvider.EXTRA_ID, articleList.get(position).getID());
 		Intent fillInIntent = new Intent();
 		fillInIntent.putExtras(extras);
-		rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+		rv.setOnClickFillInIntent(R.id.widget_parent, fillInIntent);
 		
 		// You can do heaving lifting in here, synchronously. For example, if you need to
 		// process an image, fetch something from the network, etc., it is ok to do it here,

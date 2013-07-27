@@ -4,6 +4,7 @@
     android:initialLayout="@layout/widget_stack"
     android:minHeight="110dip"
     android:minWidth="180dip"
+    android:previewImage="@drawable/widget_stack_preview"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="keyguard|home_screen" >
 
