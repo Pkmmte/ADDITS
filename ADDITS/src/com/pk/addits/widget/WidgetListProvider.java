@@ -21,9 +21,7 @@ public class WidgetListProvider extends AppWidgetProvider
 	@Override
 	public void onEnabled(Context context)
 	{
-		// super.onEnabled(context);
-		
-		Toast.makeText(context, "OnEnabled!", Toast.LENGTH_SHORT).show();
+		super.onEnabled(context);
 	}
 	
 	@Override

@@ -154,7 +154,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		if(getIntent().hasExtra(WidgetStackProvider.EXTRA_ID))
 		{
-			Article article = db.getArticle(getIntent().getExtras().getInt(WidgetStackProvider.EXTRA_ID) - 1);
+			Toast.makeText(ActivityMain.this, "EXTRA_ID: " + getIntent().getExtras().getInt(WidgetStackProvider.EXTRA_ID), Toast.LENGTH_SHORT).show();
+			Article article = db.getArticle(getIntent().getExtras().getInt(WidgetStackProvider.EXTRA_ID));
+			Toast.makeText(ActivityMain.this, "ID: " + article.getID(), Toast.LENGTH_SHORT).show();
 			fromWidget = true;
 			callArticle(ActivityMain.this, article, 0, 0);
 		}
