@@ -59,17 +59,11 @@ public class WidgetListProvider extends AppWidgetProvider
 			
 			widget.setRemoteAdapter(R.id.articles, svcIntent);
 			
-			//Intent clickIntent = new Intent(context, ActivityMain.class);
-			//PendingIntent clickPI = PendingIntent.getActivity(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			
-			//widget.setPendingIntentTemplate(R.id.articles, clickPI);
-			
 			Intent clickIntent = new Intent(context, WidgetListProvider.class);
 			clickIntent.setAction(WidgetListProvider.ARTICLE_ACTION);
 			clickIntent.setData(Uri.parse(clickIntent.toUri(Intent.URI_INTENT_SCHEME)));
 			PendingIntent clickPI = PendingIntent.getBroadcast(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			widget.setPendingIntentTemplate(R.id.articles, clickPI);
-			
 			
 			appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
 		}

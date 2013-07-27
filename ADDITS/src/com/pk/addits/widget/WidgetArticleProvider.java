@@ -7,13 +7,17 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.widget.RemoteViews;
 
+import com.pk.addits.ActivityMain;
 import com.pk.addits.R;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
@@ -107,6 +111,11 @@ public class WidgetArticleProvider extends AppWidgetProvider
 			{
 				e.printStackTrace();
 			}
+			
+			Intent clickIntent = new Intent(mContext, ActivityMain.class);
+			clickIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			clickIntent.putExtra(EXTRA_ID, currentArticle.getID());
+			remoteViews.setOnClickFillInIntent(R.id.articlePreview, clickIntent);
 			
 			appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 		}
