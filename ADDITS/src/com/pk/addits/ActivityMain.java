@@ -439,11 +439,12 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			{
 				newFound = true;
 				newChecked = true;
-				return;
+				Toast.makeText(ActivityMain.this, "I found a new guy! :D", Toast.LENGTH_SHORT).show();
+				break;
 			}
 		}
-		newChecked = true;
-		return;
+		//newChecked = true;
+		//return;
 	}
 	
 	//public static void overwriteFeedXML()
@@ -550,8 +551,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						
 						try
 						{
-							AjaxCallback<JSONObject> cb = new AjaxCallback<JSONObject>();
-							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
+							AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
+							cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "checkNew");
+							//aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
 							aq.sync(cb);
 							
 							//while (true)

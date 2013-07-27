@@ -112,6 +112,12 @@ public class WidgetArticleProvider extends AppWidgetProvider
 				e.printStackTrace();
 			}
 			
+			Intent appIntent = new Intent(mContext, ActivityMain.class);
+			appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			appIntent.putExtra(EXTRA_ID, currentArticle.getID());
+			PendingIntent appPI = PendingIntent.getActivity(mContext, 0, appIntent, 0);
+			remoteViews.setOnClickPendingIntent(R.id.appButton, appPI);
+			
 			Intent articleIntent = new Intent(mContext, ActivityMain.class);
 			articleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			articleIntent.putExtra(EXTRA_ID, currentArticle.getID());
