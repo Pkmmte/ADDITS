@@ -18,7 +18,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_margin="7dp"
-        android:background="@color/transparent"
+        android:background="@drawable/transparent_selector"
         android:contentDescription="@string/placeholder"
         android:src="@drawable/ic_ab_logo" />
 
@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
             android:layout_marginRight="7dp"
@@ -45,10 +45,11 @@
             android:layout_height="wrap_content" >
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/refreshButton"
                 android:orientation="vertical" >
 
                 <TextView

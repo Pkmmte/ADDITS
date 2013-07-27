@@ -104,7 +104,7 @@ public class WidgetArticleProvider extends AppWidgetProvider
 			remoteViews.setTextViewText(R.id.txtDate, Data.parseRelativeDate(currentArticle.getDate()));
 			try
 			{
-				Bitmap bm = Picasso.with(mContext).load(currentArticle.getImage()).resize(500, 220).skipCache().get();
+				Bitmap bm = Picasso.with(mContext).load(currentArticle.getImage()).skipCache().get();
 				remoteViews.setImageViewBitmap(R.id.articlePreview, bm);
 			}
 			catch (IOException e)
@@ -112,11 +112,14 @@ public class WidgetArticleProvider extends AppWidgetProvider
 				e.printStackTrace();
 			}
 			
-			Intent clickIntent = new Intent(mContext, ActivityMain.class);
-			clickIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			clickIntent.putExtra(EXTRA_ID, currentArticle.getID());
-			PendingIntent clickPI = PendingIntent.getActivity(mContext, 0, clickIntent, 0);
-			remoteViews.setOnClickPendingIntent(R.id.txtTitle, clickPI);
+			Intent articleIntent = new Intent(mContext, ActivityMain.class);
+			articleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			articleIntent.putExtra(EXTRA_ID, currentArticle.getID());
+			PendingIntent articlePI = PendingIntent.getActivity(mContext, 0, articleIntent, 0);
+			remoteViews.setOnClickPendingIntent(R.id.txtTitle, articlePI);
+			remoteViews.setOnClickPendingIntent(R.id.txtAuthor, articlePI);
+			remoteViews.setOnClickPendingIntent(R.id.txtDate, articlePI);
+			remoteViews.setOnClickPendingIntent(R.id.articlePreview, articlePI);
 			
 			appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 		}

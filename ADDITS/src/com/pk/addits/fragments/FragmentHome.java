@@ -235,7 +235,7 @@ public class FragmentHome extends Fragment
 		String sImage = "";
 		String sCategory = "";
 		
-		if (ActivityMain.articleList != null)
+		if (ActivityMain.articleList != null && ActivityMain.articleList.size() > 0)
 		{
 			Random generator = new Random();
 			int r = generator.nextInt(ActivityMain.articleList.size());
