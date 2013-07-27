@@ -57,7 +57,6 @@ import com.pk.addits.fragments.FragmentReviews;
 import com.pk.addits.fragments.FragmentSample;
 import com.pk.addits.fragments.FragmentTutorials;
 import com.pk.addits.models.Article;
-import com.pk.addits.widget.WidgetStackProvider;
 import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
@@ -152,10 +151,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		imageExpanded = false;
 		inBackground = false;
 		
-		if(getIntent().hasExtra(WidgetStackProvider.EXTRA_ID))
+		if(getIntent().hasExtra(Data.EXTRA_ID))
 		{
-			Toast.makeText(ActivityMain.this, "EXTRA_ID: " + getIntent().getExtras().getInt(WidgetStackProvider.EXTRA_ID), Toast.LENGTH_SHORT).show();
-			Article article = db.getArticle(getIntent().getExtras().getInt(WidgetStackProvider.EXTRA_ID));
+			Toast.makeText(ActivityMain.this, "EXTRA_ID: " + getIntent().getExtras().getInt(Data.EXTRA_ID), Toast.LENGTH_SHORT).show();
+			Article article = db.getArticle(getIntent().getExtras().getInt(Data.EXTRA_ID));
 			Toast.makeText(ActivityMain.this, "ID: " + article.getID(), Toast.LENGTH_SHORT).show();
 			fromWidget = true;
 			callArticle(ActivityMain.this, article, 0, 0);

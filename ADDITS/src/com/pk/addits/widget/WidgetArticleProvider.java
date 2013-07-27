@@ -14,7 +14,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.widget.RemoteViews;
 
 import com.pk.addits.ActivityMain;
@@ -28,12 +27,6 @@ public class WidgetArticleProvider extends AppWidgetProvider
 {
 	public static DatabaseHelper db = null;
 	private List<Article> articleList = new ArrayList<Article>();
-	
-	public static final String ARTICLE_ACTION = "com.pk.addits.widget.ARTICLE_ACTION";
-	public static final String EXTRA_ID = "com.pk.addits.widget.EXTRA_ID";
-	
-	public static final String TOAST_ACTION = "com.example.android.stackwidget.TOAST_ACTION";
-	public static final String EXTRA_ITEM = "com.example.android.stackwidget.EXTRA_ITEM";
 	
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds)
@@ -114,13 +107,13 @@ public class WidgetArticleProvider extends AppWidgetProvider
 			
 			Intent appIntent = new Intent(mContext, ActivityMain.class);
 			appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			appIntent.putExtra(EXTRA_ID, currentArticle.getID());
+			appIntent.putExtra(Data.EXTRA_ID, currentArticle.getID());
 			PendingIntent appPI = PendingIntent.getActivity(mContext, 0, appIntent, 0);
 			remoteViews.setOnClickPendingIntent(R.id.appButton, appPI);
 			
 			Intent articleIntent = new Intent(mContext, ActivityMain.class);
 			articleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			articleIntent.putExtra(EXTRA_ID, currentArticle.getID());
+			articleIntent.putExtra(Data.EXTRA_ID, currentArticle.getID());
 			PendingIntent articlePI = PendingIntent.getActivity(mContext, 0, articleIntent, 0);
 			remoteViews.setOnClickPendingIntent(R.id.txtTitle, articlePI);
 			remoteViews.setOnClickPendingIntent(R.id.txtAuthor, articlePI);

@@ -11,6 +11,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.pk.addits.R;
+import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
 import com.pk.addits.models.Article;
 import com.squareup.picasso.Picasso;
@@ -96,8 +97,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
 		// Next, we set a fill-intent which will be used to fill-in the pending intent template
 		// which is set on the collection view in StackWidgetProvider.
 		Bundle extras = new Bundle();
-		extras.putInt(WidgetStackProvider.EXTRA_ITEM, position);
-		extras.putInt(WidgetStackProvider.EXTRA_ID, articleList.get(position).getID());
+		extras.putInt(Data.EXTRA_ID, articleList.get(position).getID());
 		Intent fillInIntent = new Intent();
 		fillInIntent.putExtras(extras);
 		rv.setOnClickFillInIntent(R.id.widget_parent, fillInIntent);

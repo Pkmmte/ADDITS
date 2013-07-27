@@ -7,17 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.pk.addits.ActivityMain;
 import com.pk.addits.R;
+import com.pk.addits.data.Data;
 
 public class WidgetListProvider extends AppWidgetProvider
 {
-	public static String EXTRA_ID = "com.pk.addits.widget.EXTRA_ID";
-	public static final String ARTICLE_ACTION = "com.pk.addits.widget.ARTICLE_ACTION";
-	public static final String REFRESH_ACTION = "com.pk.addits.widget.REFRESH_ACTION";
-	
 	@Override
 	public void onEnabled(Context context)
 	{
@@ -29,16 +25,16 @@ public class WidgetListProvider extends AppWidgetProvider
 	{
 		super.onReceive(context, intent);
 		
-		if (intent.getAction().equals(REFRESH_ACTION))
+		if (intent.getAction().equals(Data.REFRESH_ACTION))
 		{
 			/* Do update */
 		}
-		else if(intent.getAction().equals(ARTICLE_ACTION))
+		else if(intent.getAction().equals(Data.ARTICLE_ACTION))
 		{
-			int viewID = intent.getIntExtra(EXTRA_ID, 1);
+			int viewID = intent.getIntExtra(Data.EXTRA_ID, 1);
 			Intent articleIntent = new Intent(context, ActivityMain.class);
 			articleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			articleIntent.putExtra(EXTRA_ID, viewID);
+			articleIntent.putExtra(Data.EXTRA_ID, viewID);
 			context.startActivity(articleIntent);
 		}
 	}
@@ -58,7 +54,7 @@ public class WidgetListProvider extends AppWidgetProvider
 			widget.setRemoteAdapter(R.id.articles, svcIntent);
 			
 			Intent clickIntent = new Intent(context, WidgetListProvider.class);
-			clickIntent.setAction(WidgetListProvider.ARTICLE_ACTION);
+			clickIntent.setAction(Data.ARTICLE_ACTION);
 			clickIntent.setData(Uri.parse(clickIntent.toUri(Intent.URI_INTENT_SCHEME)));
 			PendingIntent clickPI = PendingIntent.getBroadcast(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			widget.setPendingIntentTemplate(R.id.articles, clickPI);

@@ -11,6 +11,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.pk.addits.R;
+import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
 import com.pk.addits.models.Article;
 import com.squareup.picasso.Picasso;
@@ -56,7 +57,7 @@ public class WidgetListViewsFactory implements RemoteViewsService.RemoteViewsFac
 		
 		Intent i = new Intent();
 		Bundle extras = new Bundle();
-		extras.putInt(WidgetListProvider.EXTRA_ID, currentArticle.getID());
+		extras.putInt(Data.EXTRA_ID, currentArticle.getID());
 		i.putExtras(extras);
 		
 		row.setOnClickFillInIntent(R.id.row_item, i);

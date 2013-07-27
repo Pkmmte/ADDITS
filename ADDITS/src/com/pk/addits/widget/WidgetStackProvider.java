@@ -7,19 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.pk.addits.ActivityMain;
 import com.pk.addits.R;
+import com.pk.addits.data.Data;
 
 public class WidgetStackProvider extends AppWidgetProvider
 {
-	public static final String ARTICLE_ACTION = "com.pk.addits.widget.ARTICLE_ACTION";
-	public static final String EXTRA_ID = "com.pk.addits.widget.EXTRA_ID";
-	
-	public static final String TOAST_ACTION = "com.example.android.stackwidget.TOAST_ACTION";
-	public static final String EXTRA_ITEM = "com.example.android.stackwidget.EXTRA_ITEM";
-	
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds)
 	{
@@ -41,24 +35,12 @@ public class WidgetStackProvider extends AppWidgetProvider
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		//AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-		if (intent.getAction().equals(TOAST_ACTION))
+		if (intent.getAction().equals(Data.ARTICLE_ACTION))
 		{
-			//int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-			int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-			int viewID = intent.getIntExtra(EXTRA_ID, 0);
-			Toast.makeText(context, "Touched view " + viewIndex + "\nID: " + viewID, Toast.LENGTH_SHORT).show();
-		}
-		if (intent.getAction().equals(ARTICLE_ACTION))
-		{
-			//int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-			int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
-			Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
-
-			int viewID = intent.getIntExtra(EXTRA_ID, 0);
+			int viewID = intent.getIntExtra(Data.EXTRA_ID, 0);
 			Intent articleIntent = new Intent(context, ActivityMain.class);
 			articleIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			articleIntent.putExtra(EXTRA_ID, viewID);
+			articleIntent.putExtra(Data.EXTRA_ID, viewID);
 			context.startActivity(articleIntent);
 		}
 		super.onReceive(context, intent);
@@ -90,7 +72,7 @@ public class WidgetStackProvider extends AppWidgetProvider
 			// setup a pending intent template, and the individual items can set a fillInIntent
 			// to create unique before on an item to item basis.
 			Intent toastIntent = new Intent(context, WidgetStackProvider.class);
-			toastIntent.setAction(WidgetStackProvider.ARTICLE_ACTION);
+			toastIntent.setAction(Data.ARTICLE_ACTION);
 			toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 			intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 			PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent, PendingIntent.FLAG_UPDATE_CURRENT);

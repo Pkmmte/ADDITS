@@ -61,6 +61,10 @@ public class Data
 	public static final Integer CONTENT_TYPE_VIDEO = 3;
 	public static final Integer CONTENT_TYPE_APP = 4;
 	
+	public static final String EXTRA_ID = "com.pk.addits.widget.EXTRA_ID";
+	public static final String ARTICLE_ACTION = "com.pk.addits.widget.ARTICLE_ACTION";
+	public static final String REFRESH_ACTION = "com.pk.addits.widget.REFRESH_ACTION";
+	
 	public static int getWidthByPercent(Context context, double percent)
 	{
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
