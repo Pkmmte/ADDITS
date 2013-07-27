@@ -3,8 +3,6 @@ package com.pk.addits;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONObject;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -102,8 +100,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	FragmentManager fragmentManager;
 	private boolean newFound;
 	private boolean fragmentLoaded;
-	private boolean newChecked;
-	private boolean feedDownloaded;
 	private boolean fromWidget;
 	
 	public static boolean imageExpanded;
@@ -153,8 +149,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		initializeNavigationDrawer();
 		aq = new AQuery(ActivityMain.this);
 		newFound = false;
-		newChecked = false;
-		feedDownloaded = false;
 		imageExpanded = false;
 		inBackground = false;
 		
@@ -396,15 +390,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right).replace(R.id.content_frame, fragment).commit();
 	}
 	
-	//public static Article[] getFeed()
-	//{
-	//	return NewsFeed;
-	//}
-	
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
 	{
 		List<XmlDom> entries = xml.tags("item");
-		//NewsFeed = new Article[entries.size()];
 		int count = 0;
 		
 		for (XmlDom item : entries)
@@ -420,11 +408,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			String URL = item.text("link");
 			
 			articleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
-			//NewsFeed[count] = new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false);
 			count++;
 		}
 		
-		feedDownloaded = true;
 		return;
 	}
 	
@@ -438,19 +424,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			if (Data.isNewerDate(date, articleList.get(0).getDate()))
 			{
 				newFound = true;
-				newChecked = true;
 				Toast.makeText(ActivityMain.this, "I found a new guy! :D", Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
-		//newChecked = true;
-		//return;
 	}
-	
-	//public static void overwriteFeedXML()
-	//{
-	//	Data.overwriteFeedXML(NewsFeed);
-	//}
 	
 	private void initializeEmptyFeedThread()
 	{
@@ -468,17 +446,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						try
 						{
 							articleList = new ArrayList<Article>();
-							//mHandler.post(new aqDownloadFeed());
 							AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
 							cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
-							//aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 							aq.sync(cb);
 							
-							//while (true)
-							//{
-							//	if (feedDownloaded)
-							//		break;
-							//}
 							
 							if(!inBackground)
 								mHandler.post(new showProgress2("Writing content..."));
@@ -534,7 +505,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						mHandler.post(new showProgress("Loading feed...", true, true, false));
 					
 					articleList = db.getAllArticles();
-					//NewsFeed = Data.retrieveFeed().clone();
 					Log.v("Feed Loaded! ", "" + articleList.size());
 					
 					if(!fromWidget && !inBackground)
@@ -555,14 +525,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						{
 							AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
 							cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "checkNew");
-							//aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "checkNew");
 							aq.sync(cb);
-							
-							//while (true)
-							//{
-							//	if (newChecked)
-							//		break;
-							//}
 							
 							if (newFound)
 							{
@@ -572,14 +535,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								// TODO Make sure read/favorite params don't get overwritten
 								AjaxCallback<XmlDom> cbs = new AjaxCallback<XmlDom>();
 								cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
-								//aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 								aq.sync(cbs);
-								
-								//while (true)
-								//{
-								//	if (feedDownloaded)
-								//		break;
-								//}
 								
 								if(!inBackground)
 									mHandler.post(new showProgress("Writing content...", true, false, false));
@@ -588,7 +544,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								{
 									db.addArticle(articleList.get(x));
 								}
-								//Data.overwriteFeedXML(NewsFeed);
 								Log.v("Happy Face", " New stuff found!");
 							}
 							else
@@ -739,15 +694,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		{
 			selectItem(0);
 			fragmentLoaded = true;
-		}
-	}
-	
-	public class aqDownloadFeed implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 		}
 	}
 	
