@@ -59,9 +59,7 @@ public class WidgetListViewsFactory implements RemoteViewsService.RemoteViewsFac
 		extras.putInt(WidgetListProvider.EXTRA_ID, currentArticle.getID());
 		i.putExtras(extras);
 		
-		row.setOnClickFillInIntent(R.id.txtTitle, i);
-		row.setOnClickFillInIntent(R.id.txtDescription, i);
-		row.setOnClickFillInIntent(R.id.imgPreview, i);
+		row.setOnClickFillInIntent(R.id.row_item, i);
 		
 		if (articleList.get(position).getImage().length() > 0)
 		{
