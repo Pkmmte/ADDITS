@@ -73,7 +73,7 @@
         </receiver>
 
         <service
-            android:name="com.pk.addits.widget.WidgetService"
+            android:name="com.pk.addits.widget.WidgetListService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
