@@ -4,6 +4,7 @@
     android:initialLayout="@layout/widget_list"
     android:minHeight="110dip"
     android:minWidth="250dp"
+    android:previewImage="@drawable/widget_list_preview"
     android:resizeMode="vertical|horizontal"
     android:updatePeriodMillis="10000"
     android:widgetCategory="keyguard|home_screen" />

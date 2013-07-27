@@ -162,6 +162,7 @@ public final class R {
         public static final int slider_loading=0x7f020049;
         public static final int transparent_selector=0x7f02004a;
         public static final int transparent_selector2=0x7f02004b;
+        public static final int widget_list_preview=0x7f02004c;
     }
     public static final class id {
         public static final int App=0x7f0c002b;
