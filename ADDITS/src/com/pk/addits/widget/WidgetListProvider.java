@@ -14,8 +14,7 @@ import com.pk.addits.R;
 
 public class WidgetListProvider extends AppWidgetProvider
 {
-	public static String EXTRA_WORD = "com.commonsware.android.appwidget.lorem.WORD";
-	public static int CHOSEN_PROFILE;
+	public static String EXTRA_ID = "com.pk.addits.widget.EXTRA_ID";
 	
 	@Override
 	public void onEnabled(Context context)
@@ -37,27 +36,27 @@ public class WidgetListProvider extends AppWidgetProvider
 	}
 	
 	@Override
-	public void onUpdate(Context ctxt, AppWidgetManager appWidgetManager, int[] appWidgetIds)
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
 		for (int i = 0; i < appWidgetIds.length; i++)
 		{
-			Intent svcIntent = new Intent(ctxt, WidgetListService.class);
+			Intent svcIntent = new Intent(context, WidgetListService.class);
 			
 			svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
 			svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
 			
-			RemoteViews widget = new RemoteViews(ctxt.getPackageName(), R.layout.widget_list);
+			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.widget_list);
 			
 			widget.setRemoteAdapter(R.id.articles, svcIntent);
 			
-			Intent clickIntent = new Intent(ctxt, ActivityMain.class);
-			PendingIntent clickPI = PendingIntent.getActivity(ctxt, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			Intent clickIntent = new Intent(context, ActivityMain.class);
+			PendingIntent clickPI = PendingIntent.getActivity(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			
 			widget.setPendingIntentTemplate(R.id.articles, clickPI);
 			
 			appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
 		}
 		
-		super.onUpdate(ctxt, appWidgetManager, appWidgetIds);
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 }

@@ -17,18 +17,13 @@ import com.squareup.picasso.Picasso;
 
 public class WidgetListViewsFactory implements RemoteViewsService.RemoteViewsFactory
 {
-	public static DatabaseHelper db = null;
+	private DatabaseHelper db = null;
 	private List<Article> articleList = new ArrayList<Article>();
-	// private static final String[] items = { "lorem", "ipsum", "dolor", "sit", "amet", "consectetuer", "adipiscing", "elit", "morbi", "vel", "ligula", "vitae", "arcu", "aliquet", "mollis", "etiam",
-	// "vel", "erat", "placerat", "ante", "porttitor", "sodales", "pellentesque", "augue", "purus" };
 	private Context cntxt = null;
-	
-	// private int appWidgetId;
 	
 	public WidgetListViewsFactory(Context context, Intent intent)
 	{
 		this.cntxt = context;
-		// appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 		db = new DatabaseHelper(context);
 	}
 	
@@ -61,10 +56,12 @@ public class WidgetListViewsFactory implements RemoteViewsService.RemoteViewsFac
 		
 		Intent i = new Intent();
 		Bundle extras = new Bundle();
-		
-		extras.putString(WidgetListProvider.EXTRA_WORD, currentArticle.getTitle());
+		extras.putInt(WidgetListProvider.EXTRA_ID, currentArticle.getID());
 		i.putExtras(extras);
+		
 		row.setOnClickFillInIntent(R.id.txtTitle, i);
+		row.setOnClickFillInIntent(R.id.txtDescription, i);
+		row.setOnClickFillInIntent(R.id.imgPreview, i);
 		
 		if (articleList.get(position).getImage().length() > 0)
 		{
