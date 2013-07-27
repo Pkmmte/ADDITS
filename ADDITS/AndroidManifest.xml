@@ -31,7 +31,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.pk.addits.widget.WidgetStackProvider" >
+        <receiver
+            android:name="com.pk.addits.widget.WidgetStackProvider"
+            android:label="@string/widget_stack" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -46,7 +48,9 @@
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <receiver android:name="com.pk.addits.widget.WidgetArticleProvider" >
+        <receiver
+            android:name="com.pk.addits.widget.WidgetArticleProvider"
+            android:label="@string/widget_article" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -55,6 +59,22 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/article_widget_provider" />
         </receiver>
+        <receiver
+            android:name="com.pk.addits.widget.WidgetListProvider"
+            android:label="@string/widget_list" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/list_widget_provider" />
+        </receiver>
+
+        <service
+            android:name="com.pk.addits.widget.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

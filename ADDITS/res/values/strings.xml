@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Android Dissected</string>
-	<string name="drawer_open">Open drawer</string>
+    <string name="drawer_open">Open drawer</string>
     <string name="drawer_close">close_drawer</string>
     <string name="choose_item">Choose an item</string>
     <string name="placeholder">Value</string>
@@ -9,8 +9,7 @@
     <string name="loren_ipsum">Some sample text to show what this could look like with a review here. 
         \n Blah Blah Blah. ADDITS is pretty cool. But the1dynasty is the best!
         \n Grab my new app below. Just kidding. there are no links here :P</string>
-        
-    
+
     <!-- Dummy Text -->
     <string name="dummy_desc">Some sample text to show what this could look like with a review here. 
         \n Blah Blah Blah. ADDITS is pretty cool. But the1dynasty is the best!
@@ -21,5 +20,8 @@
     <string name="dummy_comments">Load Comments</string>
     <string name="dummy_category">Articles</string>
     <string name="get_it_on_google_play">Get it on Google Play</string>
-    
+    <string name="widget_stack">ADDITS Stack</string>
+    <string name="widget_article">ADDITS Article</string>
+    <string name="widget_list">ADDITS List</string>
+
 </resources>

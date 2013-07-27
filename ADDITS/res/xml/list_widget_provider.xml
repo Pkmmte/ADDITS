@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:autoAdvanceViewId="@+id/articles"
+    android:initialLayout="@layout/widget_list"
+    android:minHeight="110dip"
+    android:minWidth="180dp"
+    android:resizeMode="vertical"
+    android:updatePeriodMillis="1000" />
