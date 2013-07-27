@@ -66,7 +66,7 @@ public class WidgetArticleProvider extends AppWidgetProvider
 		articleList = db.getAllArticles();
 		
 		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(new MyTime(context, appWidgetManager), 1, 10000);
+		timer.scheduleAtFixedRate(new MyTime(context, appWidgetManager), 1, 300000);
 	}
 	
 	private class MyTime extends TimerTask
@@ -115,7 +115,8 @@ public class WidgetArticleProvider extends AppWidgetProvider
 			Intent clickIntent = new Intent(mContext, ActivityMain.class);
 			clickIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			clickIntent.putExtra(EXTRA_ID, currentArticle.getID());
-			remoteViews.setOnClickFillInIntent(R.id.articlePreview, clickIntent);
+			PendingIntent clickPI = PendingIntent.getActivity(mContext, 0, clickIntent, 0);
+			remoteViews.setOnClickPendingIntent(R.id.txtTitle, clickPI);
 			
 			appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 		}
