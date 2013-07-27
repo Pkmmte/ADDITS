@@ -469,8 +469,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						{
 							articleList = new ArrayList<Article>();
 							//mHandler.post(new aqDownloadFeed());
-							AjaxCallback<JSONObject> cb = new AjaxCallback<JSONObject>();
-							aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+							AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
+							cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
+							//aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 							aq.sync(cb);
 							
 							//while (true)
@@ -485,7 +486,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								db.addArticle(articleList.get(x));
 							
 							if(!inBackground)
-							{	mHandler.post(new showProgress2("Everything is up to date!"));
+							{
+								mHandler.post(new showProgress2("Everything is up to date!"));
 								mHandler.postDelayed(new showProgress2(""), 3500);
 							}
 						}
@@ -568,8 +570,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 									mHandler.post(new showProgress("Updating content...", true, false, false));
 								
 								// TODO Make sure read/favorite params don't get overwritten
-								AjaxCallback<JSONObject> cbs = new AjaxCallback<JSONObject>();
-								aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
+								AjaxCallback<XmlDom> cbs = new AjaxCallback<XmlDom>();
+								cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
+								//aq.ajax(Data.FEED_URL, XmlDom.class, ActivityMain.this, "downloadFeed");
 								aq.sync(cbs);
 								
 								//while (true)
