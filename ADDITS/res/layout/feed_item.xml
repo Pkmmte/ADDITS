@@ -11,8 +11,10 @@
         android:id="@+id/Card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/margin_small"
-        android:layout_marginRight="@dimen/margin_small"
+        android:layout_marginLeft="@dimen/article_card_margin"
+        android:layout_marginRight="@dimen/article_card_margin"
+        android:layout_marginBottom="@dimen/article_card_spacing"
+        android:layout_marginTop="@dimen/article_card_spacing"
         android:background="@drawable/card_bg"
         android:orientation="vertical" >
 
