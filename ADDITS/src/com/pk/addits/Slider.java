@@ -97,7 +97,7 @@ public class Slider extends Fragment
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_banner).fit().into(imgImage);
 		
-		imgImage.setScaleType(ScaleType.CENTER_CROP);
-		imgImage.setAdjustViewBounds(false);
+		//imgImage.setScaleType(ScaleType.CENTER_CROP);
+		//imgImage.setAdjustViewBounds(false);
 	}
 }

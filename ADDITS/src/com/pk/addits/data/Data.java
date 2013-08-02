@@ -52,8 +52,8 @@ public class Data
 	public static final String PREF_TAG_FIRST_TIME = "First Time";
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";
-	public static final String FEED_URL = "http://addits.androiddissected.com/feed/";
-	public static final String MAIN_URL = "http://addits.androiddissected.com/";
+	public static final String FEED_URL = "http://www.androiddissected.com/feed/";
+	public static final String MAIN_URL = "http://www.androiddissected.com/";
 	public static final String TEMP_TAG = "temporary.xml";
 	
 	public static final Integer CONTENT_TYPE_TEXT = 1;
