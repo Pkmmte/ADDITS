@@ -67,20 +67,24 @@ public final class R {
         public static final int abs__action_bar_default_height=0x7f0b0000;
         public static final int divider_thick=0x7f0b0009;
         /**  Dividers 
+ Dividers 
          */
         public static final int divider_thin=0x7f0b0008;
         /**  Images 
+ Images 
          */
         public static final int feed_image=0x7f0b000a;
         public static final int margin_large=0x7f0b0007;
         public static final int margin_medium=0x7f0b0006;
         /**  Margins 
+ Margins 
          */
         public static final int margin_small=0x7f0b0005;
         public static final int slider_image=0x7f0b000b;
         public static final int text_primary=0x7f0b0003;
         public static final int text_secondary=0x7f0b0004;
         /**  Fonts 
+ Fonts 
          */
         public static final int text_title=0x7f0b0001;
         public static final int text_title_med=0x7f0b0002;

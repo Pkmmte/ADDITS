@@ -1,6 +1,8 @@
 package com.pk.addits;
 
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -92,12 +94,37 @@ public class Slider extends Fragment
 	
 	public void setImage()
 	{
+		DownloadImage task = new DownloadImage();
 		if (ImageURL.length() > 0)
-			Picasso.with(getActivity()).load(ImageURL).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().into(imgImage);
+			task.execute(ImageURL);
+			//Picasso.with(getActivity()).load(ImageURL).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().into(imgImage);
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_banner).fit().into(imgImage);
 		
 		//imgImage.setScaleType(ScaleType.CENTER_CROP);
 		//imgImage.setAdjustViewBounds(false);
+	}
+	
+	private class DownloadImage extends AsyncTask<String, Void, Bitmap>
+	{
+        @Override
+        protected Bitmap doInBackground(String... param)
+		{
+			try
+			{
+            	return Picasso.with(getActivity()).load(param[0]).skipCache().get();
+        	}
+			catch (Exception e)
+			{
+				return null;
+			}
+		}
+		
+        @Override
+        protected void onPostExecute(Bitmap result)
+		{
+			if(result != null)
+            	imgImage.setImageBitmap(result);
+        }
 	}
 }
