@@ -57,8 +57,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginBottom="@dimen/margin_medium"
-                        android:layout_marginTop="@dimen/margin_medium"
+                        android:layout_marginBottom="@dimen/margin_feed_category"
+                        android:layout_marginTop="@dimen/margin_feed_category"
                         android:background="@color/addits_green" >
 
                         <TextView
@@ -70,7 +70,7 @@
                             android:text="@string/dummy_category"
                             android:textAllCaps="true"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/text_primary" />
+                            android:textSize="@dimen/text_feed_category" />
                     </LinearLayout>
 
                     <TextView
@@ -82,7 +82,7 @@
                         android:fontFamily="serif"
                         android:padding="@dimen/margin_medium"
                         android:text="@string/dummy_date"
-                        android:textSize="@dimen/text_secondary" />
+                        android:textSize="@dimen/text_feed_date" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -98,7 +98,7 @@
                         android:maxLines="2"
                         android:padding="@dimen/margin_medium"
                         android:text="@string/dummy_title"
-                        android:textSize="@dimen/text_title" />
+                        android:textSize="@dimen/text_feed_title" />
 
                     <TextView
                         android:id="@+id/txtDescription"

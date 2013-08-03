@@ -65,24 +65,27 @@ public final class R {
     }
     public static final class dimen {
         public static final int abs__action_bar_default_height=0x7f0b0000;
-        public static final int article_card_margin=0x7f0b0008;
-        public static final int article_card_spacing=0x7f0b0009;
-        public static final int divider_thick=0x7f0b000b;
+        public static final int article_card_margin=0x7f0b000b;
+        public static final int article_card_spacing=0x7f0b000c;
+        public static final int divider_thick=0x7f0b000f;
         /**  Dividers 
  Dividers 
          */
-        public static final int divider_thin=0x7f0b000a;
+        public static final int divider_thin=0x7f0b000e;
         /**  Images 
  Images 
          */
-        public static final int feed_image=0x7f0b000c;
-        public static final int margin_large=0x7f0b0007;
-        public static final int margin_medium=0x7f0b0006;
+        public static final int feed_image=0x7f0b0010;
+        public static final int margin_feed_category=0x7f0b000d;
+        public static final int margin_large=0x7f0b000a;
+        public static final int margin_medium=0x7f0b0009;
         /**  Margins 
  Margins 
          */
-        public static final int margin_small=0x7f0b0005;
-        public static final int slider_image=0x7f0b000d;
+        public static final int margin_small=0x7f0b0008;
+        public static final int text_feed_category=0x7f0b0005;
+        public static final int text_feed_date=0x7f0b0006;
+        public static final int text_feed_title=0x7f0b0007;
         public static final int text_primary=0x7f0b0003;
         public static final int text_secondary=0x7f0b0004;
         /**  Fonts 
@@ -265,12 +268,13 @@ public final class R {
         public static final int fragment_home=0x7f04000d;
         public static final int fragment_home_slider=0x7f04000e;
         public static final int fragment_loading=0x7f04000f;
-        public static final int header_light=0x7f040010;
-        public static final int widget_article=0x7f040011;
-        public static final int widget_list=0x7f040012;
-        public static final int widget_list_item=0x7f040013;
-        public static final int widget_stack=0x7f040014;
-        public static final int widget_stack_item=0x7f040015;
+        public static final int fragment_settings=0x7f040010;
+        public static final int header_light=0x7f040011;
+        public static final int widget_article=0x7f040012;
+        public static final int widget_list=0x7f040013;
+        public static final int widget_list_item=0x7f040014;
+        public static final int widget_stack=0x7f040015;
+        public static final int widget_stack_item=0x7f040016;
     }
     public static final class menu {
         public static final int article=0x7f100000;
