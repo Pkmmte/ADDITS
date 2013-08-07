@@ -741,6 +741,7 @@ public class Data
 		String link = "";
 		try
 		{
+			//String regex = "<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
 			String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
 			Pattern p = Pattern.compile(regex);
 			Matcher m = p.matcher(text);
@@ -751,12 +752,15 @@ public class Data
 				{
 					urlStr = urlStr.substring(1, urlStr.length() - 1);
 				}
-				String format = urlStr.substring(urlStr.length() - 4);
-				String lformat = urlStr.substring(urlStr.length() - 5);
-				if (format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".gif"))
+				
+				//String IMG = currentArticle.getImage();
+				//String imgURL = IMG.substring(0, IMG.lastIndexOf(".")) + "-150x150" + IMG.substring(IMG.lastIndexOf("."), IMG.length());
+				//urlStr.replaceAll("?resize=150%2C150", "");
+				String format = urlStr.substring(urlStr.lastIndexOf("."), urlStr.length());
+				if (format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".gif") || format.equalsIgnoreCase(".webp"))
 					links.add(urlStr);
-				else if (lformat.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".webp"))
-					links.add(urlStr);
+				//else if (lformat.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".webp"))
+				//	links.add(urlStr);
 			}
 		}
 		catch (Exception e)
@@ -770,6 +774,38 @@ public class Data
 			link = link.replace("[", "").replace("]", "").replace("-150x150", "");
 		}
 		return link;
+	}
+	
+	public static String pullImageLink(String encoded)
+	{
+		String img = "";
+		
+		try
+		{
+		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+		XmlPullParser xpp = factory.newPullParser();
+
+		xpp.setInput( new StringReader ( "<html>I have string like this with <br> some HTML<b>tag</b> with <img src=\"http://xyz.com/par.jpg\" align=\"left\"/> image tags in it. how can get it ?</html>" ) );
+		int eventType = xpp.getEventType();
+		while (eventType != XmlPullParser.END_DOCUMENT) {
+			if(eventType == XmlPullParser.START_TAG && "img".equals(xpp.getName()))
+			{
+				int count = xpp.getAttributeCount();
+				for (int x = 0; x < count; x++)
+				{
+					if(xpp.getAttributeName(x).equalsIgnoreCase("src"))
+						img = xpp.getAttributeValue(x);
+				}
+			}
+			eventType = xpp.next();
+		}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return img;
 	}
 	
 	public static boolean containsLinks(String text)

@@ -53,6 +53,8 @@ public class FragmentHome extends Fragment
 	static FragmentManager fm;
 	static Integer currentSlideID;
 	
+	private static int returnCount; // To prevent a StackOverflowError
+	
 	public static FragmentHome newInstance(int lastScrollPosition, int lastTopOffset)
 	{
 		FragmentHome f = new FragmentHome();
@@ -80,6 +82,7 @@ public class FragmentHome extends Fragment
 		currentSlideID = 1;
 		scrollPosition = 0;
 		topOffset = 0;
+		returnCount = 0;
 		
 		Bundle args = getArguments();
 		if (args != null)
@@ -234,8 +237,9 @@ public class FragmentHome extends Fragment
 			sCategory = ActivityMain.articleList.get(r).getCategory();
 			currentSlideID = ActivityMain.articleList.get(r).getID();
 			
-			if (sImage.length() < 1)
+			if (sImage.length() < 1 && returnCount < 5)
 			{
+			    returnCount++;
 				populateSlide();
 				return;
 			}
@@ -243,9 +247,10 @@ public class FragmentHome extends Fragment
 		
 		if (!sCategory.equalsIgnoreCase("DAILY SAVER"))
 			fragSlide = FragmentSlider.newInstance(sTitle, sAuthor, sDate, sImage);
-		else
+		else if (returnCount < 5)
 		{
-			populateSlide();
+			returnCount++;
+		    populateSlide();
 			return;
 		}
 		
@@ -253,6 +258,7 @@ public class FragmentHome extends Fragment
 		trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
 		trans.replace(R.id.slider_content, fragSlide);
 		trans.commit();
+		returnCount = 0;
 	}
 	
 	class firstTask extends TimerTask
