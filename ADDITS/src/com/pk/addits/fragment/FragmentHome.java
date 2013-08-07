@@ -1,6 +1,5 @@
-package com.pk.addits.fragments;
+package com.pk.addits.fragment;
 
-import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -8,8 +7,6 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,24 +21,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.pk.addits.ActivityMain;
 import com.pk.addits.R;
-import com.pk.addits.Slider;
+import com.pk.addits.activity.ActivityMain;
+import com.pk.addits.adapter.FeedAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
-import com.pk.addits.models.Article;
-import com.squareup.picasso.Picasso;
+import com.pk.addits.model.Article;
 
 public class FragmentHome extends Fragment
 {
@@ -62,10 +52,6 @@ public class FragmentHome extends Fragment
 	static Fragment fragSlide;
 	static FragmentManager fm;
 	static Integer currentSlideID;
-	
-	Typeface fontRegular;
-	Typeface fontBold;
-	Typeface fontLight;
 	
 	public static FragmentHome newInstance(int lastScrollPosition, int lastTopOffset)
 	{
@@ -109,9 +95,6 @@ public class FragmentHome extends Fragment
 	{
 		super.onStart();
 		fm = getChildFragmentManager();
-		fontRegular = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
-		fontBold = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
-		fontLight = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
 		
 		timer = new Timer();
 		timeHandler = new Handler(new Callback()
@@ -258,7 +241,7 @@ public class FragmentHome extends Fragment
 		}
 		
 		if (!sCategory.equalsIgnoreCase("DAILY SAVER"))
-			fragSlide = Slider.newInstance(sTitle, sAuthor, sDate, sImage);
+			fragSlide = FragmentSlider.newInstance(sTitle, sAuthor, sDate, sImage);
 		else
 		{
 			populateSlide();
@@ -279,111 +262,4 @@ public class FragmentHome extends Fragment
 			timeHandler.sendEmptyMessage(0);
 		}
 	};
-	
-	public class FeedAdapter extends BaseAdapter
-	{
-		private Context context;
-		
-		private List<Article> listItem;
-		
-		public FeedAdapter(Context context, List<Article> listItem)
-		{
-			this.context = context;
-			this.listItem = listItem;
-		}
-		
-		public int getCount()
-		{
-			return listItem.size();
-		}
-		
-		public Article getItem(int position)
-		{
-			return listItem.get(position);
-		}
-		
-		public long getItemId(int position)
-		{
-			return position;
-		}
-		
-		public View getView(int position, View view, ViewGroup viewGroup)
-		{
-			final ViewHolder holder;
-			Article entry = listItem.get(position);
-			if (view == null)
-			{
-				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				view = inflater.inflate(R.layout.feed_item, null);
-				
-				holder = new ViewHolder();
-				holder.Card = (LinearLayout) view.findViewById(R.id.Card);
-				holder.lblUnread = view.findViewById(R.id.lblUnread);
-				holder.drkRead = (FrameLayout) view.findViewById(R.id.drkRead);
-				holder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
-				holder.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
-				holder.txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
-				holder.txtDate = (TextView) view.findViewById(R.id.txtDate);
-				holder.txtCategory = (TextView) view.findViewById(R.id.txtCategory);
-				holder.imgPreview = (ImageView) view.findViewById(R.id.imgPreview);
-				
-				holder.txtTitle.setTypeface(fontBold);
-				holder.txtDescription.setTypeface(fontRegular);
-				holder.txtAuthor.setTypeface(fontLight);
-				holder.txtDate.setTypeface(fontLight);
-				holder.txtCategory.setTypeface(fontRegular);
-				
-				view.setTag(holder);
-			}
-			else
-			{
-				holder = (ViewHolder) view.getTag();
-			}
-			
-			holder.txtTitle.setText(entry.getTitle());
-			holder.txtDescription.setText(entry.getDescription());
-			holder.txtAuthor.setText("Posted by " + entry.getAuthor());
-			holder.txtDate.setText(Data.parseDate(context, entry.getDate()));
-			holder.txtCategory.setText(entry.getCategory());
-			
-			// holder.imgPreview.
-			if (entry.getImage().length() > 0)
-				Picasso.with(context).load(entry.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().skipCache().into(holder.imgPreview);
-			else
-				holder.imgPreview.setVisibility(View.GONE);
-			
-			// holder.imgPreview.setAdjustViewBounds(false);
-			
-			if (entry.isRead())
-			{
-				holder.lblUnread.setVisibility(View.INVISIBLE);
-				if (entry.getImage().length() > 0)
-					holder.drkRead.setForeground(new ColorDrawable(context.getResources().getColor(R.color.black_trans)));
-			}
-			else
-			{
-				holder.lblUnread.setVisibility(View.VISIBLE);
-				holder.drkRead.setForeground(new ColorDrawable(context.getResources().getColor(R.color.transparent)));
-			}
-			
-			Animation cardAnimation = AnimationUtils.loadAnimation(context, R.anim.card_anim_list);
-			holder.Card.startAnimation(cardAnimation);
-			
-			return view;
-		}
-	}
-	
-	private static class ViewHolder
-	{
-		public LinearLayout Card;
-		public View lblUnread;
-		public FrameLayout drkRead;
-		public TextView txtTitle;
-		public TextView txtDescription;
-		public TextView txtAuthor;
-		public TextView txtDate;
-		public TextView txtCategory;
-		public ImageView imgPreview;
-		
-	}
 }

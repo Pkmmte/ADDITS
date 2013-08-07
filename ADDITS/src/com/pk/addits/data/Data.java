@@ -39,9 +39,9 @@ import android.util.Log;
 import android.util.Xml;
 import android.view.Display;
 
-import com.pk.addits.fragments.FragmentArticle.ArticleContent;
-import com.pk.addits.fragments.FragmentArticle.CommentFeed;
-import com.pk.addits.models.Article;
+import com.pk.addits.model.Article;
+import com.pk.addits.model.ArticleContent;
+import com.pk.addits.model.CommentFeed;
 
 public class Data
 {

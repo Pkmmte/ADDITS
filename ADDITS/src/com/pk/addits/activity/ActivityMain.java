@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,19 +46,20 @@ import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.XmlDom;
+import com.pk.addits.R;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
-import com.pk.addits.fragments.FragmentArticle;
-import com.pk.addits.fragments.FragmentCustomization;
-import com.pk.addits.fragments.FragmentDeveloperFocus;
-import com.pk.addits.fragments.FragmentHome;
-import com.pk.addits.fragments.FragmentLoading;
-import com.pk.addits.fragments.FragmentMerchandise;
-import com.pk.addits.fragments.FragmentReviews;
-import com.pk.addits.fragments.FragmentSample;
-import com.pk.addits.fragments.FragmentSettings;
-import com.pk.addits.fragments.FragmentTutorials;
-import com.pk.addits.models.Article;
+import com.pk.addits.fragment.FragmentArticle;
+import com.pk.addits.fragment.FragmentCustomization;
+import com.pk.addits.fragment.FragmentDeveloperFocus;
+import com.pk.addits.fragment.FragmentHome;
+import com.pk.addits.fragment.FragmentLoading;
+import com.pk.addits.fragment.FragmentMerchandise;
+import com.pk.addits.fragment.FragmentReviews;
+import com.pk.addits.fragment.FragmentSample;
+import com.pk.addits.fragment.FragmentSettings;
+import com.pk.addits.fragment.FragmentTutorials;
+import com.pk.addits.model.Article;
 import com.squareup.picasso.Picasso;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener

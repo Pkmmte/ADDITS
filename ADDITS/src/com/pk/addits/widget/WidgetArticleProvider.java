@@ -16,11 +16,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.widget.RemoteViews;
 
-import com.pk.addits.ActivityMain;
 import com.pk.addits.R;
+import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
-import com.pk.addits.models.Article;
+import com.pk.addits.model.Article;
 import com.squareup.picasso.Picasso;
 
 public class WidgetArticleProvider extends AppWidgetProvider

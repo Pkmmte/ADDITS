@@ -1,4 +1,4 @@
-package com.pk.addits.fragments;
+package com.pk.addits.fragment;
 
 import java.util.List;
 
@@ -8,12 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,19 +24,21 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pk.addits.ActivityMain;
 import com.pk.addits.R;
 import com.pk.addits.URLImageParser;
+import com.pk.addits.adapter.ArticleContentAdapter;
+import com.pk.addits.adapter.CommentsAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.fadingactionbar.FadingActionBarHelper;
-import com.pk.addits.models.Article;
-import com.pk.addits.views.PkListView;
-import com.pk.addits.views.ZoomImageView;
+import com.pk.addits.model.Article;
+import com.pk.addits.model.ArticleContent;
+import com.pk.addits.model.CommentFeed;
+import com.pk.addits.model.CommentsViewHolder;
+import com.pk.addits.view.PkListView;
 import com.squareup.picasso.Picasso;
 
 public class FragmentArticle extends Fragment
@@ -66,18 +65,18 @@ public class FragmentArticle extends Fragment
 	// TextView txtContent;
 	PkListView lstContent;
 	private List<ArticleContent> contentList;
-	private ContentAdapter contentAdapter;
+	private ArticleContentAdapter contentAdapter;
 	
 	FrameLayout commentCard;
 	TextView txtLoadComments;
 	ProgressBar progressBar;
 	ListView comments;
 	private List<CommentFeed> commentList;
-	private CommentFeedAdapter commentAdapter;
+	private CommentsAdapter commentAdapter;
 	
-	Typeface fontRegular;
-	Typeface fontBold;
-	Typeface fontLight;
+	private Typeface fontRegular;
+	private Typeface fontBold;
+	private Typeface fontLight;
 	
 	public static FragmentArticle newInstance(Article article)
 	{
@@ -325,7 +324,7 @@ public class FragmentArticle extends Fragment
 			public void run()
 			{
 				contentList = Data.generateArticleContent(Article.getContent());
-				contentAdapter = new ContentAdapter(getActivity(), contentList);
+				contentAdapter = new ArticleContentAdapter(getActivity(), contentList);
 				mHandler.postDelayed(loadContent, 500);
 				
 				stopThread(this);
@@ -363,168 +362,15 @@ public class FragmentArticle extends Fragment
 		}
 	}
 	
-	public class ContentAdapter extends BaseAdapter
-	{
-		private Context context;
-		
-		private List<ArticleContent> listItem;
-		
-		public ContentAdapter(Context context, List<ArticleContent> listItem)
-		{
-			this.context = context;
-			this.listItem = listItem;
-		}
-		
-		public int getCount()
-		{
-			return listItem.size();
-		}
-		
-		public Object getItem(int position)
-		{
-			return listItem.get(position);
-		}
-		
-		public long getItemId(int position)
-		{
-			return position;
-		}
-		
-		public View getView(int position, View view, ViewGroup viewGroup)
-		{
-			final ContentViewHolder holder;
-			ArticleContent entry = listItem.get(position);
-			if (view == null)
-			{
-				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				view = inflater.inflate(R.layout.fragment_article_content, null);
-				
-				holder = new ContentViewHolder();
-				holder.Text = (TextView) view.findViewById(R.id.Text);
-				holder.Text.setTypeface(fontRegular);
-				holder.Text.setMovementMethod(LinkMovementMethod.getInstance());
-				holder.Image = (ZoomImageView) view.findViewById(R.id.Image);
-				holder.Video = (FrameLayout) view.findViewById(R.id.Video);
-				holder.VideoPreview = (ImageView) view.findViewById(R.id.VideoPreview);
-				holder.App = (RelativeLayout) view.findViewById(R.id.App);
-				
-				view.setTag(holder);
-			}
-			else
-			{
-				holder = (ContentViewHolder) view.getTag();
-			}
-			
-			final int Type = entry.getType();
-			final String Content = entry.getContent();
-			
-			if (Type == Data.CONTENT_TYPE_TEXT)
-			{
-				holder.Text.setVisibility(View.VISIBLE);
-				holder.Image.setVisibility(View.GONE);
-				holder.Video.setVisibility(View.GONE);
-				holder.App.setVisibility(View.GONE);
-				
-				holder.Text.setText(Html.fromHtml(Content));
-			}
-			else if (Type == Data.CONTENT_TYPE_IMAGE)
-			{
-				holder.Text.setVisibility(View.GONE);
-				holder.Image.setVisibility(View.VISIBLE);
-				holder.Video.setVisibility(View.GONE);
-				holder.App.setVisibility(View.GONE);
-				
-				Picasso.with(context).load(Content).error(R.drawable.loading_image_error).skipCache().into(holder.Image);
-				holder.Image.setOnClickListener(new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View view)
-					{
-						ActivityMain.zoomImageFromThumb(holder.Image, Content, context);
-					}
-				});
-			}
-			else if (Type == Data.CONTENT_TYPE_VIDEO)
-			{
-				holder.Text.setVisibility(View.GONE);
-				holder.Image.setVisibility(View.GONE);
-				holder.Video.setVisibility(View.VISIBLE);
-				holder.App.setVisibility(View.GONE);
-				
-				String VideoPreviewURL = "http://img.youtube.com/vi/" + Content + "/hqdefault.jpg";
-				Picasso.with(context).load(VideoPreviewURL).error(R.drawable.loading_image_error).skipCache().fit().into(holder.VideoPreview);
-				holder.Video.setOnClickListener(new View.OnClickListener()
-				{
-					@Override
-					public void onClick(View view)
-					{
-						context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + Content)));
-					}
-				});
-			}
-			else if (Type == Data.CONTENT_TYPE_APP)
-			{
-				holder.Text.setVisibility(View.GONE);
-				holder.Image.setVisibility(View.GONE);
-				holder.Video.setVisibility(View.GONE);
-				holder.App.setVisibility(View.VISIBLE);
-				
-				// TODO Add Application Support
-			}
-			else
-			{
-				holder.Text.setVisibility(View.GONE);
-				holder.Image.setVisibility(View.GONE);
-				holder.Video.setVisibility(View.GONE);
-				holder.App.setVisibility(View.GONE);
-			}
-			
-			return view;
-		}
-	}
 	
-	private static class ContentViewHolder
-	{
-		public TextView Text;
-		public ZoomImageView Image;
-		public FrameLayout Video;
-		public ImageView VideoPreview;
-		public RelativeLayout App;
-	}
 	
-	public static class ArticleContent
-	{
-		int Type;
-		String Content;
-		
-		public ArticleContent()
-		{
-			this.Type = 0;
-			this.Content = "";
-		}
-		
-		public ArticleContent(int Type, String Content)
-		{
-			this.Type = Type;
-			this.Content = Content;
-		}
-		
-		public int getType()
-		{
-			return Type;
-		}
-		
-		public String getContent()
-		{
-			return Content;
-		}
-	}
+	
 	
 	Runnable loadComments = new Runnable()
 	{
 		public void run()
 		{
-			commentAdapter = new CommentFeedAdapter(getActivity(), commentList);
+			commentAdapter = new CommentsAdapter(getActivity(), commentList);
 			comments.setAdapter(commentAdapter);
 			commentAdapter.notifyDataSetChanged();
 			
@@ -544,100 +390,4 @@ public class FragmentArticle extends Fragment
 			
 		}
 	};
-	
-	public class CommentFeedAdapter extends BaseAdapter
-	{
-		private Context context;
-		
-		private List<CommentFeed> listItem;
-		
-		public CommentFeedAdapter(Context context, List<CommentFeed> listItem)
-		{
-			this.context = context;
-			this.listItem = listItem;
-		}
-		
-		public int getCount()
-		{
-			return listItem.size();
-		}
-		
-		public Object getItem(int position)
-		{
-			return listItem.get(position);
-		}
-		
-		public long getItemId(int position)
-		{
-			return position;
-		}
-		
-		public View getView(int position, View view, ViewGroup viewGroup)
-		{
-			CommentViewHolder holder;
-			CommentFeed entry = listItem.get(position);
-			if (view == null)
-			{
-				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				view = inflater.inflate(R.layout.commentfeed_item, null);
-				
-				holder = new CommentViewHolder();
-				holder.txtCreator = (TextView) view.findViewById(R.id.txtCreator);
-				holder.txtContent = (TextView) view.findViewById(R.id.txtContent);
-				holder.txtDate = (TextView) view.findViewById(R.id.txtDate);
-				
-				holder.txtCreator.setTypeface(fontBold);
-				holder.txtDate.setTypeface(fontLight);
-				holder.txtContent.setTypeface(fontRegular);
-				
-				view.setTag(holder);
-			}
-			else
-			{
-				holder = (CommentViewHolder) view.getTag();
-			}
-			
-			holder.txtCreator.setText(entry.getCreator());
-			holder.txtContent.setText(entry.getContent());
-			holder.txtDate.setText(entry.getDate());
-			
-			return view;
-		}
-	}
-	
-	private static class CommentViewHolder
-	{
-		public TextView txtCreator;
-		public TextView txtContent;
-		public TextView txtDate;
-	}
-	
-	public static class CommentFeed
-	{
-		String Creator;
-		String Content;
-		String Date;
-		
-		public CommentFeed(String Creator, String Content, String Date)
-		{
-			this.Creator = Creator;
-			this.Content = Content;
-			this.Date = Date;
-		}
-		
-		public String getCreator()
-		{
-			return Creator;
-		}
-		
-		public String getContent()
-		{
-			return Content;
-		}
-		
-		public String getDate()
-		{
-			return Date;
-		}
-	}
 }

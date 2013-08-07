@@ -1,4 +1,4 @@
-package com.pk.addits.fragments;
+package com.pk.addits.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.pk.addits.R;
 
-public class FragmentMerchandise extends Fragment
+public class FragmentDeveloperFocus extends Fragment
 {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

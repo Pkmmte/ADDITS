@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.fragment;
 
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -12,9 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.pk.addits.R;
 import com.squareup.picasso.Picasso;
 
-public class Slider extends Fragment
+public class FragmentSlider extends Fragment
 {
 	private String Title;
 	private String Author;
@@ -27,9 +28,9 @@ public class Slider extends Fragment
 	private TextView txtDate;
 	private LinearLayout Content;
 	
-	public static final Slider newInstance(String Title, String Author, String Date, String ImageURL)
+	public static final FragmentSlider newInstance(String Title, String Author, String Date, String ImageURL)
 	{
-		Slider f = new Slider();
+		FragmentSlider f = new FragmentSlider();
 		Bundle bdl = new Bundle(4);
 		
 		bdl.putString("Title", Title);

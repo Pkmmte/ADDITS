@@ -1,4 +1,4 @@
-package com.pk.addits.fragments;
+package com.pk.addits.fragment;
 
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;

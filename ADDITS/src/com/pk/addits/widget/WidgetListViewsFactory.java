@@ -13,7 +13,7 @@ import android.widget.RemoteViewsService;
 import com.pk.addits.R;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
-import com.pk.addits.models.Article;
+import com.pk.addits.model.Article;
 import com.squareup.picasso.Picasso;
 
 public class WidgetListViewsFactory implements RemoteViewsService.RemoteViewsFactory

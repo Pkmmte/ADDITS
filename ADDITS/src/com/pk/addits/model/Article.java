@@ -1,4 +1,4 @@
-package com.pk.addits.models;
+package com.pk.addits.model;
 
 public class Article
 {
