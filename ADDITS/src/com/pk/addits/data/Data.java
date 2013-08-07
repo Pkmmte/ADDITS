@@ -785,7 +785,7 @@ public class Data
 		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 		XmlPullParser xpp = factory.newPullParser();
 
-		xpp.setInput( new StringReader ( "<html>I have string like this with <br> some HTML<b>tag</b> with <img src=\"http://xyz.com/par.jpg\" align=\"left\"/> image tags in it. how can get it ?</html>" ) );
+		xpp.setInput( new StringReader (encoded) );
 		int eventType = xpp.getEventType();
 		while (eventType != XmlPullParser.END_DOCUMENT) {
 			if(eventType == XmlPullParser.START_TAG && "img".equals(xpp.getName()))
@@ -794,7 +794,10 @@ public class Data
 				for (int x = 0; x < count; x++)
 				{
 					if(xpp.getAttributeName(x).equalsIgnoreCase("src"))
+					{
 						img = xpp.getAttributeValue(x);
+						return img;
+					}
 				}
 			}
 			eventType = xpp.next();

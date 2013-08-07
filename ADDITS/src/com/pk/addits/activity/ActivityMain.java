@@ -422,7 +422,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			String Author = item.text("dc:creator");
 			String Date = item.text("pubDate");
 			String Category = item.text("category");
-			String Image = "";//Data.pullImageLink(item.text("description"));
+			String Image = Data.pullImageLink(item.text("description"));
 			String URL = item.text("link");
 			
 			articleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
