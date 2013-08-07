@@ -7,8 +7,10 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -20,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -152,7 +155,7 @@ public class FragmentHome extends Fragment
 					 * 
 					 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					 */
-					ActivityMain.callArticle(getActivity(), article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
+					ActivityMain.callArticle(article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
 				}
 				else if (currentSlideID != null)
 				{
@@ -169,7 +172,7 @@ public class FragmentHome extends Fragment
 					 * 
 					 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
 					 */
-					ActivityMain.callArticle(getActivity(), article, 0, 0);
+					ActivityMain.callArticle(article, 0, 0);
 				}
 			}
 		});
@@ -203,6 +206,25 @@ public class FragmentHome extends Fragment
 	{
 		menu.clear();
 		inflater.inflate(R.menu.home, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.Website_Label:
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(Data.MAIN_URL));
+				startActivity(i);
+				return true;
+			case R.id.Settings_Label:
+				ActivityMain.callSettings();
+				return true;
+			default:
+				
+				return super.onOptionsItemSelected(item);
+		}
 	}
 	
 	public static void updateState()

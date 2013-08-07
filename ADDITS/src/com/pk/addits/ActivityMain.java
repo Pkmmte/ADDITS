@@ -20,6 +20,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
@@ -97,7 +98,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private long lastUpdateCheckTime;
 	private int updateCheckInterval = 0;// 6 * 60 * 60 * 1000; // Comment out to 0 if you want to test it.
 	
-	FragmentManager fragmentManager;
+	private static FragmentManager fragmentManager;
 	private boolean newFound;
 	private boolean fragmentLoaded;
 	private boolean fromWidget;
@@ -158,7 +159,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			Article article = db.getArticle(getIntent().getExtras().getInt(Data.EXTRA_ID));
 			Toast.makeText(ActivityMain.this, "ID: " + article.getID(), Toast.LENGTH_SHORT).show();
 			fromWidget = true;
-			callArticle(ActivityMain.this, article, 0, 0);
+			callArticle(article, 0, 0);
 		}
 		if (savedInstanceState == null)
 		{
@@ -346,9 +347,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			case 5:
 				fragment = new FragmentTutorials();
 				break;
-			case 6:
-				fragment = new FragmentSettings();
-				break;
 			case 225:
 				fragment = new FragmentLoading();
 				currentFragment = "Loading";
@@ -381,7 +379,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setTitle(mTitle);
 	}
 	
-	public static void callArticle(Context context, Article article, int scrollPosition, int topOffset)
+	public static void callArticle(Article article, int scrollPosition, int topOffset)
 	{
 		Fragment fragment = FragmentArticle.newInstance(article);
 		mTitle = article.getTitle();
@@ -390,8 +388,23 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		lastHomeScrollPosition = scrollPosition;
 		lastHomeTopOffset = topOffset;
 		
-		FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-		fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right).replace(R.id.content_frame, fragment).commit();
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right);
+		transaction.replace(R.id.content_frame, fragment);
+		transaction.commit();
+	}
+	
+	public static void callSettings()
+	{
+		Fragment fragment = new FragmentSettings();
+		mTitle = "Settings";
+		articleShowing = false;
+		backPress = 0;
+		
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right);
+		transaction.replace(R.id.content_frame, fragment);
+		transaction.commit();
 	}
 	
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
