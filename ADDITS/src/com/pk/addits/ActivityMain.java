@@ -66,7 +66,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public static DatabaseHelper db = null;
 	public static List<Article> articleList;
 	
-	private ActionBar actionBar;
+	private static ActionBar actionBar;
 	private SharedPreferences prefs;
 	private Thread feedThread;
 	private Thread emptyFeedThread;
@@ -324,7 +324,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	private void selectItem(int position)
 	{
-		// update the main content by replacing fragments
 		Fragment fragment = null;
 		
 		switch (position)
@@ -398,6 +397,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		Fragment fragment = new FragmentSettings();
 		mTitle = "Settings";
+		actionBar.setTitle("Settings");
 		articleShowing = false;
 		backPress = 0;
 		

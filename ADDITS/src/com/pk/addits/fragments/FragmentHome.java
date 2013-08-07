@@ -18,7 +18,6 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,9 +54,6 @@ public class FragmentHome extends Fragment
 	static int scrollPosition;
 	static int topOffset;
 	
-	// static List<Article> feedList;
-	// static Article[] NewsFeed;
-	
 	static int currentSlide;
 	static Timer timer;
 	Handler timeHandler;
@@ -89,7 +85,6 @@ public class FragmentHome extends Fragment
 		view = mFadingHelper.createView(inflater);
 		setHasOptionsMenu(true);
 		cntxt = getActivity();
-		// feedList = new ArrayList<Article>();
 		list = (ListView) view.findViewById(android.R.id.list);
 		
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
@@ -114,7 +109,6 @@ public class FragmentHome extends Fragment
 	{
 		super.onStart();
 		fm = getChildFragmentManager();
-		// NewsFeed = ActivityMain.getFeed();
 		fontRegular = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
 		fontBold = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
 		fontLight = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
@@ -229,22 +223,8 @@ public class FragmentHome extends Fragment
 	
 	public static void updateState()
 	{
-		// NewsFeed = ActivityMain.getFeed();
-		
-		if (ActivityMain.articleList == null)
+		if (ActivityMain.articleList != null)
 		{
-			// feedList.clear();
-		}
-		else
-		{
-			Log.v("Guess what!", "VAGINA!!!!");
-			// feedList = new ArrayList<Feed>();
-			// feedList.clear();
-			
-			// for (int x = 0; x < NewsFeed.length; x++)
-			// feedList.add(new Article(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(),
-			// NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
-			
 			adapter.notifyDataSetChanged();
 			list.setSelectionFromTop(scrollPosition, topOffset);
 			populateSlide();
