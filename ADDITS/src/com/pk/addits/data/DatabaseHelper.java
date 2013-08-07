@@ -39,7 +39,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		String CREATE_ARTICLES_TABLE = "CREATE TABLE " + TABLE_ARTICLES + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL  UNIQUE, " + KEY_TITLE + " TEXT UNIQUE ," + KEY_DESCRIPTION + " TEXT UNIQUE , " + KEY_CONTENT + " TEXT UNIQUE , " + KEY_COMMENT_FEED + " TEXT UNIQUE , " + KEY_AUTHOR + " TEXT , " + KEY_DATE + " TEXT , " + KEY_CATEGORY + " TEXT , " + KEY_IMG_URL + " TEXT UNIQUE ," + KEY_URL + " TEXT, " + KEY_IS_FAV + " BOOL, " + KEY_IS_READ + " BOOL " + ")";
+		String CREATE_ARTICLES_TABLE = "CREATE TABLE " + TABLE_ARTICLES + " (" + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT  NOT NULL  UNIQUE, " + KEY_TITLE + " TEXT ," + KEY_DESCRIPTION + " TEXT , " + KEY_CONTENT + " TEXT , " + KEY_COMMENT_FEED + " TEXT , " + KEY_AUTHOR + " TEXT , " + KEY_DATE + " TEXT , " + KEY_CATEGORY + " TEXT , " + KEY_IMG_URL + " TEXT ," + KEY_URL + " TEXT, " + KEY_IS_FAV + " BOOL, " + KEY_IS_READ + " BOOL " + ")";
 		
 		db.execSQL(CREATE_ARTICLES_TABLE);
 	}
@@ -91,7 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 			if (cursor != null)
 				cursor.moveToFirst();
 			
-			article = new Article(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), Boolean.parseBoolean(cursor.getString(10)), Boolean.parseBoolean(cursor.getString(11)));
+			article = new Article(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getInt(10) > 0, cursor.getInt(11) > 0);
 			
 		}
 		finally
@@ -129,8 +129,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
 				article.setCategory(cursor.getString(7));
 				article.setImage(cursor.getString(8));
 				article.setURL(cursor.getString(9));
-				article.setFavorite(Boolean.parseBoolean(cursor.getString(10)));
-				article.setRead(Boolean.parseBoolean(cursor.getString(11)));
+				article.setFavorite(cursor.getInt(10) > 0);
+				article.setRead(cursor.getInt(11) > 0);
 				articleList.add(article);
 			} while (cursor.moveToNext());
 		}
@@ -164,7 +164,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	
 	public void removeAll()
 	{
-		// EXPERIMENTAL!!!
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(DatabaseHelper.TABLE_ARTICLES, null, null);
 		db.close();
