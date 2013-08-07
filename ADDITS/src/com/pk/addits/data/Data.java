@@ -50,6 +50,7 @@ public class Data
 	public static final String PREFS_TAG = "AndroidDissectedPreferences";
 	public static final String PREF_TAG_LAST_UPDATE_CHECK_TIME = "Last Update Check Time";
 	public static final String PREF_TAG_FIRST_TIME = "First Time";
+	public static final String PREF_TAG_PARSE_ARTICLE_CONTENT = "Parse Article Content";
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";
 	public static final String FEED_URL = "http://www.androiddissected.com/feed/";
@@ -347,7 +348,7 @@ public class Data
 						{
 							p_active = true;
 							builder = new StringBuilder();
-							//builder.append("<p>");
+							// builder.append("<p>");
 						}
 						else if (p_active)
 						{
@@ -475,13 +476,14 @@ public class Data
 						String elemName = xrp.getName();
 						if (p_active && elemName.equalsIgnoreCase("p"))
 						{
-							//builder.append("</p>");
+							// builder.append("</p>");
 							if (img_active)
 							{
 								if (Html.fromHtml(builder.toString()).toString().trim().length() > 0)
 									contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, builder.toString() + "\n\n"));
 							}
-							else// if (Html.fromHtml(builder.toString()).toString().trim().length() > 0)
+							else
+								// if (Html.fromHtml(builder.toString()).toString().trim().length() > 0)
 								contentList.add(new ArticleContent(Data.CONTENT_TYPE_TEXT, builder.toString() + "\n\n"));
 							
 							p_active = false;

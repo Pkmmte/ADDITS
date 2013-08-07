@@ -4,13 +4,14 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -37,12 +37,12 @@ import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.pk.addits.model.Article;
 import com.pk.addits.model.ArticleContent;
 import com.pk.addits.model.CommentFeed;
-import com.pk.addits.model.CommentsViewHolder;
 import com.pk.addits.view.PkListView;
 import com.squareup.picasso.Picasso;
 
 public class FragmentArticle extends Fragment
 {
+	private SharedPreferences prefs;
 	ActionBar actionBar;
 	static ShareActionProvider mShareActionProvider;
 	View view;
@@ -62,7 +62,7 @@ public class FragmentArticle extends Fragment
 	TextView txtTitle;
 	TextView txtAuthor;
 	TextView txtDate;
-	// TextView txtContent;
+	TextView txtContent;
 	PkListView lstContent;
 	private List<ArticleContent> contentList;
 	private ArticleContentAdapter contentAdapter;
@@ -77,6 +77,8 @@ public class FragmentArticle extends Fragment
 	private Typeface fontRegular;
 	private Typeface fontBold;
 	private Typeface fontLight;
+	
+	private boolean parseContent;
 	
 	public static FragmentArticle newInstance(Article article)
 	{
@@ -111,7 +113,7 @@ public class FragmentArticle extends Fragment
 		txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
-		// txtContent = (TextView) view.findViewById(R.id.txtContent);
+		txtContent = (TextView) view.findViewById(R.id.txtContent);
 		lstContent = (PkListView) view.findViewById(R.id.ArticleContent);
 		// p = new URLImageParser(txtContent, getActivity());
 		
@@ -127,7 +129,7 @@ public class FragmentArticle extends Fragment
 		txtTitle.setTypeface(fontBold);
 		txtAuthor.setTypeface(fontLight);
 		txtDate.setTypeface(fontLight);
-		// txtContent.setTypeface(fontRegular);
+		txtContent.setTypeface(fontRegular);
 		
 		return view;
 	}
@@ -137,6 +139,8 @@ public class FragmentArticle extends Fragment
 	{
 		super.onStart();
 		
+		prefs = getActivity().getSharedPreferences(Data.PREFS_TAG, 0);
+		parseContent = prefs.getBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, false);
 		actionBar = getActivity().getActionBar();
 		retrieveArguments();
 		mHandler = new Handler();
@@ -157,12 +161,23 @@ public class FragmentArticle extends Fragment
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
 		txtDate.setText(Data.parseRelativeDate(Article.getDate()));
-		// txtContent.setText(Html.fromHtml(Article.getContent()));
-		/** Uncomment this for images **/
-		// txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		
-		initializeLoadContentThread();
-		loadContentThread.start();
+		if (parseContent)
+		{
+			lstContent.setVisibility(View.VISIBLE);
+			txtContent.setVisibility(View.GONE);
+			initializeLoadContentThread();
+			loadContentThread.start();
+		}
+		else
+		{
+			lstContent.setVisibility(View.GONE);
+			txtContent.setVisibility(View.VISIBLE);
+
+			txtContent.setText(Html.fromHtml(Article.getContent()));
+			/** EXPERIMENTAL: Uncomment this for images **/
+			// txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
+		}
 		
 		commentCard.setOnClickListener(new View.OnClickListener()
 		{
@@ -361,10 +376,6 @@ public class FragmentArticle extends Fragment
 			theThread = null;
 		}
 	}
-	
-	
-	
-	
 	
 	Runnable loadComments = new Runnable()
 	{

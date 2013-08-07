@@ -186,16 +186,17 @@ public final class R {
         public static final int Image=0x7f0c0028;
         public static final int Info=0x7f0c0020;
         public static final int ListView=0x7f0c0026;
-        public static final int Settings_Label=0x7f0c0042;
-        public static final int Share_Label=0x7f0c0040;
+        public static final int Settings_Label=0x7f0c0043;
+        public static final int Share_Label=0x7f0c0041;
         public static final int Text=0x7f0c0027;
         public static final int Video=0x7f0c0029;
         public static final int VideoPreview=0x7f0c002a;
-        public static final int Website_Label=0x7f0c0041;
-        public static final int appButton=0x7f0c0033;
-        public static final int articlePreview=0x7f0c0032;
-        public static final int articles=0x7f0c0035;
-        public static final int background=0x7f0c003d;
+        public static final int Website_Label=0x7f0c0042;
+        public static final int appButton=0x7f0c0034;
+        public static final int articlePreview=0x7f0c0033;
+        public static final int articles=0x7f0c0036;
+        public static final int background=0x7f0c003e;
+        public static final int checkBox=0x7f0c0031;
         public static final int commentCard=0x7f0c0024;
         public static final int container=0x7f0c0004;
         public static final int content_frame=0x7f0c0005;
@@ -203,7 +204,7 @@ public final class R {
         public static final int divider=0x7f0c000f;
         public static final int drawer_layout=0x7f0c0003;
         public static final int drkRead=0x7f0c001d;
-        public static final int empty_view=0x7f0c0038;
+        public static final int empty_view=0x7f0c0039;
         public static final int expanded_image=0x7f0c000b;
         public static final int fab__container=0x7f0c0015;
         public static final int fab__content_top_margin=0x7f0c0016;
@@ -213,7 +214,7 @@ public final class R {
         public static final int fab__listview_background=0x7f0c0013;
         public static final int fab__scroll_view=0x7f0c0014;
         public static final int home_header=0x7f0c0001;
-        public static final int image_header=0x7f0c0031;
+        public static final int image_header=0x7f0c0032;
         public static final int imgPreview=0x7f0c001e;
         public static final int lblUnread=0x7f0c0019;
         public static final int left_drawer=0x7f0c000c;
@@ -221,15 +222,15 @@ public final class R {
         public static final int loadingImage=0x7f0c002f;
         public static final int loadingText=0x7f0c000a;
         public static final int playLogo=0x7f0c002e;
-        public static final int progress=0x7f0c003f;
+        public static final int progress=0x7f0c0040;
         public static final int progressBar=0x7f0c0008;
-        public static final int progressBar1=0x7f0c0039;
+        public static final int progressBar1=0x7f0c003a;
         public static final int progressFinished=0x7f0c0009;
-        public static final int refreshButton=0x7f0c0034;
-        public static final int row_item=0x7f0c0036;
-        public static final int secondaryProgress=0x7f0c003e;
+        public static final int refreshButton=0x7f0c0035;
+        public static final int row_item=0x7f0c0037;
+        public static final int secondaryProgress=0x7f0c003f;
         public static final int slider_content=0x7f0c0000;
-        public static final int stack_view=0x7f0c0037;
+        public static final int stack_view=0x7f0c0038;
         public static final int textLoading=0x7f0c0030;
         public static final int txtAuthor=0x7f0c001f;
         public static final int txtCategory=0x7f0c001a;
@@ -240,9 +241,9 @@ public final class R {
         public static final int txtLoadComments=0x7f0c0025;
         public static final int txtTitle=0x7f0c001b;
         public static final int video_fragment=0x7f0c0002;
-        public static final int widget_image=0x7f0c003b;
-        public static final int widget_item=0x7f0c003c;
-        public static final int widget_parent=0x7f0c003a;
+        public static final int widget_image=0x7f0c003c;
+        public static final int widget_item=0x7f0c003d;
+        public static final int widget_parent=0x7f0c003b;
     }
     public static final class integer {
         public static final int card_flip_time_full=0x7f0d0001;

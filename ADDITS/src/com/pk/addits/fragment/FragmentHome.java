@@ -74,6 +74,7 @@ public class FragmentHome extends Fragment
 		list = (ListView) view.findViewById(android.R.id.list);
 		
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
+		list.setDividerHeight(0);
 		list.setAdapter(adapter);
 		currentSlide = 1;
 		currentSlideID = 1;
