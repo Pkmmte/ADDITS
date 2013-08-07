@@ -186,10 +186,12 @@ public final class R {
         public static final int Image=0x7f0c0028;
         public static final int Info=0x7f0c0020;
         public static final int ListView=0x7f0c0026;
+        public static final int Settings_Label=0x7f0c0042;
         public static final int Share_Label=0x7f0c0040;
         public static final int Text=0x7f0c0027;
         public static final int Video=0x7f0c0029;
         public static final int VideoPreview=0x7f0c002a;
+        public static final int Website_Label=0x7f0c0041;
         public static final int appButton=0x7f0c0033;
         public static final int articlePreview=0x7f0c0032;
         public static final int articles=0x7f0c0035;
@@ -278,6 +280,7 @@ public final class R {
     }
     public static final class menu {
         public static final int article=0x7f100000;
+        public static final int home=0x7f100001;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f030000;

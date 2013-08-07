@@ -218,7 +218,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggles
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 	

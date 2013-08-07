@@ -18,6 +18,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -50,8 +52,8 @@ public class FragmentHome extends Fragment
 	static int scrollPosition;
 	static int topOffset;
 	
-	//static List<Article> feedList;
-	//static Article[] NewsFeed;
+	// static List<Article> feedList;
+	// static Article[] NewsFeed;
 	
 	static int currentSlide;
 	static Timer timer;
@@ -82,9 +84,9 @@ public class FragmentHome extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		view = mFadingHelper.createView(inflater);
-		
+		setHasOptionsMenu(true);
 		cntxt = getActivity();
-		//feedList = new ArrayList<Article>();
+		// feedList = new ArrayList<Article>();
 		list = (ListView) view.findViewById(android.R.id.list);
 		
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
@@ -95,7 +97,7 @@ public class FragmentHome extends Fragment
 		topOffset = 0;
 		
 		Bundle args = getArguments();
-		if(args != null)
+		if (args != null)
 		{
 			scrollPosition = args.getInt("Last Scroll Position", 0);
 			topOffset = args.getInt("Last Top Offset", 0);
@@ -109,7 +111,7 @@ public class FragmentHome extends Fragment
 	{
 		super.onStart();
 		fm = getChildFragmentManager();
-		//NewsFeed = ActivityMain.getFeed();
+		// NewsFeed = ActivityMain.getFeed();
 		fontRegular = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
 		fontBold = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
 		fontLight = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Light.ttf");
@@ -136,45 +138,37 @@ public class FragmentHome extends Fragment
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 			{
-				if(position > 0)
+				if (position > 0)
 				{
 					int ID = ActivityMain.articleList.get(position - 1).getID();
 					Article article = ActivityMain.db.getArticle(ID);
 					
 					/*
-					String Title = ActivityMain.articleList.get(ID).getTitle();
-					String Description = ActivityMain.articleList.get(ID).getDescription();
-					String Content = ActivityMain.articleList.get(ID).getContent();
-					String CommentFeed = ActivityMain.articleList.get(ID).getCommentFeed();
-					String Author = ActivityMain.articleList.get(ID).getAuthor();
-					String Date = ActivityMain.articleList.get(ID).getDate();
-					String Category = ActivityMain.articleList.get(ID).getCategory();
-					String Image = ActivityMain.articleList.get(ID).getImage();
-					String URL = ActivityMain.articleList.get(ID).getURL();
-					boolean Favorite = ActivityMain.articleList.get(ID).isFavorite();
-					boolean Read = ActivityMain.articleList.get(ID).isRead();
-					
-					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);*/
+					 * String Title = ActivityMain.articleList.get(ID).getTitle(); String Description = ActivityMain.articleList.get(ID).getDescription(); String Content =
+					 * ActivityMain.articleList.get(ID).getContent(); String CommentFeed = ActivityMain.articleList.get(ID).getCommentFeed(); String Author =
+					 * ActivityMain.articleList.get(ID).getAuthor(); String Date = ActivityMain.articleList.get(ID).getDate(); String Category = ActivityMain.articleList.get(ID).getCategory(); String
+					 * Image = ActivityMain.articleList.get(ID).getImage(); String URL = ActivityMain.articleList.get(ID).getURL(); boolean Favorite = ActivityMain.articleList.get(ID).isFavorite();
+					 * boolean Read = ActivityMain.articleList.get(ID).isRead();
+					 * 
+					 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+					 */
 					ActivityMain.callArticle(getActivity(), article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
 				}
 				else if (currentSlideID != null)
 				{
-					//int ID = ActivityMain.articleList.get(currentSlideID - 1).getID();
+					// int ID = ActivityMain.articleList.get(currentSlideID - 1).getID();
 					Article article = ActivityMain.db.getArticle(currentSlideID);
 					
-					/*String Title = ActivityMain.articleList.get(currentSlideID).getTitle();
-					String Description = ActivityMain.articleList.get(currentSlideID).getDescription();
-					String Content = ActivityMain.articleList.get(currentSlideID).getContent();
-					String CommentFeed = ActivityMain.articleList.get(currentSlideID).getCommentFeed();
-					String Author = ActivityMain.articleList.get(currentSlideID).getAuthor();
-					String Date = ActivityMain.articleList.get(currentSlideID).getDate();
-					String Category = ActivityMain.articleList.get(currentSlideID).getCategory();
-					String Image = ActivityMain.articleList.get(currentSlideID).getImage();
-					String URL = ActivityMain.articleList.get(currentSlideID).getURL();
-					boolean Favorite = ActivityMain.articleList.get(currentSlideID).isFavorite();
-					boolean Read = ActivityMain.articleList.get(currentSlideID).isRead();
-					
-					Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);*/
+					/*
+					 * String Title = ActivityMain.articleList.get(currentSlideID).getTitle(); String Description = ActivityMain.articleList.get(currentSlideID).getDescription(); String Content =
+					 * ActivityMain.articleList.get(currentSlideID).getContent(); String CommentFeed = ActivityMain.articleList.get(currentSlideID).getCommentFeed(); String Author =
+					 * ActivityMain.articleList.get(currentSlideID).getAuthor(); String Date = ActivityMain.articleList.get(currentSlideID).getDate(); String Category =
+					 * ActivityMain.articleList.get(currentSlideID).getCategory(); String Image = ActivityMain.articleList.get(currentSlideID).getImage(); String URL =
+					 * ActivityMain.articleList.get(currentSlideID).getURL(); boolean Favorite = ActivityMain.articleList.get(currentSlideID).isFavorite(); boolean Read =
+					 * ActivityMain.articleList.get(currentSlideID).isRead();
+					 * 
+					 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+					 */
 					ActivityMain.callArticle(getActivity(), article, 0, 0);
 				}
 			}
@@ -204,22 +198,30 @@ public class FragmentHome extends Fragment
 		mFadingHelper.initActionBar(activity);
 	}
 	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		menu.clear();
+		inflater.inflate(R.menu.home, menu);
+	}
+	
 	public static void updateState()
 	{
-		//NewsFeed = ActivityMain.getFeed();
+		// NewsFeed = ActivityMain.getFeed();
 		
 		if (ActivityMain.articleList == null)
 		{
-			//feedList.clear();
+			// feedList.clear();
 		}
 		else
 		{
 			Log.v("Guess what!", "VAGINA!!!!");
-			//feedList = new ArrayList<Feed>();
-			//feedList.clear();
+			// feedList = new ArrayList<Feed>();
+			// feedList.clear();
 			
-			//for (int x = 0; x < NewsFeed.length; x++)
-			//	feedList.add(new Article(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(), NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
+			// for (int x = 0; x < NewsFeed.length; x++)
+			// feedList.add(new Article(NewsFeed[x].getID(), NewsFeed[x].getTitle(), NewsFeed[x].getDescription(), NewsFeed[x].getContent(), NewsFeed[x].getCommentFeed(), NewsFeed[x].getAuthor(),
+			// NewsFeed[x].getDate(), NewsFeed[x].getCategory(), NewsFeed[x].getImage(), NewsFeed[x].getURL(), NewsFeed[x].isFavorite(), NewsFeed[x].isRead()));
 			
 			adapter.notifyDataSetChanged();
 			list.setSelectionFromTop(scrollPosition, topOffset);
@@ -246,7 +248,7 @@ public class FragmentHome extends Fragment
 			sCategory = ActivityMain.articleList.get(r).getCategory();
 			currentSlideID = ActivityMain.articleList.get(r).getID();
 			
-			if(sImage.length() < 1)
+			if (sImage.length() < 1)
 			{
 				populateSlide();
 				return;
@@ -342,13 +344,13 @@ public class FragmentHome extends Fragment
 			holder.txtDate.setText(Data.parseDate(context, entry.getDate()));
 			holder.txtCategory.setText(entry.getCategory());
 			
-			//holder.imgPreview.
+			// holder.imgPreview.
 			if (entry.getImage().length() > 0)
 				Picasso.with(context).load(entry.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().skipCache().into(holder.imgPreview);
 			else
 				holder.imgPreview.setVisibility(View.GONE);
 			
-			//holder.imgPreview.setAdjustViewBounds(false);
+			// holder.imgPreview.setAdjustViewBounds(false);
 			
 			if (entry.isRead())
 			{
