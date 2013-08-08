@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,25 +20,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.FeedAdapter;
 import com.pk.addits.data.Data;
-import com.pk.addits.fadingactionbar.FadingActionBarHelperHome2;
 import com.pk.addits.model.Article;
+import com.pk.addits.view.ParallaxListView;
 
 public class FragmentHome extends Fragment
 {
-	static View view;
-	static ListView list;
+	static ParallaxListView list;
 	static FrameLayout frame;
 	static FeedAdapter adapter;
-	static FadingActionBarHelperHome2 mFadingHelper;
 	static Context cntxt;
 	static int scrollPosition;
 	static int topOffset;
@@ -70,14 +67,24 @@ public class FragmentHome extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		view = mFadingHelper.createView(inflater);
+		View view = inflater.inflate(R.layout.list, container, false);
 		setHasOptionsMenu(true);
 		cntxt = getActivity();
-		list = (ListView) view.findViewById(android.R.id.list);
 		
-		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
+		list = (ParallaxListView) view.findViewById(R.id.ListView);
 		list.setDividerHeight(0);
+		View header = (View) inflater.inflate(R.layout.header, list, false);
+		//frame = new FrameLayout(getActivity());
+		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.35));
+		//frame.setLayoutParams(layoutParams);
+		//frame.setId(R.id.slider_content);
+		//frame.setClickable(true);
+		list.setParallaxHeader(header);
+		list.addHeaderView(header, null, true);
+		header.setLayoutParams(layoutParams);
+		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
 		list.setAdapter(adapter);
+		
 		currentSlide = 1;
 		currentSlideID = 1;
 		scrollPosition = 0;
@@ -106,8 +113,8 @@ public class FragmentHome extends Fragment
 			@Override
 			public boolean handleMessage(Message msg)
 			{
-				if (mFadingHelper.mLastScrollPosition < 10 && ActivityMain.articleList != null)
-					populateSlide();
+				// if (mFadingHelper.mLastScrollPosition < 10 && ActivityMain.articleList != null)
+				populateSlide();
 				
 				return false;
 			}
@@ -169,20 +176,6 @@ public class FragmentHome extends Fragment
 	}
 	
 	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		
-		frame = new FrameLayout(activity);
-		FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(activity, 0.35));
-		frame.setLayoutParams(layoutParams);
-		frame.setId(R.id.slider_content);
-		frame.setClickable(true);
-		mFadingHelper = new FadingActionBarHelperHome2().actionBarBackground(R.drawable.ab_background).headerView(frame).contentLayout(R.layout.fragment_home);
-		mFadingHelper.initActionBar(activity);
-	}
-	
-	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		menu.clear();
@@ -239,7 +232,7 @@ public class FragmentHome extends Fragment
 			
 			if (sImage.length() < 1 && returnCount < 5)
 			{
-			    returnCount++;
+				returnCount++;
 				populateSlide();
 				return;
 			}
@@ -250,7 +243,7 @@ public class FragmentHome extends Fragment
 		else if (returnCount < 5)
 		{
 			returnCount++;
-		    populateSlide();
+			populateSlide();
 			return;
 		}
 		

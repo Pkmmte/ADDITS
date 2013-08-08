@@ -56,7 +56,6 @@ import com.pk.addits.fragment.FragmentHome;
 import com.pk.addits.fragment.FragmentLoading;
 import com.pk.addits.fragment.FragmentMerchandise;
 import com.pk.addits.fragment.FragmentReviews;
-import com.pk.addits.fragment.FragmentSample;
 import com.pk.addits.fragment.FragmentSettings;
 import com.pk.addits.fragment.FragmentTutorials;
 import com.pk.addits.model.Article;
@@ -350,13 +349,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			case 225:
 				fragment = new FragmentLoading();
 				currentFragment = "Loading";
-				break;
-			default:
-				fragment = new FragmentSample();
-				Bundle args = new Bundle();
-				args.putInt(FragmentSample.ARG_IMAGE_RES, mListImages[position]);
-				args.putInt(FragmentSample.ARG_ACTION_BG_RES, R.drawable.ab_background);
-				fragment.setArguments(args);
 				break;
 		}
 		

@@ -3,7 +3,6 @@ package com.pk.addits.fragment;
 import java.util.List;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -20,8 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
@@ -33,7 +30,6 @@ import com.pk.addits.URLImageParser;
 import com.pk.addits.adapter.ArticleContentAdapter;
 import com.pk.addits.adapter.CommentsAdapter;
 import com.pk.addits.data.Data;
-import com.pk.addits.fadingactionbar.FadingActionBarHelper;
 import com.pk.addits.model.Article;
 import com.pk.addits.model.ArticleContent;
 import com.pk.addits.model.CommentFeed;
@@ -45,8 +41,6 @@ public class FragmentArticle extends Fragment
 	private SharedPreferences prefs;
 	ActionBar actionBar;
 	static ShareActionProvider mShareActionProvider;
-	View view;
-	static FadingActionBarHelper mFadingHelper;
 	static Article Article;
 	private Thread loadHeaderImageThread;
 	private Thread markReadThread;
@@ -58,7 +52,7 @@ public class FragmentArticle extends Fragment
 	URLImageParser p;
 	private Bitmap bm;
 	
-	ImageView imgHeader;
+	//ImageView imgHeader;
 	TextView txtTitle;
 	TextView txtAuthor;
 	TextView txtDate;
@@ -106,10 +100,10 @@ public class FragmentArticle extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		view = mFadingHelper.createView(inflater);
+		View view = inflater.inflate(R.layout.fragment_article, container, false);
 		setHasOptionsMenu(true);
 		
-		imgHeader = (ImageView) view.findViewById(R.id.image_header);
+		//imgHeader = (ImageView) view.findViewById(R.id.image_header);
 		txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
@@ -146,17 +140,16 @@ public class FragmentArticle extends Fragment
 		mHandler = new Handler();
 		
 		actionBar.setTitle(Article.getTitle());
-		imgHeader.setAdjustViewBounds(false);
-		imgHeader.setScaleType(ScaleType.CENTER_CROP);
-		if (Article.getImage().length() > 0)
-		{
-			initializeLoadHeaderImageThread();
-			loadHeaderImageThread.start();
-			
-		}
-		else
-			Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
-		// mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
+		//imgHeader.setAdjustViewBounds(false);
+		//imgHeader.setScaleType(ScaleType.CENTER_CROP);
+		//if (Article.getImage().length() > 0)
+		//{
+		//	initializeLoadHeaderImageThread();
+		//	loadHeaderImageThread.start();
+		//	
+		//}
+		//else
+		//	Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
@@ -205,15 +198,6 @@ public class FragmentArticle extends Fragment
 			markRead();
 		
 		configureShare();
-	}
-	
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		
-		mFadingHelper = new FadingActionBarHelper().actionBarBackground(R.drawable.ab_background).headerLayout(R.layout.header_light).contentLayout(R.layout.fragment_article).lightActionBar(false);
-		mFadingHelper.initActionBar(activity);
 	}
 	
 	@Override
@@ -319,8 +303,8 @@ public class FragmentArticle extends Fragment
 	{
 		public void run()
 		{
-			imgHeader.setImageBitmap(bm);
-			mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
+			//imgHeader.setImageBitmap(bm);
+			//mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
 		}
 	};
 	

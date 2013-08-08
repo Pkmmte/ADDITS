@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.pk.addits.view.ParallaxListView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ListView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:cacheColorHint="@null"
+    android:divider="@null"
+    android:duplicateParentState="true"
+    android:footerDividersEnabled="false"
+    android:headerDividersEnabled="false"
+    android:overScrollMode="never"
+    android:scrollingCache="false" />
