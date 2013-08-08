@@ -89,7 +89,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private CharSequence mDrawerTitle;
 	private static CharSequence mTitle;
 	private String[] mListNames;
-	private int[] mListImages;
 	
 	private ProgressBar ProgressBar;
 	private View ProgressFinished;

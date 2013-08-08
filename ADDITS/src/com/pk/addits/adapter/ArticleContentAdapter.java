@@ -22,7 +22,7 @@ import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.data.Data;
 import com.pk.addits.model.ArticleContent;
 import com.pk.addits.view.ZoomImageView;
-import com.pk.addits.widget.viewholder.ContentViewHolder;
+import com.pk.addits.viewholder.ContentViewHolder;
 import com.squareup.picasso.Picasso;
 
 public class ArticleContentAdapter extends BaseAdapter

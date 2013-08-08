@@ -26,10 +26,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pk.addits.R;
-import com.pk.addits.URLImageParser;
 import com.pk.addits.adapter.ArticleContentAdapter;
 import com.pk.addits.adapter.CommentsAdapter;
 import com.pk.addits.data.Data;
+import com.pk.addits.misc.URLImageParser;
 import com.pk.addits.model.Article;
 import com.pk.addits.model.ArticleContent;
 import com.pk.addits.model.CommentFeed;

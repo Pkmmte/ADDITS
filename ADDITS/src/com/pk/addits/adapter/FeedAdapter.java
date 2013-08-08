@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.pk.addits.R;
 import com.pk.addits.data.Data;
 import com.pk.addits.model.Article;
-import com.pk.addits.widget.viewholder.ArticleContentViewHolder;
+import com.pk.addits.viewholder.ArticleContentViewHolder;
 import com.squareup.picasso.Picasso;
 
 public class FeedAdapter extends BaseAdapter

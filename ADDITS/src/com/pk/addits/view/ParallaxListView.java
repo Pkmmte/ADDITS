@@ -8,7 +8,6 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 public class ParallaxListView extends ListView implements OnScrollListener

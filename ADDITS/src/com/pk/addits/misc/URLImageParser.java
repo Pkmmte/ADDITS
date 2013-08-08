@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.misc;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.pk.addits;
+package com.pk.addits.misc;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;

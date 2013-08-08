@@ -1,4 +1,4 @@
-package com.pk.addits.widget.viewholder;
+package com.pk.addits.viewholder;
 
 import android.view.View;
 import android.widget.FrameLayout;
