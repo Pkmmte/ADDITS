@@ -88,7 +88,6 @@
         android:background="#111"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:paddingTop="@dimen/abs__action_bar_default_height" />
+        android:dividerHeight="0dp" />
 
 </android.support.v4.widget.DrawerLayout>

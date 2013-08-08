@@ -196,7 +196,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	protected void onPostCreate(Bundle savedInstanceState)
 	{
 		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
 		mDrawerToggle.syncState();
 	}
 	
