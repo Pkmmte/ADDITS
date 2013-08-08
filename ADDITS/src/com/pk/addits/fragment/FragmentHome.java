@@ -24,17 +24,17 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.FeedAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.model.Article;
-import com.pk.addits.view.ParallaxListView;
 
 public class FragmentHome extends Fragment
 {
-	static ParallaxListView list;
+	static ListView list;
 	static FrameLayout frame;
 	static FeedAdapter adapter;
 	static Context cntxt;
@@ -71,15 +71,11 @@ public class FragmentHome extends Fragment
 		setHasOptionsMenu(true);
 		cntxt = getActivity();
 		
-		list = (ParallaxListView) view.findViewById(R.id.ListView);
+		list = (ListView) view.findViewById(R.id.ListView);
 		list.setDividerHeight(0);
 		View header = (View) inflater.inflate(R.layout.header, list, false);
-		//frame = new FrameLayout(getActivity());
 		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.35));
-		//frame.setLayoutParams(layoutParams);
-		//frame.setId(R.id.slider_content);
-		//frame.setClickable(true);
-		list.setParallaxHeader(header);
+		//list.setParallaxHeader(header);
 		list.addHeaderView(header, null, true);
 		header.setLayoutParams(layoutParams);
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);

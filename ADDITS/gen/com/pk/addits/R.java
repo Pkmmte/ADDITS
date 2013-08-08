@@ -299,14 +299,15 @@ public final class R {
         public static final int widget_stack=0x7f0e000e;
     }
     public static final class style {
-        public static final int AppTheme=0x7f0f0005;
-        public static final int AppTheme_Light_TranslucentActionBar=0x7f0f0007;
-        public static final int AppTheme_TranslucentActionBar=0x7f0f0006;
-        public static final int CustomProgressBarHorizontal=0x7f0f0003;
+        public static final int AppTheme=0x7f0f0006;
+        public static final int AppTheme_Light_TranslucentActionBar=0x7f0f0008;
+        public static final int AppTheme_TranslucentActionBar=0x7f0f0007;
+        public static final int CustomProgressBarHorizontal=0x7f0f0004;
         public static final int Widget_ActionBar=0x7f0f0000;
-        public static final int Widget_ActionBar_Transparent=0x7f0f0002;
+        public static final int Widget_ActionBar_Green=0x7f0f0002;
+        public static final int Widget_ActionBar_Transparent=0x7f0f0003;
         public static final int Widget_Light_ActionBar=0x7f0f0001;
-        public static final int Widget_Light_ActionBar_Transparent=0x7f0f0004;
+        public static final int Widget_Light_ActionBar_Transparent=0x7f0f0005;
     }
     public static final class xml {
         public static final int article_widget_provider=0x7f080000;
