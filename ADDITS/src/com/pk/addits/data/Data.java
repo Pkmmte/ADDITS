@@ -741,7 +741,6 @@ public class Data
 		String link = "";
 		try
 		{
-			//String regex = "<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
 			String regex = "\\(?\\b(http://|www[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
 			Pattern p = Pattern.compile(regex);
 			Matcher m = p.matcher(text);
@@ -753,14 +752,13 @@ public class Data
 					urlStr = urlStr.substring(1, urlStr.length() - 1);
 				}
 				
-				//String IMG = currentArticle.getImage();
-				//String imgURL = IMG.substring(0, IMG.lastIndexOf(".")) + "-150x150" + IMG.substring(IMG.lastIndexOf("."), IMG.length());
-				//urlStr.replaceAll("?resize=150%2C150", "");
-				String format = urlStr.substring(urlStr.lastIndexOf("."), urlStr.length());
+				String resizeCrap = urlStr.substring(urlStr.lastIndexOf("?resize="), urlStr.length());
+				String cleanIMG = urlStr.replace(resizeCrap, "");
+				Log.v("Crap: ", resizeCrap);
+				Log.v("Clean: ", cleanIMG);
+				String format = cleanIMG.substring(cleanIMG.lastIndexOf("."), cleanIMG.length());
 				if (format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".gif") || format.equalsIgnoreCase(".webp"))
-					links.add(urlStr);
-				//else if (lformat.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".webp"))
-				//	links.add(urlStr);
+					links.add(cleanIMG);
 			}
 		}
 		catch (Exception e)
@@ -782,26 +780,27 @@ public class Data
 		
 		try
 		{
-		XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-		XmlPullParser xpp = factory.newPullParser();
-
-		xpp.setInput( new StringReader (encoded) );
-		int eventType = xpp.getEventType();
-		while (eventType != XmlPullParser.END_DOCUMENT) {
-			if(eventType == XmlPullParser.START_TAG && "img".equals(xpp.getName()))
+			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+			XmlPullParser xpp = factory.newPullParser();
+			
+			xpp.setInput(new StringReader(encoded));
+			int eventType = xpp.getEventType();
+			while (eventType != XmlPullParser.END_DOCUMENT)
 			{
-				int count = xpp.getAttributeCount();
-				for (int x = 0; x < count; x++)
+				if (eventType == XmlPullParser.START_TAG && "img".equals(xpp.getName()))
 				{
-					if(xpp.getAttributeName(x).equalsIgnoreCase("src"))
+					int count = xpp.getAttributeCount();
+					for (int x = 0; x < count; x++)
 					{
-						img = xpp.getAttributeValue(x);
-						return img;
+						if (xpp.getAttributeName(x).equalsIgnoreCase("src"))
+						{
+							img = xpp.getAttributeValue(x);
+							return img;
+						}
 					}
 				}
+				eventType = xpp.next();
 			}
-			eventType = xpp.next();
-		}
 		}
 		catch (Exception e)
 		{
