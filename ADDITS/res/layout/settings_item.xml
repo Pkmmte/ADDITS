@@ -4,68 +4,84 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/Setting"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5.0dip"
-        android:layout_marginLeft="15.0dip"
-        android:layout_marginRight="15.0dip"
-        android:layout_marginTop="5.0dip"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:visibility="gone" >
+        android:layout_height="match_parent"
+        android:layout_marginBottom="3dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/card_bg"
+        android:foreground="@drawable/card_selector_transparent" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/CheckText"
+            android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/Name"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceMedium" />
+                android:layout_weight="2.0" >
 
-            <TextView
-                android:id="@+id/Description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/txtTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:ellipsize="end"
+                    android:fontFamily="sans-serif-condensed"
+                    android:maxLines="1"
+                    android:padding="3.0dip"
+                    android:singleLine="true"
+                    android:text="@string/placeholder"
+                    android:textAllCaps="true"
+                    android:textAppearance="?android:textAppearanceLarge" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10.0dip"
+                android:layout_weight="5.0" >
+
+                <LinearLayout
+                    android:id="@+id/valueContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" >
+
+                    <ImageView
+                        android:id="@+id/checkBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/checkbox_off" />
+
+                    <TextView
+                        android:id="@+id/txtValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/placeholder"
+                        android:textAppearance="?android:textAppearanceMedium" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/valueContainer"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:minLines="2"
+                    android:text="TextView" />
+            </RelativeLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/CheckText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5.0dip" >
-
-            <CheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/textValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:visibility="gone" />
-        </LinearLayout>
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10.0dip"
-        android:layout_marginLeft="20.0dip"
-        android:layout_marginRight="20.0dip"
-        android:layout_marginTop="10.0dip"
-        android:textAppearance="?android:textAppearanceLarge"
-        android:visibility="gone" />
+    </FrameLayout>
 
 </LinearLayout>

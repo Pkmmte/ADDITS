@@ -7,8 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pk.addits.R;
@@ -50,51 +49,36 @@ public class SettingsAdapter extends BaseAdapter
 			view = inflater.inflate(R.layout.settings_item, null);
 		}
 		
-		// Get Values
-		String Name = entry.getName();
-		String Description = entry.getDescription();
-		String Type = entry.getType();
-		String Value = entry.getValue();
-		String ValueType = entry.getValueType();
+		TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+		TextView txtDescription = (TextView) view.findViewById(R.id.txtDescription);
+		ImageView checkBox = (ImageView) view.findViewById(R.id.checkBox);
+		TextView txtValue = (TextView) view.findViewById(R.id.txtValue);
 		
-		// Types
-		RelativeLayout LayoutSetting = (RelativeLayout) view.findViewById(R.id.Setting);
-		TextView LayoutText = (TextView) view.findViewById(R.id.Text);
+		txtTitle.setText(entry.getName());
+		txtDescription.setText(entry.getDescription());
 		
-		// Setting
-		TextView textName = (TextView) view.findViewById(R.id.Name);
-		TextView textDescription = (TextView) view.findViewById(R.id.Description);
-		CheckBox checkValue = (CheckBox) view.findViewById(R.id.checkBox);
-		TextView textValue = (TextView) view.findViewById(R.id.textValue);
-		
-		if (Type.equals("Setting"))
+		if (entry.getType().equals("CheckBox"))
 		{
-			LayoutSetting.setVisibility(View.VISIBLE);
-			LayoutText.setVisibility(View.GONE);
+			checkBox.setVisibility(View.VISIBLE);
+			txtValue.setVisibility(View.GONE);
 			
-			textName.setText(Name);
-			textDescription.setText(Description);
-			if (ValueType.equals("Text"))
-			{
-				checkValue.setVisibility(View.GONE);
-				textValue.setVisibility(View.VISIBLE);
-				
-				textValue.setText(Value);
-			}
+			boolean selected = Boolean.parseBoolean(entry.getValue());
+			if (selected)
+				checkBox.setImageResource(R.drawable.checkbox_on);
 			else
-			{
-				checkValue.setVisibility(View.VISIBLE);
-				textValue.setVisibility(View.GONE);
-				
-				checkValue.setChecked(Boolean.parseBoolean(Value));
-			}
+				checkBox.setImageResource(R.drawable.checkbox_off);
 		}
-		else if (Type.equals("Text"))
+		else if (entry.getType().equals("Text"))
 		{
-			LayoutSetting.setVisibility(View.GONE);
-			LayoutText.setVisibility(View.VISIBLE);
+			checkBox.setVisibility(View.GONE);
+			txtValue.setVisibility(View.VISIBLE);
 			
-			LayoutText.setText(Value);
+			txtValue.setText(entry.getValue());
+		}
+		else
+		{
+			checkBox.setVisibility(View.GONE);
+			txtValue.setVisibility(View.GONE);
 		}
 		
 		return view;

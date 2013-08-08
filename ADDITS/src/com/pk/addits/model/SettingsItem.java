@@ -6,24 +6,13 @@ public class SettingsItem
 	String Description;
 	String Type;
 	String Value;
-	String ValueType;
 	
-	public SettingsItem(String Name, String Description, String Type, String Value, String ValueType)
+	public SettingsItem(String Name, String Description, String Type, String Value)
 	{
 		this.Name = Name;
 		this.Description = Description;
 		this.Type = Type;
 		this.Value = Value;
-		this.ValueType = ValueType;
-	}
-	
-	public SettingsItem(String Type, String Value)
-	{
-		this.Name = "";
-		this.Description = "";
-		this.Type = Type;
-		this.Value = Value;
-		this.ValueType = "";
 	}
 	
 	public String getName()
@@ -44,10 +33,5 @@ public class SettingsItem
 	public String getValue()
 	{
 		return Value;
-	}
-	
-	public String getValueType()
-	{
-		return ValueType;
 	}
 }
