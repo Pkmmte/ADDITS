@@ -389,6 +389,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		Fragment fragment = new FragmentSettings();
 		mTitle = "Settings";
 		actionBar.setTitle("Settings");
+		currentFragment = "Settings";
 		articleShowing = false;
 		backPress = 0;
 		

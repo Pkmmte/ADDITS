@@ -51,6 +51,8 @@ public class Data
 	public static final String PREF_TAG_LAST_UPDATE_CHECK_TIME = "Last Update Check Time";
 	public static final String PREF_TAG_FIRST_TIME = "First Time";
 	public static final String PREF_TAG_PARSE_ARTICLE_CONTENT = "Parse Article Content";
+	public static final String PREF_TAG_UPDATE_INTERVAL = "Update Interval";
+	
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";
 	public static final String FEED_URL = "http://www.androiddissected.com/feed/";
