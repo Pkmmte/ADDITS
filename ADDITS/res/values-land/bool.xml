@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Device Type -->
+    <bool name="isPhone">true</bool>
+    <bool name="isSmallTablet">false</bool>
+    <bool name="isNormalTablet">false</bool>
+
+    <!-- Orientation -->
+    <bool name="isPortrait">false</bool>
+    <bool name="isLandscape">true</bool>
+
+</resources>

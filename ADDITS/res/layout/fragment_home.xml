@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ListView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@android:id/list"
+    android:id="@+id/ListView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:dividerHeight="0dp" />
+    android:cacheColorHint="@null"
+    android:dividerHeight="0dp"
+    android:duplicateParentState="true"
+    android:footerDividersEnabled="false"
+    android:headerDividersEnabled="false"
+    android:overScrollMode="never"
+    android:scrollingCache="false" />

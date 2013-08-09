@@ -24,6 +24,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import com.pk.addits.R;
@@ -34,6 +35,7 @@ import com.pk.addits.model.Article;
 
 public class FragmentHome extends Fragment
 {
+	static GridView grid;
 	static ListView list;
 	static FrameLayout frame;
 	static FeedAdapter adapter;
@@ -49,6 +51,8 @@ public class FragmentHome extends Fragment
 	static Fragment fragSlide;
 	static FragmentManager fm;
 	static Integer currentSlideID;
+	
+	private static boolean isLandscape;
 	
 	private static int returnCount; // To prevent a StackOverflowError
 	
@@ -67,19 +71,28 @@ public class FragmentHome extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View view = inflater.inflate(R.layout.list, container, false);
+		View view = inflater.inflate(R.layout.fragment_home, container, false);
 		setHasOptionsMenu(true);
 		cntxt = getActivity();
-		
-		list = (ListView) view.findViewById(R.id.ListView);
-		list.setDividerHeight(0);
-		View header = (View) inflater.inflate(R.layout.header, list, false);
-		AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.35));
-		//list.setParallaxHeader(header);
-		list.addHeaderView(header, null, true);
-		header.setLayoutParams(layoutParams);
+		isLandscape = getActivity().getResources().getBoolean(R.bool.isLandscape);
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
-		list.setAdapter(adapter);
+		
+		if (isLandscape)
+		{
+			grid = (GridView) view.findViewById(R.id.GridView);
+			grid.setAdapter(adapter);
+		}
+		else
+		{
+			list = (ListView) view.findViewById(R.id.ListView);
+			list.setDividerHeight(0);
+			View header = (View) inflater.inflate(R.layout.header, list, false);
+			AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, Data.getHeightByPercent(getActivity(), 0.35));
+			// list.setParallaxHeader(header);
+			list.addHeaderView(header, null, true);
+			header.setLayoutParams(layoutParams);
+			list.setAdapter(adapter);
+		}
 		
 		currentSlide = 1;
 		currentSlideID = 1;
@@ -109,57 +122,69 @@ public class FragmentHome extends Fragment
 			@Override
 			public boolean handleMessage(Message msg)
 			{
-				// if (mFadingHelper.mLastScrollPosition < 10 && ActivityMain.articleList != null)
-				populateSlide();
+				if (!isLandscape && ActivityMain.articleList != null)
+					populateSlide();
 				
 				return false;
 			}
 		});
-		timer.schedule(new firstTask(), 5000, 7000);
-		
-		populateSlide();
 		updateState();
 		
-		list.setOnItemClickListener(new OnItemClickListener()
+		if (!isLandscape)
 		{
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
+			timer.schedule(new firstTask(), 5000, 7000);
+			list.setOnItemClickListener(new OnItemClickListener()
 			{
-				if (position > 0)
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 				{
-					int ID = ActivityMain.articleList.get(position - 1).getID();
-					Article article = ActivityMain.db.getArticle(ID);
-					
-					/*
-					 * String Title = ActivityMain.articleList.get(ID).getTitle(); String Description = ActivityMain.articleList.get(ID).getDescription(); String Content =
-					 * ActivityMain.articleList.get(ID).getContent(); String CommentFeed = ActivityMain.articleList.get(ID).getCommentFeed(); String Author =
-					 * ActivityMain.articleList.get(ID).getAuthor(); String Date = ActivityMain.articleList.get(ID).getDate(); String Category = ActivityMain.articleList.get(ID).getCategory(); String
-					 * Image = ActivityMain.articleList.get(ID).getImage(); String URL = ActivityMain.articleList.get(ID).getURL(); boolean Favorite = ActivityMain.articleList.get(ID).isFavorite();
-					 * boolean Read = ActivityMain.articleList.get(ID).isRead();
-					 * 
-					 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-					 */
-					ActivityMain.callArticle(article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
+					if (position > 0)
+					{
+						int ID = ActivityMain.articleList.get(position - 1).getID();
+						Article article = ActivityMain.db.getArticle(ID);
+						
+						/*
+						 * String Title = ActivityMain.articleList.get(ID).getTitle(); String Description = ActivityMain.articleList.get(ID).getDescription(); String Content =
+						 * ActivityMain.articleList.get(ID).getContent(); String CommentFeed = ActivityMain.articleList.get(ID).getCommentFeed(); String Author =
+						 * ActivityMain.articleList.get(ID).getAuthor(); String Date = ActivityMain.articleList.get(ID).getDate(); String Category = ActivityMain.articleList.get(ID).getCategory();
+						 * String Image = ActivityMain.articleList.get(ID).getImage(); String URL = ActivityMain.articleList.get(ID).getURL(); boolean Favorite =
+						 * ActivityMain.articleList.get(ID).isFavorite(); boolean Read = ActivityMain.articleList.get(ID).isRead();
+						 * 
+						 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+						 */
+						ActivityMain.callArticle(article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
+					}
+					else if (currentSlideID != null)
+					{
+						// int ID = ActivityMain.articleList.get(currentSlideID - 1).getID();
+						Article article = ActivityMain.db.getArticle(currentSlideID);
+						
+						/*
+						 * String Title = ActivityMain.articleList.get(currentSlideID).getTitle(); String Description = ActivityMain.articleList.get(currentSlideID).getDescription(); String Content =
+						 * ActivityMain.articleList.get(currentSlideID).getContent(); String CommentFeed = ActivityMain.articleList.get(currentSlideID).getCommentFeed(); String Author =
+						 * ActivityMain.articleList.get(currentSlideID).getAuthor(); String Date = ActivityMain.articleList.get(currentSlideID).getDate(); String Category =
+						 * ActivityMain.articleList.get(currentSlideID).getCategory(); String Image = ActivityMain.articleList.get(currentSlideID).getImage(); String URL =
+						 * ActivityMain.articleList.get(currentSlideID).getURL(); boolean Favorite = ActivityMain.articleList.get(currentSlideID).isFavorite(); boolean Read =
+						 * ActivityMain.articleList.get(currentSlideID).isRead();
+						 * 
+						 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
+						 */
+						ActivityMain.callArticle(article, 0, 0);
+					}
 				}
-				else if (currentSlideID != null)
+			});
+		}
+		else
+		{
+			grid.setOnItemClickListener(new OnItemClickListener()
+			{
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 				{
-					// int ID = ActivityMain.articleList.get(currentSlideID - 1).getID();
-					Article article = ActivityMain.db.getArticle(currentSlideID);
 					
-					/*
-					 * String Title = ActivityMain.articleList.get(currentSlideID).getTitle(); String Description = ActivityMain.articleList.get(currentSlideID).getDescription(); String Content =
-					 * ActivityMain.articleList.get(currentSlideID).getContent(); String CommentFeed = ActivityMain.articleList.get(currentSlideID).getCommentFeed(); String Author =
-					 * ActivityMain.articleList.get(currentSlideID).getAuthor(); String Date = ActivityMain.articleList.get(currentSlideID).getDate(); String Category =
-					 * ActivityMain.articleList.get(currentSlideID).getCategory(); String Image = ActivityMain.articleList.get(currentSlideID).getImage(); String URL =
-					 * ActivityMain.articleList.get(currentSlideID).getURL(); boolean Favorite = ActivityMain.articleList.get(currentSlideID).isFavorite(); boolean Read =
-					 * ActivityMain.articleList.get(currentSlideID).isRead();
-					 * 
-					 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-					 */
-					ActivityMain.callArticle(article, 0, 0);
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	@Override
@@ -202,8 +227,11 @@ public class FragmentHome extends Fragment
 		if (ActivityMain.articleList != null)
 		{
 			adapter.notifyDataSetChanged();
-			list.setSelectionFromTop(scrollPosition, topOffset);
-			populateSlide();
+			if (!isLandscape)
+			{
+				list.setSelectionFromTop(scrollPosition, topOffset);
+				populateSlide();
+			}
 		}
 	}
 	
@@ -243,11 +271,15 @@ public class FragmentHome extends Fragment
 			return;
 		}
 		
-		FragmentTransaction trans = fm.beginTransaction();
-		trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
-		trans.replace(R.id.slider_content, fragSlide);
-		trans.commit();
 		returnCount = 0;
+		
+		if (!isLandscape)
+		{
+			FragmentTransaction trans = fm.beginTransaction();
+			trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
+			trans.replace(R.id.slider_content, fragSlide);
+			trans.commit();
+		}
 	}
 	
 	class firstTask extends TimerTask

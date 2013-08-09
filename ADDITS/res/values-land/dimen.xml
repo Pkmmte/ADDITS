@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
+    <!-- Margins -->
+    <dimen name="article_card_margin">5dp</dimen>
+    <dimen name="article_card_spacing">3dp</dimen>
+    <dimen name="margin_feed_category">8dp</dimen>
+    <dimen name="settings_card_horizontal_margin">50dp</dimen>
+
 </resources>
