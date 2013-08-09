@@ -252,8 +252,23 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					mTitle = "Home";
 					actionBar.setTitle(mTitle);
 					articleShowing = false;
-					fragmentManager.beginTransaction().setCustomAnimations(R.anim.plus_page_in_left, R.anim.plus_page_out_left).replace(R.id.content_frame, fragment).commit();
+					FragmentTransaction transaction = fragmentManager.beginTransaction();
+					transaction.setCustomAnimations(R.anim.plus_page_in_left, R.anim.plus_page_out_left);
+					transaction.replace(R.id.content_frame, fragment);
+					transaction.commit();
 				}
+				
+				return true;
+			}
+			else if (currentFragment.equals("Settings"))
+			{
+				Fragment fragment = new FragmentHome();
+				mTitle = "Home";
+				actionBar.setTitle(mTitle);
+				FragmentTransaction transaction = fragmentManager.beginTransaction();
+				transaction.setCustomAnimations(R.anim.plus_page_in_left, R.anim.plus_page_out_left);
+				transaction.replace(R.id.content_frame, fragment);
+				transaction.commit();
 				
 				return true;
 			}
@@ -388,7 +403,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		Fragment fragment = new FragmentSettings();
 		mTitle = "Settings";
-		actionBar.setTitle("Settings");
+		actionBar.setTitle(mTitle);
 		currentFragment = "Settings";
 		articleShowing = false;
 		backPress = 0;
