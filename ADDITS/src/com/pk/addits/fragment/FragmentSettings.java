@@ -49,9 +49,9 @@ public class FragmentSettings extends Fragment
 		updateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
 		
 		settingList = new ArrayList<SettingsItem>();
-		settingList.add(new SettingsItem("Parse Content (Experimental)", "Parse article content to show dynamic content", "CheckBox", "" + parseContent));
-		settingList.add(new SettingsItem("Update Interval", "How often to check for new articles", "Text", updateInterval));
-		settingList.add(new SettingsItem("Clear App Data", "Deletes all data on this app.\nUse only if you're experiencing issues.", "Other", ""));
+		settingList.add(new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", "" + parseContent, Data.SETTING_TYPE_CHECKBOX));
+		settingList.add(new SettingsItem("Update Interval", "How often to check for new content.", updateInterval, Data.SETTING_TYPE_TEXT));
+		settingList.add(new SettingsItem("Clear App Data", "Deletes all data on this app.\nUse only if you're experiencing issues.", "", Data.SETTING_TYPE_OTHER));
 		
 		adapter = new SettingsAdapter(getActivity(), settingList);
 		grid.setAdapter(adapter);
@@ -62,19 +62,19 @@ public class FragmentSettings extends Fragment
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 			{
 				String ID = settingList.get(position).getName();
-				String IDType = settingList.get(position).getType();
-				String IDValue = settingList.get(position).getValue();
+				//int IDType = settingList.get(position).getType();
+				//String IDValue = settingList.get(position).getValue();
 				
 				if (ID.equals("Update Interval"))
 				{
 					// callDialog(ID, position);
 				}
-				else if (ID.equals("Parse Content (Experimental)"))
+				else if (ID.equals("Parse Content [Experimental]"))
 				{
 					parseContent = !parseContent;
 					
 					settingList.remove(position);
-					settingList.add(position, new SettingsItem("Parse Content (Experimental)", "Parse article content to show dynamic content", "CheckBox", "" + parseContent));
+					settingList.add(position, new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", "" + parseContent, Data.SETTING_TYPE_CHECKBOX));
 					adapter.notifyDataSetChanged();
 					
 					Editor editor = prefs.edit();

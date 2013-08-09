@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.pk.addits.R;
 import com.pk.addits.model.SettingsItem;
+import com.pk.addits.viewholder.SettingsViewHolder;
 
 public class SettingsAdapter extends BaseAdapter
 {
@@ -43,42 +44,45 @@ public class SettingsAdapter extends BaseAdapter
 	public View getView(int position, View view, ViewGroup viewGroup)
 	{
 		SettingsItem entry = listItem.get(position);
+		SettingsViewHolder holder;
+		
 		if (view == null)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.settings_item, null);
-		}
-		
-		TextView txtTitle = (TextView) view.findViewById(R.id.txtTitle);
-		TextView txtDescription = (TextView) view.findViewById(R.id.txtDescription);
-		ImageView checkBox = (ImageView) view.findViewById(R.id.checkBox);
-		TextView txtValue = (TextView) view.findViewById(R.id.txtValue);
-		
-		txtTitle.setText(entry.getName());
-		txtDescription.setText(entry.getDescription());
-		
-		if (entry.getType().equals("CheckBox"))
-		{
-			checkBox.setVisibility(View.VISIBLE);
-			txtValue.setVisibility(View.GONE);
 			
-			boolean selected = Boolean.parseBoolean(entry.getValue());
-			if (selected)
-				checkBox.setImageResource(R.drawable.checkbox_on);
-			else
-				checkBox.setImageResource(R.drawable.checkbox_off);
-		}
-		else if (entry.getType().equals("Text"))
-		{
-			checkBox.setVisibility(View.GONE);
-			txtValue.setVisibility(View.VISIBLE);
-			
-			txtValue.setText(entry.getValue());
+			holder = new SettingsViewHolder();
+			holder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+			holder.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
+			holder.txtValue = (TextView) view.findViewById(R.id.txtValue);
+			holder.checkBox = (ImageView) view.findViewById(R.id.checkBox);
+			view.setTag(holder);
 		}
 		else
+			holder = (SettingsViewHolder) view.getTag();
+		
+		holder.txtTitle.setText(entry.getName());
+		holder.txtDescription.setText(entry.getDescription());
+		
+		switch (entry.getType())
 		{
-			checkBox.setVisibility(View.GONE);
-			txtValue.setVisibility(View.GONE);
+			case 1: // TEXT
+				holder.checkBox.setVisibility(View.GONE);
+				holder.txtValue.setVisibility(View.VISIBLE);
+				holder.txtValue.setText(entry.getValue());
+				break;
+			case 2: // CHECK BOX
+				holder.checkBox.setVisibility(View.VISIBLE);
+				holder.txtValue.setVisibility(View.GONE);
+				if (Boolean.parseBoolean(entry.getValue()))
+					holder.checkBox.setImageResource(R.drawable.checkbox_on);
+				else
+					holder.checkBox.setImageResource(R.drawable.checkbox_off);
+				break;
+			default: // OTHER
+				holder.checkBox.setVisibility(View.GONE);
+				holder.txtValue.setVisibility(View.GONE);
+				break;
 		}
 		
 		return view;

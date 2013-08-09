@@ -4,15 +4,15 @@ public class SettingsItem
 {
 	String Name;
 	String Description;
-	String Type;
 	String Value;
+	int Type;
 	
-	public SettingsItem(String Name, String Description, String Type, String Value)
+	public SettingsItem(String Name, String Description, String Value, int Type)
 	{
 		this.Name = Name;
 		this.Description = Description;
-		this.Type = Type;
 		this.Value = Value;
+		this.Type = Type;
 	}
 	
 	public String getName()
@@ -25,13 +25,13 @@ public class SettingsItem
 		return Description;
 	}
 	
-	public String getType()
-	{
-		return Type;
-	}
-	
 	public String getValue()
 	{
 		return Value;
+	}
+	
+	public int getType()
+	{
+		return Type;
 	}
 }
