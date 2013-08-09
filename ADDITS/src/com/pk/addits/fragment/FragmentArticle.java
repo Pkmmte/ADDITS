@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pk.addits.R;
+import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ArticleContentAdapter;
 import com.pk.addits.adapter.CommentsAdapter;
 import com.pk.addits.data.Data;
@@ -34,6 +35,7 @@ import com.pk.addits.model.Article;
 import com.pk.addits.model.ArticleContent;
 import com.pk.addits.model.CommentFeed;
 import com.pk.addits.view.PkListView;
+import com.pk.addits.view.ZoomImageView;
 import com.squareup.picasso.Picasso;
 
 public class FragmentArticle extends Fragment
@@ -52,7 +54,7 @@ public class FragmentArticle extends Fragment
 	URLImageParser p;
 	private Bitmap bm;
 	
-	//ImageView imgHeader;
+	ZoomImageView imgHeader;
 	TextView txtTitle;
 	TextView txtAuthor;
 	TextView txtDate;
@@ -103,7 +105,7 @@ public class FragmentArticle extends Fragment
 		View view = inflater.inflate(R.layout.fragment_article, container, false);
 		setHasOptionsMenu(true);
 		
-		//imgHeader = (ImageView) view.findViewById(R.id.image_header);
+		imgHeader = (ZoomImageView) view.findViewById(R.id.Image);
 		txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 		txtAuthor = (TextView) view.findViewById(R.id.txtAuthor);
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
@@ -140,16 +142,25 @@ public class FragmentArticle extends Fragment
 		mHandler = new Handler();
 		
 		actionBar.setTitle(Article.getTitle());
-		//imgHeader.setAdjustViewBounds(false);
-		//imgHeader.setScaleType(ScaleType.CENTER_CROP);
-		//if (Article.getImage().length() > 0)
-		//{
-		//	initializeLoadHeaderImageThread();
-		//	loadHeaderImageThread.start();
-		//	
-		//}
-		//else
-		//	Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
+		Picasso.with(getActivity()).load(Article.getImage()).fit().skipCache().into(imgHeader);
+		imgHeader.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View view)
+			{
+				ActivityMain.zoomImageFromThumb(imgHeader, Article.getImage(), getActivity());
+			}
+		});
+		// imgHeader.setAdjustViewBounds(false);
+		// imgHeader.setScaleType(ScaleType.CENTER_CROP);
+		// if (Article.getImage().length() > 0)
+		// {
+		// initializeLoadHeaderImageThread();
+		// loadHeaderImageThread.start();
+		//
+		// }
+		// else
+		// Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
@@ -166,7 +177,7 @@ public class FragmentArticle extends Fragment
 		{
 			lstContent.setVisibility(View.GONE);
 			txtContent.setVisibility(View.VISIBLE);
-
+			
 			txtContent.setText(Html.fromHtml(Article.getContent()));
 			/** EXPERIMENTAL: Uncomment this for images **/
 			// txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
@@ -303,8 +314,8 @@ public class FragmentArticle extends Fragment
 	{
 		public void run()
 		{
-			//imgHeader.setImageBitmap(bm);
-			//mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
+			// imgHeader.setImageBitmap(bm);
+			// mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
 		}
 	};
 	
