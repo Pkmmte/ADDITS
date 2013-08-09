@@ -14,12 +14,16 @@ public final class R {
         public static final int card_anim_list=0x7f050002;
         public static final int fade_in=0x7f050003;
         public static final int fade_out=0x7f050004;
-        public static final int loading_slide_down=0x7f050005;
-        public static final int loading_slide_up=0x7f050006;
-        public static final int plus_page_in_left=0x7f050007;
-        public static final int plus_page_in_right=0x7f050008;
-        public static final int plus_page_out_left=0x7f050009;
-        public static final int plus_page_out_right=0x7f05000a;
+        public static final int in_from_down=0x7f050005;
+        public static final int in_from_up=0x7f050006;
+        public static final int loading_slide_down=0x7f050007;
+        public static final int loading_slide_up=0x7f050008;
+        public static final int out_to_down=0x7f050009;
+        public static final int out_to_up=0x7f05000a;
+        public static final int plus_page_in_left=0x7f05000b;
+        public static final int plus_page_in_right=0x7f05000c;
+        public static final int plus_page_out_left=0x7f05000d;
+        public static final int plus_page_out_right=0x7f05000e;
     }
     public static final class animator {
         public static final int now_left_in=0x7f060000;

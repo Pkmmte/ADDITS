@@ -82,7 +82,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	
-	//public static Article[] NewsFeed;
+	// public static Article[] NewsFeed;
 	public static String currentFragment;
 	public static boolean articleShowing;
 	
@@ -95,7 +95,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private LinearLayout Loading;
 	private TextView LoadingText;
 	private long lastUpdateCheckTime;
-	private int updateCheckInterval = 0;// 6 * 60 * 60 * 1000; // Comment out to 0 if you want to test it.
+	private int updateCheckInterval;
 	
 	private static FragmentManager fragmentManager;
 	private boolean newFound;
@@ -134,17 +134,17 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		fragmentManager = getSupportFragmentManager();
 		
 		String UpdateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
-		if(UpdateInterval.equals("Manual"))
+		if (UpdateInterval.equals("Manual"))
 			updateCheckInterval = 0;
-		else if(UpdateInterval.equals("15 Minutes"))
+		else if (UpdateInterval.equals("15 Minutes"))
 			updateCheckInterval = 15 * 60 * 1000;
-		else if(UpdateInterval.equals("30 Minutes"))
+		else if (UpdateInterval.equals("30 Minutes"))
 			updateCheckInterval = 30 * 60 * 1000;
-		else if(UpdateInterval.equals("Hourly"))
+		else if (UpdateInterval.equals("Hourly"))
 			updateCheckInterval = 60 * 60 * 1000;
-		else if(UpdateInterval.equals("6 Hours"))
+		else if (UpdateInterval.equals("6 Hours"))
 			updateCheckInterval = 6 * 60 * 60 * 1000;
-		else if(UpdateInterval.equals("Daily"))
+		else if (UpdateInterval.equals("Daily"))
 			updateCheckInterval = 24 * 60 * 60 * 1000;
 		
 		contentFrameColor = findViewById(R.id.content_frame_color);
@@ -166,7 +166,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		imageExpanded = false;
 		inBackground = false;
 		
-		if(getIntent().hasExtra(Data.EXTRA_ID))
+		if (getIntent().hasExtra(Data.EXTRA_ID))
 		{
 			Toast.makeText(ActivityMain.this, "EXTRA_ID: " + getIntent().getExtras().getInt(Data.EXTRA_ID), Toast.LENGTH_SHORT).show();
 			Article article = db.getArticle(getIntent().getExtras().getInt(Data.EXTRA_ID));
@@ -177,10 +177,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		if (savedInstanceState == null)
 		{
 			mHandler = new Handler();
-			if(!fromWidget)
+			if (!fromWidget)
 				selectItem(225);
 			
-			if(db.getArticleCount() < 5)
+			if (db.getArticleCount() < 5)
 				emptyFeed = true;
 			else
 				emptyFeed = false;
@@ -280,7 +280,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				mTitle = "Home";
 				actionBar.setTitle(mTitle);
 				FragmentTransaction transaction = fragmentManager.beginTransaction();
-				transaction.setCustomAnimations(R.anim.plus_page_in_left, R.anim.plus_page_out_left);
+				transaction.setCustomAnimations(R.anim.in_from_up, R.anim.out_to_down);
 				transaction.replace(R.id.content_frame, fragment);
 				transaction.commit();
 				
@@ -423,7 +423,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		backPress = 0;
 		
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.plus_page_in_right, R.anim.plus_page_out_right);
+		transaction.setCustomAnimations(R.anim.in_from_down, R.anim.out_to_up);
 		transaction.replace(R.id.content_frame, fragment);
 		transaction.commit();
 	}
@@ -478,7 +478,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				{
 					if (Data.isNetworkConnected(ActivityMain.this))
 					{
-						if(!inBackground)
+						if (!inBackground)
 							mHandler.post(new showProgress2("Downloading content..."));
 						
 						try
@@ -488,13 +488,12 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
 							aq.sync(cb);
 							
-							
-							if(!inBackground)
+							if (!inBackground)
 								mHandler.post(new showProgress2("Writing content..."));
-							for(int x = 0; x < articleList.size(); x++)
+							for (int x = 0; x < articleList.size(); x++)
 								db.addArticle(articleList.get(x));
 							
-							if(!inBackground)
+							if (!inBackground)
 							{
 								mHandler.post(new showProgress2("Everything is up to date!"));
 								mHandler.postDelayed(new showProgress2(""), 3500);
@@ -502,11 +501,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						}
 						catch (Exception e)
 						{
-							if(!inBackground)
+							if (!inBackground)
 								mHandler.post(new showProgress2("Error downloading feed!"));
 						}
 					}
-					else if(!inBackground)
+					else if (!inBackground)
 						mHandler.post(new showProgress2("An internet connection is required!"));
 					
 				}
@@ -516,7 +515,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					
 					try
 					{
-						if(!inBackground)
+						if (!inBackground)
 							mHandler.post(new showProgress2("Oh noez!\nAn unknown error occurred!!!"));
 					}
 					catch (Exception ee)
@@ -539,13 +538,13 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				try
 				{
 					Log.v("Loading Feed!", "");
-					if(!inBackground)
+					if (!inBackground)
 						mHandler.post(new showProgress("Loading feed...", true, true, false));
 					
 					articleList = db.getAllArticles();
 					Log.v("Feed Loaded! ", "" + articleList.size());
 					
-					if(!fromWidget && !inBackground)
+					if (!fromWidget && !inBackground)
 						mHandler.post(new showHome());
 					/** Fetch Website Data **/
 					
@@ -556,8 +555,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
 						editor.commit();
 						
-						if(!inBackground)
-						mHandler.post(new showProgress("Checking for new content...", true, false, false));
+						if (!inBackground)
+							mHandler.post(new showProgress("Checking for new content...", true, false, false));
 						
 						try
 						{
@@ -567,7 +566,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							
 							if (newFound)
 							{
-								if(!inBackground)
+								if (!inBackground)
 									mHandler.post(new showProgress("Updating content...", true, false, false));
 								
 								// TODO Make sure read/favorite params don't get overwritten
@@ -575,10 +574,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
 								aq.sync(cbs);
 								
-								if(!inBackground)
+								if (!inBackground)
 									mHandler.post(new showProgress("Writing content...", true, false, false));
 								
-								for(int x = 0; x < articleList.size(); x++)
+								for (int x = 0; x < articleList.size(); x++)
 								{
 									db.addArticle(articleList.get(x));
 								}
@@ -587,7 +586,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							else
 								Log.v("Sad Face", " No new found...");
 							
-							if(!inBackground)
+							if (!inBackground)
 								mHandler.post(new showProgress("Everything is up to date!", true, false, true));
 							
 							if (newFound)
@@ -596,26 +595,26 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								{
 									if (fragmentLoaded)
 									{
-										if(!inBackground)
+										if (!inBackground)
 											mHandler.post(new showProgress("", false, false, false));
 										break;
 									}
 								}
 							}
 							
-							if(!inBackground)
-							mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
+							if (!inBackground)
+								mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
 						}
 						catch (Exception e)
 						{
-							if(!inBackground)
+							if (!inBackground)
 							{
 								mHandler.post(new showProgress("Error updating feed!", true, false, true));
 								mHandler.postDelayed(new showProgress("Error updating feed!", false, true, true), 2500);
 							}
 						}
 					}
-					else if(!inBackground)
+					else if (!inBackground)
 					{
 						mHandler.post(new showProgress("Loading feed...", true, false, true));
 						mHandler.postDelayed(new showProgress("Loading feed...", false, true, true), 2500);
@@ -694,7 +693,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			{
 				if (currentFragment.equals("Home") && !articleShowing && !fromWidget)
 				{
-					if(!inBackground)
+					if (!inBackground)
 						FragmentHome.updateState();
 				}
 			}
