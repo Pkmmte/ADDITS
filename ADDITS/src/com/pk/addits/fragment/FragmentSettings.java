@@ -59,7 +59,7 @@ public class FragmentSettings extends Fragment
 		settingList = new ArrayList<SettingsItem>();
 		settingList.add(new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", "" + parseContent, Data.SETTING_TYPE_CHECKBOX));
 		settingList.add(new SettingsItem("Update Interval", "How often to check for new content.", updateInterval, Data.SETTING_TYPE_TEXT));
-		if(updateInterval.equals("Manual"))
+		if (updateInterval.equals("Manual"))
 			settingList.add(new SettingsItem("Check New", "Check for new content.\nWill update automatically if found.", "", Data.SETTING_TYPE_OTHER));
 		settingList.add(new SettingsItem("Clear App Data", "Deletes all data on this app.\nUse only if you're experiencing issues.", "", Data.SETTING_TYPE_OTHER));
 		
@@ -78,6 +78,10 @@ public class FragmentSettings extends Fragment
 				if (ID.equals("Update Interval"))
 				{
 					callUpdateIntervalDialog(position);
+				}
+				else if (ID.equals("Check New"))
+				{
+					ActivityMain.checkNewContent(getActivity());
 				}
 				else if (ID.equals("Parse Content [Experimental]"))
 				{

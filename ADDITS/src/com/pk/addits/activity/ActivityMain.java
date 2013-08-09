@@ -66,12 +66,14 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public static DatabaseHelper db = null;
 	public static List<Article> articleList;
 	
+	private static Context cntxt;
 	private static ActionBar actionBar;
-	private SharedPreferences prefs;
+	private static SharedPreferences prefs;
 	private Thread feedThread;
 	private Thread emptyFeedThread;
-	private Handler mHandler;
-	private AQuery aq;
+	private static Thread checkNewThread;
+	private static Handler mHandler;
+	private static AQuery aq;
 	private boolean emptyFeed;
 	private static int lastHomeScrollPosition;
 	private static int lastHomeTopOffset;
@@ -90,17 +92,17 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private static CharSequence mTitle;
 	private String[] mListNames;
 	
-	private ProgressBar ProgressBar;
-	private View ProgressFinished;
-	private LinearLayout Loading;
-	private TextView LoadingText;
-	private long lastUpdateCheckTime;
+	private static ProgressBar ProgressBar;
+	private static View ProgressFinished;
+	private static LinearLayout Loading;
+	private static TextView LoadingText;
+	private static long lastUpdateCheckTime;
 	private int updateCheckInterval;
 	
 	private static FragmentManager fragmentManager;
-	private boolean newFound;
+	private static boolean newFound;
 	private boolean fragmentLoaded;
-	private boolean fromWidget;
+	private static boolean fromWidget;
 	
 	public static boolean imageExpanded;
 	public static View contentFrameColor;
@@ -115,13 +117,14 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		db = new DatabaseHelper(ActivityMain.this);
+		db = DatabaseHelper.getInstance(ActivityMain.this);
 		
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setIcon(R.drawable.ic_ab_logo);
 		
+		cntxt = getApplicationContext();
 		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
 		emptyFeed = false;
@@ -276,14 +279,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			}
 			else if (currentFragment.equals("Settings"))
 			{
-				Fragment fragment = new FragmentHome();
-				mTitle = "Home";
-				actionBar.setTitle(mTitle);
-				FragmentTransaction transaction = fragmentManager.beginTransaction();
-				transaction.setCustomAnimations(R.anim.in_from_up, R.anim.out_to_down);
-				transaction.replace(R.id.content_frame, fragment);
-				transaction.commit();
-				
+				selectItem(0);
 				return true;
 			}
 			else
@@ -396,6 +392,25 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		mTitle = title;
 		actionBar.setTitle(mTitle);
+	}
+	
+	public static void checkNewContent(Context context)
+	{
+		if (Data.isNetworkConnected(context))
+		{
+			if (checkNewThread == null)
+			{
+				initializeCheckNewThread();
+				checkNewThread.start();
+			}
+			else if (!checkNewThread.isAlive())
+			{
+				initializeCheckNewThread();
+				checkNewThread.start();
+			}
+		}
+		else
+			Toast.makeText(context, "Unable to establish a network connection!", Toast.LENGTH_SHORT).show();
 	}
 	
 	public static void callArticle(Article article, int scrollPosition, int topOffset)
@@ -630,7 +645,73 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		};
 	}
 	
-	private synchronized void stopThread(Thread theThread)
+	private static void initializeCheckNewThread()
+	{
+		checkNewThread = new Thread()
+		{
+			public void run()
+			{
+				try
+				{
+					mHandler.post(new showProgress("Checking for new content...", true, true, false));
+					
+					lastUpdateCheckTime = System.currentTimeMillis();
+					Editor editor = prefs.edit();
+					editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
+					editor.commit();
+					
+					mHandler.post(new showProgress("Checking for new content...", true, false, false));
+					
+					try
+					{
+						AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
+						cb.url(Data.FEED_URL).type(XmlDom.class).handler(cntxt, "checkNew");
+						aq.sync(cb);
+						
+						if (newFound)
+						{
+							if (!inBackground)
+								mHandler.post(new showProgress("Updating content...", true, false, false));
+							
+							// TODO Make sure read/favorite params don't get overwritten
+							AjaxCallback<XmlDom> cbs = new AjaxCallback<XmlDom>();
+							cbs.url(Data.FEED_URL).type(XmlDom.class).handler(cntxt, "downloadFeed");
+							aq.sync(cbs);
+							
+							if (!inBackground)
+								mHandler.post(new showProgress("Writing content...", true, false, false));
+							
+							for (int x = 0; x < articleList.size(); x++)
+							{
+								db.addArticle(articleList.get(x));
+							}
+							Log.v("Happy Face", " New stuff found!");
+						}
+						else
+							Log.v("Sad Face", " No new found...");
+						
+						mHandler.post(new showProgress("Everything is up to date!", true, false, true));
+						mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
+					}
+					catch (Exception e)
+					{
+						mHandler.post(new showProgress("Error updating feed!", true, false, true));
+						mHandler.postDelayed(new showProgress("Error updating feed!", false, true, true), 2500);
+						
+					}
+					
+				}
+				catch (Exception e)
+				{
+					Log.v("DownloadFile", "ERROR: " + e.getMessage());
+				}
+				
+				stopThread(this);
+			}
+		};
+	}
+	
+	private synchronized static void stopThread(Thread theThread)
 	{
 		if (theThread != null)
 		{
@@ -638,7 +719,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 	}
 	
-	public class showProgress implements Runnable
+	public static class showProgress implements Runnable
 	{
 		boolean Active;
 		boolean Animate;
@@ -665,7 +746,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					Loading.setVisibility(View.VISIBLE);
 					if (Animate)
 					{
-						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_up);
+						Animation a = AnimationUtils.loadAnimation(cntxt, R.anim.loading_slide_up);
 						Loading.startAnimation(a);
 					}
 					if (Finished)
@@ -679,7 +760,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					Loading.setVisibility(View.GONE);
 					if (Animate)
 					{
-						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down);
+						Animation a = AnimationUtils.loadAnimation(cntxt, R.anim.loading_slide_down);
 						Loading.startAnimation(a);
 					}
 					if (Finished)

@@ -13,6 +13,8 @@ import com.pk.addits.model.Article;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
+	private static DatabaseHelper mInstance = null;
+	
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "db.addits.article";
 	private static final String TABLE_ARTICLES = "articles";
@@ -29,6 +31,14 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	private static final String KEY_URL = "url";
 	private static final String KEY_IS_FAV = "isFav";
 	private static final String KEY_IS_READ = "isRead";
+	
+	public static DatabaseHelper getInstance(Context context)
+	{
+		if (mInstance == null)
+			mInstance = new DatabaseHelper(context.getApplicationContext());
+		
+		return mInstance;
+	}
 	
 	public DatabaseHelper(Context context)
 	{
