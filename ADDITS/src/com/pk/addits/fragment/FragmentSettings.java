@@ -5,10 +5,8 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -143,6 +141,7 @@ public class FragmentSettings extends Fragment
 		listOfChoices.add("15 Minutes");
 		listOfChoices.add("30 Minutes");
 		listOfChoices.add("Hourly");
+		listOfChoices.add("6 Hours");
 		listOfChoices.add("Daily");
 		list.setAdapter(new SimpleListAdapter(getActivity(), listOfChoices));
 		

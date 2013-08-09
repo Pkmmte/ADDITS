@@ -133,6 +133,20 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		fromWidget = false;
 		fragmentManager = getSupportFragmentManager();
 		
+		String UpdateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
+		if(UpdateInterval.equals("Manual"))
+			updateCheckInterval = 0;
+		else if(UpdateInterval.equals("15 Minutes"))
+			updateCheckInterval = 15 * 60 * 1000;
+		else if(UpdateInterval.equals("30 Minutes"))
+			updateCheckInterval = 30 * 60 * 1000;
+		else if(UpdateInterval.equals("Hourly"))
+			updateCheckInterval = 60 * 60 * 1000;
+		else if(UpdateInterval.equals("6 Hours"))
+			updateCheckInterval = 6 * 60 * 60 * 1000;
+		else if(UpdateInterval.equals("Daily"))
+			updateCheckInterval = 24 * 60 * 60 * 1000;
+		
 		contentFrameColor = findViewById(R.id.content_frame_color);
 		container = (RelativeLayout) findViewById(R.id.container);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -535,7 +549,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						mHandler.post(new showHome());
 					/** Fetch Website Data **/
 					
-					if (lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.isNetworkConnected(ActivityMain.this))
+					if (updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.isNetworkConnected(ActivityMain.this))
 					{
 						lastUpdateCheckTime = System.currentTimeMillis();
 						Editor editor = prefs.edit();
