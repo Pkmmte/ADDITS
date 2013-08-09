@@ -1,10 +1,12 @@
 package com.pk.addits.data;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.net.URLConnection;
@@ -19,7 +21,13 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
 import org.apache.http.util.ByteArrayBuffer;
+import org.json.JSONObject;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -88,6 +96,53 @@ public class Data
 		display.getSize(size);
 		int height = (int) (size.y * percent);
 		return height;
+	}
+	
+	public static JSONObject getJSON()
+	{
+		DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
+		HttpPost httppost = new HttpPost(Data.FEED_URL);
+		// Depends on your web service
+		httppost.setHeader("Content-type", "application/json");
+		
+		InputStream inputStream = null;
+		String result = null;
+		JSONObject jObject = null;
+		try
+		{
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			
+			inputStream = entity.getContent();
+			// json is UTF-8 by default
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+			StringBuilder sb = new StringBuilder();
+			
+			String line = null;
+			while ((line = reader.readLine()) != null)
+			{
+				sb.append(line + "\n");
+			}
+			result = sb.toString();
+			jObject = new JSONObject(result);
+		}
+		catch (Exception e)
+		{
+			// Oops
+		}
+		finally
+		{
+			try
+			{
+				if (inputStream != null)
+					inputStream.close();
+			}
+			catch (Exception squish)
+			{
+			}
+		}
+		
+		return jObject;
 	}
 	
 	public static void downloadFeed()
