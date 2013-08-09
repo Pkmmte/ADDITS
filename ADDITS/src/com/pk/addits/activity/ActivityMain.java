@@ -279,7 +279,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			}
 			else if (currentFragment.equals("Settings"))
 			{
-				selectItem(0);
+				Fragment fragment = new FragmentHome();
+				mTitle = "Home";
+				actionBar.setTitle(mTitle);
+				currentFragment = "Home";
+				articleShowing = false;
+				FragmentTransaction transaction = fragmentManager.beginTransaction();
+				transaction.setCustomAnimations(R.anim.in_from_up, R.anim.out_to_down);
+				transaction.replace(R.id.content_frame, fragment);
+				transaction.commit();
 				return true;
 			}
 			else

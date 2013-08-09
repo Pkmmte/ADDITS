@@ -19,6 +19,7 @@
 	<dimen name="article_card_margin">18dp</dimen>
 	<dimen name="article_card_spacing">6dp</dimen>
 	<dimen name="margin_feed_category">12dp</dimen>
+	<dimen name="settings_card_horizontal_margin">48dp</dimen>
 
 	<!-- Dividers -->
 	<dimen name="divider_thin">1dp</dimen>

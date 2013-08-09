@@ -71,15 +71,15 @@ public final class R {
         public static final int abs__action_bar_default_height=0x7f0b0000;
         public static final int article_card_margin=0x7f0b000b;
         public static final int article_card_spacing=0x7f0b000c;
-        public static final int divider_thick=0x7f0b000f;
+        public static final int divider_thick=0x7f0b0010;
         /**  Dividers 
  Dividers 
          */
-        public static final int divider_thin=0x7f0b000e;
+        public static final int divider_thin=0x7f0b000f;
         /**  Images 
  Images 
          */
-        public static final int feed_image=0x7f0b0010;
+        public static final int feed_image=0x7f0b0011;
         public static final int margin_feed_category=0x7f0b000d;
         public static final int margin_large=0x7f0b000a;
         public static final int margin_medium=0x7f0b0009;
@@ -87,6 +87,7 @@ public final class R {
  Margins 
          */
         public static final int margin_small=0x7f0b0008;
+        public static final int settings_card_horizontal_margin=0x7f0b000e;
         public static final int text_feed_category=0x7f0b0005;
         public static final int text_feed_date=0x7f0b0006;
         public static final int text_feed_title=0x7f0b0007;
