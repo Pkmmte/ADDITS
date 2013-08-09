@@ -26,6 +26,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
@@ -138,10 +139,10 @@ public class FragmentHome extends Fragment
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 				{
+					Toast.makeText(getActivity(), "Position: " + position, Toast.LENGTH_SHORT).show();
 					if (position > 0)
 					{
-						int ID = ActivityMain.articleList.get(position - 1).getID();
-						Article article = ActivityMain.db.getArticle(ID);
+						Article article = ActivityMain.articleList.get(position - 1);
 						
 						/*
 						 * String Title = ActivityMain.articleList.get(ID).getTitle(); String Description = ActivityMain.articleList.get(ID).getDescription(); String Content =
