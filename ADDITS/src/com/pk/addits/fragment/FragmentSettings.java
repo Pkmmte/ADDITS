@@ -3,7 +3,12 @@ package com.pk.addits.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -15,8 +20,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.pk.addits.R;
+import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.SettingsAdapter;
 import com.pk.addits.adapter.SimpleListAdapter;
 import com.pk.addits.data.Data;
@@ -86,7 +93,39 @@ public class FragmentSettings extends Fragment
 					editor.putBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, parseContent);
 					editor.commit();
 				}
-				
+				else if (ID.equals("Clear App Data"))
+				{
+					AlertDialog.Builder confirmDialogBuilder = new AlertDialog.Builder(getActivity());
+					confirmDialogBuilder.setTitle("Confirm");
+					confirmDialogBuilder.setMessage("Are you sure you wish to clear application data?\nThis action cannot be undone!");
+					confirmDialogBuilder.setCancelable(false);
+					confirmDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener()
+					{
+						public void onClick(DialogInterface dialog, int id)
+						{
+							dialog.cancel();
+						}
+					});
+					confirmDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+					{
+						public void onClick(DialogInterface dialog, int id)
+						{
+							Toast.makeText(getActivity(), "Cleared App Data!", Toast.LENGTH_LONG).show();
+							
+							getActivity().getSharedPreferences(Data.PREFS_TAG, 0).edit().clear().commit();
+							ActivityMain.db.removeAll();
+							
+							// Restart the app...
+							Intent restartIntent = new Intent(getActivity(), ActivityMain.class);
+							restartIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							restartIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+							getActivity().startActivity(restartIntent);
+						}
+					});
+					
+					AlertDialog confirmDialog = confirmDialogBuilder.create();
+					confirmDialog.show();
+				}
 			}
 		});
 	}
