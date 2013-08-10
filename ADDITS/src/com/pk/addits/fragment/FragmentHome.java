@@ -26,7 +26,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
@@ -139,38 +138,10 @@ public class FragmentHome extends Fragment
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 				{
-					Toast.makeText(getActivity(), "Position: " + position, Toast.LENGTH_SHORT).show();
 					if (position > 0)
 					{
 						Article article = ActivityMain.articleList.get(position - 1);
-						
-						/*
-						 * String Title = ActivityMain.articleList.get(ID).getTitle(); String Description = ActivityMain.articleList.get(ID).getDescription(); String Content =
-						 * ActivityMain.articleList.get(ID).getContent(); String CommentFeed = ActivityMain.articleList.get(ID).getCommentFeed(); String Author =
-						 * ActivityMain.articleList.get(ID).getAuthor(); String Date = ActivityMain.articleList.get(ID).getDate(); String Category = ActivityMain.articleList.get(ID).getCategory();
-						 * String Image = ActivityMain.articleList.get(ID).getImage(); String URL = ActivityMain.articleList.get(ID).getURL(); boolean Favorite =
-						 * ActivityMain.articleList.get(ID).isFavorite(); boolean Read = ActivityMain.articleList.get(ID).isRead();
-						 * 
-						 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-						 */
 						ActivityMain.callArticle(article, list.getFirstVisiblePosition(), (list.getChildAt(0) == null) ? 0 : list.getChildAt(0).getTop());
-					}
-					else if (currentSlideID != null)
-					{
-						// int ID = ActivityMain.articleList.get(currentSlideID - 1).getID();
-						Article article = ActivityMain.db.getArticle(currentSlideID);
-						
-						/*
-						 * String Title = ActivityMain.articleList.get(currentSlideID).getTitle(); String Description = ActivityMain.articleList.get(currentSlideID).getDescription(); String Content =
-						 * ActivityMain.articleList.get(currentSlideID).getContent(); String CommentFeed = ActivityMain.articleList.get(currentSlideID).getCommentFeed(); String Author =
-						 * ActivityMain.articleList.get(currentSlideID).getAuthor(); String Date = ActivityMain.articleList.get(currentSlideID).getDate(); String Category =
-						 * ActivityMain.articleList.get(currentSlideID).getCategory(); String Image = ActivityMain.articleList.get(currentSlideID).getImage(); String URL =
-						 * ActivityMain.articleList.get(currentSlideID).getURL(); boolean Favorite = ActivityMain.articleList.get(currentSlideID).isFavorite(); boolean Read =
-						 * ActivityMain.articleList.get(currentSlideID).isRead();
-						 * 
-						 * Article Article = new Article(ID, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-						 */
-						ActivityMain.callArticle(article, 0, 0);
 					}
 				}
 			});
@@ -182,7 +153,8 @@ public class FragmentHome extends Fragment
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 				{
-					
+					Article article = ActivityMain.articleList.get(position - 1);
+					ActivityMain.callArticle(article, 0, 0);
 				}
 			});
 		}
@@ -238,6 +210,7 @@ public class FragmentHome extends Fragment
 	
 	public static void populateSlide()
 	{
+		int sID = 0;
 		String sTitle = "";
 		String sAuthor = "";
 		String sDate = "";
@@ -248,6 +221,7 @@ public class FragmentHome extends Fragment
 		{
 			Random generator = new Random();
 			int r = generator.nextInt(ActivityMain.articleList.size());
+			sID = r;
 			sTitle = ActivityMain.articleList.get(r).getTitle();
 			sAuthor = ActivityMain.articleList.get(r).getAuthor();
 			sDate = Data.parseDate(cntxt, ActivityMain.articleList.get(r).getDate());
@@ -264,7 +238,7 @@ public class FragmentHome extends Fragment
 		}
 		
 		if (!sCategory.equalsIgnoreCase("DAILY SAVER"))
-			fragSlide = FragmentSlider.newInstance(sTitle, sAuthor, sDate, sImage);
+			fragSlide = FragmentSlider.newInstance(sID, sTitle, sAuthor, sDate, sImage);
 		else if (returnCount < 5)
 		{
 			returnCount++;
