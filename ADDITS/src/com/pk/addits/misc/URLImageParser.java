@@ -12,12 +12,12 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.Html.ImageGetter;
-import android.view.View;
+import android.widget.TextView;
 
 public class URLImageParser implements ImageGetter
 {
 	Context c;
-	View container;
+	TextView container;
 	
 	/***
 	 * Construct the URLImageParser which will execute AsyncTask and refresh the container
@@ -25,7 +25,7 @@ public class URLImageParser implements ImageGetter
 	 * @param t
 	 * @param c
 	 */
-	public URLImageParser(View t, Context c)
+	public URLImageParser(TextView t, Context c)
 	{
 		this.c = c;
 		this.container = t;
@@ -73,6 +73,7 @@ public class URLImageParser implements ImageGetter
 			
 			// redraw the image by invalidating the container
 			URLImageParser.this.container.invalidate();
+			URLImageParser.this.container.setHeight((URLImageParser.this.container.getHeight() + result.getIntrinsicHeight()));
 		}
 		
 		/***

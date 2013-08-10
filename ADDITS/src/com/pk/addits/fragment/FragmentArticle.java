@@ -43,7 +43,7 @@ public class FragmentArticle extends Fragment
 	private Handler mHandler;
 	static MenuItem shareItem;
 	static Menu optionsMenu;
-	URLImageParser p;
+	private URLImageParser p;
 	
 	ZoomImageView imgHeader;
 	TextView txtTitle;
@@ -103,7 +103,7 @@ public class FragmentArticle extends Fragment
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
 		txtContent = (TextView) view.findViewById(R.id.txtContent);
 		lstContent = (PkListView) view.findViewById(R.id.ArticleContent);
-		// p = new URLImageParser(txtContent, getActivity());
+		p = new URLImageParser(txtContent, getActivity());
 		
 		// commentCard = (FrameLayout) view.findViewById(R.id.commentCard);
 		// txtLoadComments = (TextView) view.findViewById(R.id.txtLoadComments);
@@ -170,9 +170,7 @@ public class FragmentArticle extends Fragment
 			lstContent.setVisibility(View.GONE);
 			txtContent.setVisibility(View.VISIBLE);
 			
-			txtContent.setText(Html.fromHtml(Article.getContent()));
-			/** EXPERIMENTAL: Uncomment this for images **/
-			// txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
+			txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		}
 		
 		/*commentCard.setOnClickListener(new View.OnClickListener()
