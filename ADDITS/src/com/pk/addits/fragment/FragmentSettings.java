@@ -73,6 +73,7 @@ public class FragmentSettings extends Fragment
 			settingList.add(new SettingsItem("Check New", "Check for new content.\nWill update automatically if found.", "", Data.SETTING_TYPE_OTHER));
 		settingList.add(new SettingsItem("Support Android Dissected", "If you would like to help support Android Dissected, please enable ads.", String.valueOf(adsEnabled), Data.SETTING_TYPE_CHECKBOX));
 		settingList.add(new SettingsItem("Changelog", "View recent changes.\nCurrent build: " + currentBuild, "", Data.SETTING_TYPE_OTHER));
+		settingList.add(new SettingsItem("About", "Learn more about Android Dissected and the developers of this app. ", "", Data.SETTING_TYPE_OTHER));
 		settingList.add(new SettingsItem("Clear App Data", "Deletes all data on this app.\nUse only if you're experiencing issues.", "", Data.SETTING_TYPE_OTHER));
 		
 		adapter = new SettingsAdapter(getActivity(), settingList);
@@ -84,8 +85,6 @@ public class FragmentSettings extends Fragment
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 			{
 				String ID = settingList.get(position).getName();
-				// int IDType = settingList.get(position).getType();
-				// String IDValue = settingList.get(position).getValue();
 				
 				if (ID.equals("Update Interval"))
 				{
@@ -232,7 +231,7 @@ public class FragmentSettings extends Fragment
 		list.addHeaderView(header, null, false);
 		
 		final List<ChangelogItem> changes = new ArrayList<ChangelogItem>();
-		changes.add(new ChangelogItem("Version 1.0 (Build 1)", "04-20-1984", "• Initial Release"));
+		changes.add(new ChangelogItem("Version 1.0 (Build 1)", "04-20-1984", "ï¿½ Initial Release"));
 		list.setAdapter(new ChangelogAdapter(getActivity(), changes));
 		
 		btnClose.setOnClickListener(new View.OnClickListener()
