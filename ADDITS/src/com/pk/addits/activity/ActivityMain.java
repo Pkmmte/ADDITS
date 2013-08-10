@@ -409,6 +409,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setTitle(mTitle);
 	}
 	
+	/** Needed for update purposes **/
 	private void saveCurrentBuild()
 	{
 		Editor editor = prefs.edit();

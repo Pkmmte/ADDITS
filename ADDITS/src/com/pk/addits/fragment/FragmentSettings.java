@@ -39,8 +39,9 @@ public class FragmentSettings extends Fragment
 	private GridView grid;
 	private List<SettingsItem> settingList;
 	private SettingsAdapter adapter;
-	
+
 	private boolean parseContent;
+	private boolean adsEnabled;
 	private String updateInterval;
 	private int currentBuild;
 	
@@ -69,6 +70,7 @@ public class FragmentSettings extends Fragment
 		settingList.add(new SettingsItem("Update Interval", "How often to check for new content.", updateInterval, Data.SETTING_TYPE_TEXT));
 		if (updateInterval.equals("Manual"))
 			settingList.add(new SettingsItem("Check New", "Check for new content.\nWill update automatically if found.", "", Data.SETTING_TYPE_OTHER));
+		settingList.add(new SettingsItem("Support Android Dissected", "If you would like to help support Android Dissected, please enable ads.", "" + parseContent, Data.SETTING_TYPE_CHECKBOX));
 		settingList.add(new SettingsItem("Changelog", "View recent changes.\nCurrent build: " + currentBuild, "", Data.SETTING_TYPE_OTHER));
 		settingList.add(new SettingsItem("Clear App Data", "Deletes all data on this app.\nUse only if you're experiencing issues.", "", Data.SETTING_TYPE_OTHER));
 		
