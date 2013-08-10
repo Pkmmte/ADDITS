@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -171,6 +172,7 @@ public class FragmentArticle extends Fragment
 			txtContent.setVisibility(View.VISIBLE);
 			
 			txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
+			txtContent.setMovementMethod(LinkMovementMethod.getInstance());
 		}
 		
 		/*commentCard.setOnClickListener(new View.OnClickListener()
