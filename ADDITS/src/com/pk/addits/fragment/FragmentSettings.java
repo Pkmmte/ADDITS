@@ -12,6 +12,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -212,11 +213,11 @@ public class FragmentSettings extends Fragment
 		View header = (View) inflater.inflate(R.layout.dialog_changelog_list_header, list, false);
 		TextView txtChangeNote = (TextView) header.findViewById(R.id.txtChangelogNote);
 		txtChangeNote.setText(Html.fromHtml(getActivity().getResources().getString(R.string.changelog_note)));
+		txtChangeNote.setMovementMethod(LinkMovementMethod.getInstance());
 		list.addHeaderView(header, null, false);
 		
 		final List<ChangelogItem> changes = new ArrayList<ChangelogItem>();
-		changes.add(new ChangelogItem("Example Build", "Example Date", "Roar roar roar meow"));
-		changes.add(new ChangelogItem("Example2 Buildzzz", "ZAAANNGGGOOOO!!!", "Y U NO COME AT MEH?!"));
+		changes.add(new ChangelogItem("Version 1.0 (Build 1)", "04-20-1984", "• Initial Release"));
 		list.setAdapter(new ChangelogAdapter(getActivity(), changes));
 		
 		btnClose.setOnClickListener(new View.OnClickListener()
