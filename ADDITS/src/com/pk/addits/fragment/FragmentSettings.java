@@ -11,20 +11,25 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
+import com.pk.addits.adapter.ChangelogAdapter;
 import com.pk.addits.adapter.SettingsAdapter;
 import com.pk.addits.adapter.SimpleListAdapter;
 import com.pk.addits.data.Data;
+import com.pk.addits.model.ChangelogItem;
 import com.pk.addits.model.SettingsItem;
 
 public class FragmentSettings extends Fragment
@@ -36,6 +41,7 @@ public class FragmentSettings extends Fragment
 	
 	private boolean parseContent;
 	private String updateInterval;
+	private int currentBuild;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -55,12 +61,14 @@ public class FragmentSettings extends Fragment
 		prefs = getActivity().getSharedPreferences(Data.PREFS_TAG, 0);
 		parseContent = prefs.getBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, false);
 		updateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
+		currentBuild = prefs.getInt(Data.PREF_TAG_SAVED_BUILD, 0);
 		
 		settingList = new ArrayList<SettingsItem>();
 		settingList.add(new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", "" + parseContent, Data.SETTING_TYPE_CHECKBOX));
 		settingList.add(new SettingsItem("Update Interval", "How often to check for new content.", updateInterval, Data.SETTING_TYPE_TEXT));
 		if (updateInterval.equals("Manual"))
 			settingList.add(new SettingsItem("Check New", "Check for new content.\nWill update automatically if found.", "", Data.SETTING_TYPE_OTHER));
+		settingList.add(new SettingsItem("Changelog", "View recent changes.\nCurrent build: " + currentBuild, "", Data.SETTING_TYPE_OTHER));
 		settingList.add(new SettingsItem("Clear App Data", "Deletes all data on this app.\nUse only if you're experiencing issues.", "", Data.SETTING_TYPE_OTHER));
 		
 		adapter = new SettingsAdapter(getActivity(), settingList);
@@ -94,6 +102,10 @@ public class FragmentSettings extends Fragment
 					Editor editor = prefs.edit();
 					editor.putBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, parseContent);
 					editor.commit();
+				}
+				else if (ID.equals("Changelog"))
+				{
+					callChangelogDialog();
 				}
 				else if (ID.equals("Clear App Data"))
 				{
@@ -179,6 +191,39 @@ public class FragmentSettings extends Fragment
 					adapter.notifyDataSetChanged();
 				}
 				
+				dialog.dismiss();
+			}
+		});
+		
+		dialog.show();
+	}
+	
+	private void callChangelogDialog()
+	{
+		final Dialog dialog = new Dialog(getActivity());
+		dialog.setTitle("Changelog");
+		dialog.setContentView(R.layout.dialog_changelog_list);
+		dialog.setCancelable(true);
+		
+		ListView list = (ListView) dialog.findViewById(R.id.ListView);
+		Button btnClose = (Button) dialog.findViewById(R.id.Close);
+		
+		LayoutInflater inflater = LayoutInflater.from(getActivity());
+		View header = (View) inflater.inflate(R.layout.dialog_changelog_list_header, list, false);
+		TextView txtChangeNote = (TextView) header.findViewById(R.id.txtChangelogNote);
+		txtChangeNote.setText(Html.fromHtml(getActivity().getResources().getString(R.string.changelog_note)));
+		list.addHeaderView(header, null, false);
+		
+		final List<ChangelogItem> changes = new ArrayList<ChangelogItem>();
+		changes.add(new ChangelogItem("Example Build", "Example Date", "Roar roar roar meow"));
+		changes.add(new ChangelogItem("Example2 Buildzzz", "ZAAANNGGGOOOO!!!", "Y U NO COME AT MEH?!"));
+		list.setAdapter(new ChangelogAdapter(getActivity(), changes));
+		
+		btnClose.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
 				dialog.dismiss();
 			}
 		});

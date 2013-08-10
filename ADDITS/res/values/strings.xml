@@ -23,5 +23,8 @@
     <string name="widget_stack">ADDITS Stack</string>
     <string name="widget_article">ADDITS Article</string>
     <string name="widget_list">ADDITS List</string>
+    <string name="close">Close</string>
+    <string name="note">NOTE</string>
+    <string name="changelog_note"><![CDATA[If you have problems, please <a href="mailto:support@pkmmte.com">contact support</a> so we can fix your problem and earn a 5-star rating!]]></string>
 
 </resources>

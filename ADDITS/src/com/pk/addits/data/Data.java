@@ -53,6 +53,10 @@ import com.pk.addits.model.CommentFeed;
 
 public class Data
 {
+	public static final boolean BETA = true;
+	
+	public static final int BUILD_TAG = 1;
+	
 	public static final String API_KEY_YOUTUBE = "AIzaSyCkM13XkYpzqEyjRX11F8IoiHLmd1TrKoU";
 	
 	public static final String PREFS_TAG = "AndroidDissectedPreferences";
@@ -60,6 +64,7 @@ public class Data
 	public static final String PREF_TAG_FIRST_TIME = "First Time";
 	public static final String PREF_TAG_PARSE_ARTICLE_CONTENT = "Parse Article Content";
 	public static final String PREF_TAG_UPDATE_INTERVAL = "Update Interval";
+	public static final String PREF_TAG_SAVED_BUILD = "Saved Build Number";
 	
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";

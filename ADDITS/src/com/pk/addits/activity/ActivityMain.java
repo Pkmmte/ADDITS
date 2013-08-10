@@ -124,6 +124,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setIcon(R.drawable.ic_ab_logo);
+		if(Data.BETA)
+			actionBar.setSubtitle("BETA");
 		
 		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
@@ -209,6 +211,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				initializeEmptyFeedThread();
 				emptyFeedThread.start();
 			}
+			
+			saveCurrentBuild();
 		}
 	}
 	
@@ -403,6 +407,13 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		mTitle = title;
 		actionBar.setTitle(mTitle);
+	}
+	
+	private void saveCurrentBuild()
+	{
+		Editor editor = prefs.edit();
+		editor.putInt(Data.PREF_TAG_SAVED_BUILD, Data.BUILD_TAG);
+		editor.commit();
 	}
 	
 	public static void checkNewContent(Context context)
