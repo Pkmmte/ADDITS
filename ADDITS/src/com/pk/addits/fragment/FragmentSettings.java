@@ -39,7 +39,7 @@ public class FragmentSettings extends Fragment
 	private GridView grid;
 	private List<SettingsItem> settingList;
 	private SettingsAdapter adapter;
-
+	
 	private boolean parseContent;
 	private boolean adsEnabled;
 	private String updateInterval;
@@ -64,13 +64,14 @@ public class FragmentSettings extends Fragment
 		parseContent = prefs.getBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, false);
 		updateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
 		currentBuild = prefs.getInt(Data.PREF_TAG_SAVED_BUILD, 0);
+		adsEnabled = prefs.getBoolean(Data.PREF_TAG_ADS_ENABLED, true);
 		
 		settingList = new ArrayList<SettingsItem>();
-		settingList.add(new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", "" + parseContent, Data.SETTING_TYPE_CHECKBOX));
+		settingList.add(new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", String.valueOf(parseContent), Data.SETTING_TYPE_CHECKBOX));
 		settingList.add(new SettingsItem("Update Interval", "How often to check for new content.", updateInterval, Data.SETTING_TYPE_TEXT));
 		if (updateInterval.equals("Manual"))
 			settingList.add(new SettingsItem("Check New", "Check for new content.\nWill update automatically if found.", "", Data.SETTING_TYPE_OTHER));
-		settingList.add(new SettingsItem("Support Android Dissected", "If you would like to help support Android Dissected, please enable ads.", "" + parseContent, Data.SETTING_TYPE_CHECKBOX));
+		settingList.add(new SettingsItem("Support Android Dissected", "If you would like to help support Android Dissected, please enable ads.", String.valueOf(adsEnabled), Data.SETTING_TYPE_CHECKBOX));
 		settingList.add(new SettingsItem("Changelog", "View recent changes.\nCurrent build: " + currentBuild, "", Data.SETTING_TYPE_OTHER));
 		settingList.add(new SettingsItem("Clear App Data", "Deletes all data on this app.\nUse only if you're experiencing issues.", "", Data.SETTING_TYPE_OTHER));
 		
@@ -99,11 +100,23 @@ public class FragmentSettings extends Fragment
 					parseContent = !parseContent;
 					
 					settingList.remove(position);
-					settingList.add(position, new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", "" + parseContent, Data.SETTING_TYPE_CHECKBOX));
+					settingList.add(position, new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", String.valueOf(parseContent), Data.SETTING_TYPE_CHECKBOX));
 					adapter.notifyDataSetChanged();
 					
 					Editor editor = prefs.edit();
 					editor.putBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, parseContent);
+					editor.commit();
+				}
+				else if (ID.equals("Support Android Dissected"))
+				{
+					adsEnabled = !adsEnabled;
+					
+					settingList.remove(position);
+					settingList.add(position, new SettingsItem("Support Android Dissected", "If you would like to help support Android Dissected, please enable ads.", String.valueOf(adsEnabled), Data.SETTING_TYPE_CHECKBOX));
+					adapter.notifyDataSetChanged();
+					
+					Editor editor = prefs.edit();
+					editor.putBoolean(Data.PREF_TAG_ADS_ENABLED, adsEnabled);
 					editor.commit();
 				}
 				else if (ID.equals("Changelog"))

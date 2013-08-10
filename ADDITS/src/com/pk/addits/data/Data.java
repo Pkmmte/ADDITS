@@ -65,6 +65,7 @@ public class Data
 	public static final String PREF_TAG_PARSE_ARTICLE_CONTENT = "Parse Article Content";
 	public static final String PREF_TAG_UPDATE_INTERVAL = "Update Interval";
 	public static final String PREF_TAG_SAVED_BUILD = "Saved Build Number";
+	public static final String PREF_TAG_ADS_ENABLED = "Ads Enabled";
 	
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";
