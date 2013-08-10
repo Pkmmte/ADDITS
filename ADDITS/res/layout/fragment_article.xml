@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/app_bg"
         android:gravity="center_horizontal" >
 
@@ -110,6 +110,8 @@
                 android:padding="@dimen/margin_small" />
         </RelativeLayout>
 
+        <!-- Comments have been disabled until it's fixed on the server side! -->
+        <!--
         <LinearLayout
             android:id="@+id/Comments"
             android:layout_width="match_parent"
@@ -182,6 +184,7 @@
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
+        -->
     </RelativeLayout>
 
 </ScrollView>

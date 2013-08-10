@@ -5,22 +5,17 @@ import java.util.List;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,12 +23,10 @@ import android.widget.Toast;
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ArticleContentAdapter;
-import com.pk.addits.adapter.CommentsAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.misc.URLImageParser;
 import com.pk.addits.model.Article;
 import com.pk.addits.model.ArticleContent;
-import com.pk.addits.model.CommentFeed;
 import com.pk.addits.view.PkListView;
 import com.pk.addits.view.ZoomImageView;
 import com.squareup.picasso.Picasso;
@@ -44,15 +37,13 @@ public class FragmentArticle extends Fragment
 	ActionBar actionBar;
 	static ShareActionProvider mShareActionProvider;
 	static Article Article;
-	private Thread loadHeaderImageThread;
 	private Thread markReadThread;
 	private Thread loadContentThread;
-	private Thread loadCommentsThread;
+	// private Thread loadCommentsThread;
 	private Handler mHandler;
 	static MenuItem shareItem;
 	static Menu optionsMenu;
 	URLImageParser p;
-	private Bitmap bm;
 	
 	ZoomImageView imgHeader;
 	TextView txtTitle;
@@ -63,12 +54,13 @@ public class FragmentArticle extends Fragment
 	private List<ArticleContent> contentList;
 	private ArticleContentAdapter contentAdapter;
 	
-	FrameLayout commentCard;
-	TextView txtLoadComments;
-	ProgressBar progressBar;
-	ListView comments;
-	private List<CommentFeed> commentList;
-	private CommentsAdapter commentAdapter;
+	/** Comments have been disabled until it's fixed on the server side! **/
+	//FrameLayout commentCard;
+	//TextView txtLoadComments;
+	//ProgressBar progressBar;
+	//ListView comments;
+	//private List<CommentFeed> commentList;
+	//private CommentsAdapter commentAdapter;
 	
 	private Typeface fontRegular;
 	private Typeface fontBold;
@@ -113,10 +105,10 @@ public class FragmentArticle extends Fragment
 		lstContent = (PkListView) view.findViewById(R.id.ArticleContent);
 		// p = new URLImageParser(txtContent, getActivity());
 		
-		commentCard = (FrameLayout) view.findViewById(R.id.commentCard);
-		txtLoadComments = (TextView) view.findViewById(R.id.txtLoadComments);
-		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-		comments = (ListView) view.findViewById(R.id.ListView);
+		// commentCard = (FrameLayout) view.findViewById(R.id.commentCard);
+		// txtLoadComments = (TextView) view.findViewById(R.id.txtLoadComments);
+		// progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+		// comments = (ListView) view.findViewById(R.id.ListView);
 		
 		fontRegular = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Regular.ttf");
 		fontBold = Typeface.createFromAsset(getActivity().getAssets(), "RobotoSlab-Bold.ttf");
@@ -183,7 +175,7 @@ public class FragmentArticle extends Fragment
 			// txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
 		}
 		
-		commentCard.setOnClickListener(new View.OnClickListener()
+		/*commentCard.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
@@ -203,7 +195,7 @@ public class FragmentArticle extends Fragment
 					loadCommentsThread.start();
 				}
 			}
-		});
+		});*/
 		
 		if (!Article.isRead())
 			markRead();
@@ -288,37 +280,6 @@ public class FragmentArticle extends Fragment
 		};
 	}
 	
-	private void initializeLoadHeaderImageThread()
-	{
-		loadHeaderImageThread = new Thread()
-		{
-			public void run()
-			{
-				try
-				{
-					Bitmap bp = Picasso.with(getActivity()).load(Article.getImage()).skipCache().get();
-					bm = Bitmap.createScaledBitmap(bp, Data.getWidthByPercent(getActivity(), 1.0), Data.getHeightByPercent(getActivity(), 0.3), false);
-					mHandler.post(loadImage);
-				}
-				catch (Exception e)
-				{
-					// mHandler.post(loadFail);
-				}
-				
-				stopThread(this);
-			}
-		};
-	}
-	
-	Runnable loadImage = new Runnable()
-	{
-		public void run()
-		{
-			// imgHeader.setImageBitmap(bm);
-			// mFadingHelper.updateHeaderHeight(mFadingHelper.mHeaderView.getMeasuredHeight());
-		}
-	};
-	
 	Runnable loadFail = new Runnable()
 	{
 		public void run()
@@ -342,27 +303,12 @@ public class FragmentArticle extends Fragment
 		};
 	}
 	
-	private void initializeLoadCommentsThread()
-	{
-		loadCommentsThread = new Thread()
-		{
-			public void run()
-			{
-				try
-				{
-					Data.downloadCommentFeed(Article.getCommentFeed());
-					commentList = Data.retrieveCommentFeed(getActivity());
-					mHandler.postDelayed(loadComments, 250);
-				}
-				catch (Exception e)
-				{
-					Log.v("Download Comments", "ERROR: " + e.getMessage());
-				}
-				
-				stopThread(this);
-			}
-		};
-	}
+	/*
+	 * private void initializeLoadCommentsThread() { loadCommentsThread = new Thread() { public void run() { try { Data.downloadCommentFeed(Article.getCommentFeed()); commentList =
+	 * Data.retrieveCommentFeed(getActivity()); mHandler.postDelayed(loadComments, 250); } catch (Exception e) { Log.v("Download Comments", "ERROR: " + e.getMessage()); }
+	 * 
+	 * stopThread(this); } }; }
+	 */
 	
 	private synchronized void stopThread(Thread theThread)
 	{
@@ -372,18 +318,12 @@ public class FragmentArticle extends Fragment
 		}
 	}
 	
-	Runnable loadComments = new Runnable()
-	{
-		public void run()
-		{
-			commentAdapter = new CommentsAdapter(getActivity(), commentList);
-			comments.setAdapter(commentAdapter);
-			commentAdapter.notifyDataSetChanged();
-			
-			txtLoadComments.setVisibility(View.GONE);
-			progressBar.setVisibility(View.GONE);
-		}
-	};
+	/*
+	 * Runnable loadComments = new Runnable() { public void run() { commentAdapter = new CommentsAdapter(getActivity(), commentList); comments.setAdapter(commentAdapter);
+	 * commentAdapter.notifyDataSetChanged();
+	 * 
+	 * txtLoadComments.setVisibility(View.GONE); progressBar.setVisibility(View.GONE); } };
+	 */
 	
 	Runnable loadContent = new Runnable()
 	{

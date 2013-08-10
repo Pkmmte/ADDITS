@@ -127,14 +127,17 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
-		emptyFeed = false;
-		lastHomeScrollPosition = 0;
-		lastHomeTopOffset = 0;
-		backPress = 0;
-		currentFragment = "Loading";
-		fragmentLoaded = false;
-		fromWidget = false;
 		fragmentManager = getSupportFragmentManager();
+		if (savedInstanceState == null)
+		{
+			emptyFeed = false;
+			lastHomeScrollPosition = 0;
+			lastHomeTopOffset = 0;
+			backPress = 0;
+			currentFragment = "Loading";
+			fragmentLoaded = false;
+			fromWidget = false;
+		}
 		
 		String UpdateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
 		if (UpdateInterval.equals("Manual"))
@@ -444,19 +447,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		transaction.commit();
 	}
 	
-	/*public void downloadFeed()
-	{
-		JSONObject jObject = Data.getJSON();
-		try
-		{
-			JSONArray jArray = jObject.getJSONArray("item");
-		}
-		catch (JSONException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}*/
+	/*
+	 * public void downloadFeed() { JSONObject jObject = Data.getJSON(); try { JSONArray jArray = jObject.getJSONArray("item"); } catch (JSONException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); } }
+	 */
 	
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
 	{

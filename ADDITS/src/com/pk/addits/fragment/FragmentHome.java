@@ -153,7 +153,7 @@ public class FragmentHome extends Fragment
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
 				{
-					Article article = ActivityMain.articleList.get(position - 1);
+					Article article = ActivityMain.articleList.get(position);
 					ActivityMain.callArticle(article, 0, 0);
 				}
 			});
