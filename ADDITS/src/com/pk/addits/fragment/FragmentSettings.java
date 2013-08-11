@@ -122,6 +122,10 @@ public class FragmentSettings extends Fragment
 				{
 					callChangelogDialog();
 				}
+				else if (ID.equals("About"))
+				{
+					callAboutDialog();
+				}
 				else if (ID.equals("Clear App Data"))
 				{
 					AlertDialog.Builder confirmDialogBuilder = new AlertDialog.Builder(getActivity());
@@ -242,6 +246,16 @@ public class FragmentSettings extends Fragment
 				dialog.dismiss();
 			}
 		});
+		
+		dialog.show();
+	}
+	
+	private void callAboutDialog()
+	{
+		final Dialog dialog = new Dialog(getActivity());
+		dialog.setTitle("About");
+		dialog.setContentView(R.layout.dialog_about);
+		dialog.setCancelable(true);
 		
 		dialog.show();
 	}
