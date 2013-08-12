@@ -57,6 +57,7 @@ import com.pk.addits.fragment.FragmentLoading;
 import com.pk.addits.fragment.FragmentMerchandise;
 import com.pk.addits.fragment.FragmentReviews;
 import com.pk.addits.fragment.FragmentSettings;
+import com.pk.addits.fragment.FragmentSupport;
 import com.pk.addits.fragment.FragmentTutorials;
 import com.pk.addits.model.Article;
 import com.squareup.picasso.Picasso;
@@ -74,7 +75,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private Thread emptyFeedThread;
 	private Handler mHandler;
 	private static AQuery aq;
-	private boolean emptyFeed;
+	private static boolean emptyFeed;
 	private static int lastHomeScrollPosition;
 	private static int lastHomeTopOffset;
 	private static int backPress;
@@ -101,7 +102,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	private static FragmentManager fragmentManager;
 	private boolean newFound;
-	private boolean fragmentLoaded;
+	private static boolean fragmentLoaded;
 	private boolean fromWidget;
 	
 	public static boolean imageExpanded;
@@ -110,6 +111,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public static ImageView expandedImageView;
 	private static Animator mCurrentAnimator;
 	private static int mShortAnimationDuration;
+	
+	private int savedBuild;
+	private static boolean supportFragmentActive;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -124,10 +128,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setIcon(R.drawable.ic_ab_logo);
-		if(Data.BETA)
+		if (Data.BETA)
 			actionBar.setSubtitle("BETA");
 		
 		prefs = getSharedPreferences(Data.PREFS_TAG, 0);
+		savedBuild = prefs.getInt(Data.PREF_TAG_SAVED_BUILD, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
 		fragmentManager = getSupportFragmentManager();
 		if (savedInstanceState == null)
@@ -136,6 +141,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			lastHomeScrollPosition = 0;
 			lastHomeTopOffset = 0;
 			backPress = 0;
+			supportFragmentActive = false;
 			currentFragment = "Loading";
 			fragmentLoaded = false;
 			fromWidget = false;
@@ -185,8 +191,12 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		if (savedInstanceState == null)
 		{
 			mHandler = new Handler();
-			if (!fromWidget)
+			
+			if (!fromWidget && !supportFragmentActive)
 				selectItem(225);
+			
+			if (savedBuild < 1)
+				ask4Money();
 			
 			if (db.getArticleCount() < 5)
 				emptyFeed = true;
@@ -297,6 +307,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				transaction.commit();
 				return true;
 			}
+			else if (currentFragment.equals("Android Dissected"))
+			{
+				return true;
+			}
 			else
 			{
 				if (backPress < 1)
@@ -393,7 +407,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		articleShowing = false;
 		backPress = 0;
 		fragmentManager.beginTransaction().setCustomAnimations(R.anim.fade_in, R.anim.fade_out).replace(R.id.content_frame, fragment).commit();
-		if (position != 225)
+		if (position != 225 && !supportFragmentActive)
 		{
 			mDrawerList.setItemChecked(position, true);
 			setTitle(mListNames[position]);
@@ -454,7 +468,52 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		backPress = 0;
 		
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.in_from_down, R.anim.out_to_up);
+		transaction.setCustomAnimations(R.anim.in_from_up, R.anim.none);
+		transaction.replace(R.id.content_frame, fragment);
+		transaction.commit();
+	}
+	
+	private void ask4Money()
+	{
+		supportFragmentActive = true;
+		Toast.makeText(ActivityMain.this, "Spare Change?", Toast.LENGTH_SHORT).show();
+		Fragment fragSupport = new FragmentSupport();
+		mTitle = "Android Dissected";
+		actionBar.setTitle(mTitle);
+		currentFragment = "Android Dissected";
+		articleShowing = false;
+		backPress = 0;
+		
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.in_from_down, R.anim.none);
+		transaction.replace(R.id.content_frame, fragSupport);
+		transaction.commit();
+	}
+	
+	public static void showCurrentFragment()
+	{
+		Fragment fragment = null;
+		supportFragmentActive = false;
+		
+		if (!fragmentLoaded || emptyFeed == true)
+		{
+			fragment = new FragmentLoading();
+			mTitle = "Loading";
+			actionBar.setTitle(mTitle);
+			currentFragment = "Loading";
+		}
+		else
+		{
+			fragment = new FragmentHome();
+			mTitle = "Home";
+			actionBar.setTitle(mTitle);
+			currentFragment = "Home";
+		}
+		articleShowing = false;
+		backPress = 0;
+		
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.none, R.anim.out_to_up);
 		transaction.replace(R.id.content_frame, fragment);
 		transaction.commit();
 	}
@@ -520,7 +579,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				{
 					if (Data.isNetworkConnected(ActivityMain.this))
 					{
-						if (!inBackground)
+						if (!inBackground && !supportFragmentActive)
 							mHandler.post(new showProgress2("Downloading content..."));
 						
 						try
@@ -530,12 +589,12 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
 							aq.sync(cb);
 							
-							if (!inBackground)
+							if (!inBackground && !supportFragmentActive)
 								mHandler.post(new showProgress2("Writing content..."));
 							for (int x = 0; x < articleList.size(); x++)
 								db.addArticle(articleList.get(x));
 							
-							if (!inBackground)
+							if (!inBackground && !supportFragmentActive)
 							{
 								mHandler.post(new showProgress2("Everything is up to date!"));
 								mHandler.postDelayed(new showProgress2(""), 3500);
@@ -543,11 +602,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						}
 						catch (Exception e)
 						{
-							if (!inBackground)
+							if (!inBackground && !supportFragmentActive)
 								mHandler.post(new showProgress2("Error downloading feed!"));
 						}
 					}
-					else if (!inBackground)
+					else if (!inBackground && !supportFragmentActive)
 						mHandler.post(new showProgress2("An internet connection is required!"));
 					
 				}
@@ -557,7 +616,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					
 					try
 					{
-						if (!inBackground)
+						if (!inBackground && !supportFragmentActive)
 							mHandler.post(new showProgress2("Oh noez!\nAn unknown error occurred!!!"));
 					}
 					catch (Exception ee)
@@ -760,6 +819,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			}
 			else
 			{
+				fragmentLoaded = true;
 				emptyFeed = false;
 				selectItem(0);
 			}

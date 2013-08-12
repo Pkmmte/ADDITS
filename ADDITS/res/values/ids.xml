@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="slider_content" />
-    <item type="id" name="home_header" />
-    <item type="id" name="video_fragment" />
+
+    <item name="slider_content" type="id"/>
+    <item name="home_header" type="id"/>
+    <item name="video_fragment" type="id"/>
+    <item name="radio_enable" type="id"/>
+    <item name="radio_disable" type="id"/>
+
 </resources>
