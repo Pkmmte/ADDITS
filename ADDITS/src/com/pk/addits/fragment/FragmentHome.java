@@ -26,8 +26,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
@@ -187,6 +189,9 @@ public class FragmentHome extends Fragment
 	{
 		menu.clear();
 		inflater.inflate(R.menu.home, menu);
+		
+		MenuItem searchItem = menu.findItem(R.id.Search_Label);
+		SearchView searchView = (SearchView) searchItem.getActionView();
 	}
 	
 	@Override
