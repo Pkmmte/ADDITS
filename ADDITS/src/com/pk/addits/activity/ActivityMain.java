@@ -468,7 +468,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		backPress = 0;
 		
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
-		transaction.setCustomAnimations(R.anim.in_from_up, R.anim.none);
+		transaction.setCustomAnimations(R.anim.in_from_down, R.anim.out_to_up);
 		transaction.replace(R.id.content_frame, fragment);
 		transaction.commit();
 	}
@@ -476,7 +476,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private void ask4Money()
 	{
 		supportFragmentActive = true;
-		Toast.makeText(ActivityMain.this, "Spare Change?", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(ActivityMain.this, "Spare Change?", Toast.LENGTH_SHORT).show();
 		Fragment fragSupport = new FragmentSupport();
 		mTitle = "Android Dissected";
 		actionBar.setTitle(mTitle);

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +24,7 @@ import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ArticleContentAdapter;
 import com.pk.addits.data.Data;
+import com.pk.addits.misc.CustomMovementMethod;
 import com.pk.addits.misc.URLImageParser;
 import com.pk.addits.model.Article;
 import com.pk.addits.model.ArticleContent;
@@ -172,7 +172,7 @@ public class FragmentArticle extends Fragment
 			txtContent.setVisibility(View.VISIBLE);
 			
 			txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
-			txtContent.setMovementMethod(LinkMovementMethod.getInstance());
+			txtContent.setMovementMethod(new CustomMovementMethod());
 		}
 		
 		/*commentCard.setOnClickListener(new View.OnClickListener()

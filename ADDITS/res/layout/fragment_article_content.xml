@@ -13,6 +13,7 @@
         android:fontFamily="serif"
         android:padding="@dimen/margin_medium"
         android:text="@string/placeholder"
+        android:textIsSelectable="true"
         android:textSize="@dimen/text_primary" />
 
     <com.pk.addits.view.ZoomImageView

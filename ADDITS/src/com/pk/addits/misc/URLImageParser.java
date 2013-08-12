@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.Html.ImageGetter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class URLImageParser implements ImageGetter
 {
@@ -64,16 +65,23 @@ public class URLImageParser implements ImageGetter
 		@Override
 		protected void onPostExecute(Drawable result)
 		{
-			// set the correct bound according to the result from HTTP call
-			urlDrawable.setBounds(0, 0, 0 + result.getIntrinsicWidth(), 0 + result.getIntrinsicHeight());
-			
-			// change the reference of the current drawable to the result
-			// from the HTTP call
-			urlDrawable.drawable = result;
-			
-			// redraw the image by invalidating the container
-			URLImageParser.this.container.invalidate();
-			URLImageParser.this.container.setHeight((URLImageParser.this.container.getHeight() + result.getIntrinsicHeight()));
+			try
+			{
+				// set the correct bound according to the result from HTTP call
+				urlDrawable.setBounds(0, 0, 0 + result.getIntrinsicWidth(), 0 + result.getIntrinsicHeight());
+				
+				// change the reference of the current drawable to the result
+				// from the HTTP call
+				urlDrawable.drawable = result;
+				
+				// redraw the image by invalidating the container
+				URLImageParser.this.container.invalidate();
+				URLImageParser.this.container.setHeight((URLImageParser.this.container.getHeight() + result.getIntrinsicHeight()));
+			}
+			catch (Exception e)
+			{
+				Toast.makeText(c, "Unable to load images...", Toast.LENGTH_SHORT).show();
+			}
 		}
 		
 		/***

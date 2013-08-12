@@ -107,7 +107,9 @@
                 android:id="@+id/txtContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin_small" />
+                android:padding="@dimen/margin_small"
+                android:autoLink="all"
+                android:textIsSelectable="true" />
         </RelativeLayout>
 
         <!-- Comments have been disabled until it's fixed on the server side! -->
@@ -184,6 +186,7 @@
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
+
         -->
     </RelativeLayout>
 

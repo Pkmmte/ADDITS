@@ -6,6 +6,7 @@ import java.util.TimerTask;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.pk.addits.R;
@@ -35,6 +37,10 @@ import com.pk.addits.model.Article;
 
 public class FragmentHome extends Fragment
 {
+	private SharedPreferences prefs;
+	private boolean adsEnabled;
+	private LinearLayout ad;
+	
 	static GridView grid;
 	static ListView list;
 	static FrameLayout frame;
@@ -73,9 +79,13 @@ public class FragmentHome extends Fragment
 	{
 		View view = inflater.inflate(R.layout.fragment_home, container, false);
 		setHasOptionsMenu(true);
+		
+		prefs = getActivity().getSharedPreferences(Data.PREFS_TAG, 0);
+		adsEnabled = prefs.getBoolean(Data.PREF_TAG_ADS_ENABLED, true);
 		cntxt = getActivity();
 		isLandscape = getActivity().getResources().getBoolean(R.bool.isLandscape);
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
+		ad = (LinearLayout) view.findViewById(R.id.ad);
 		
 		if (isLandscape)
 		{
@@ -106,6 +116,9 @@ public class FragmentHome extends Fragment
 			scrollPosition = args.getInt("Last Scroll Position", 0);
 			topOffset = args.getInt("Last Top Offset", 0);
 		}
+		
+		if (!adsEnabled)
+			ad.setVisibility(View.GONE);
 		
 		return view;
 	}
