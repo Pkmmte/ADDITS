@@ -1,5 +1,6 @@
 package com.pk.addits.fragment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,10 +144,11 @@ public class FragmentSettings extends Fragment
 					{
 						public void onClick(DialogInterface dialog, int id)
 						{
-							Toast.makeText(getActivity(), "Cleared App Data!", Toast.LENGTH_LONG).show();
-							
 							getActivity().getSharedPreferences(Data.PREFS_TAG, 0).edit().clear().commit();
 							ActivityMain.db.removeAll();
+							deleteCache();
+							
+							Toast.makeText(getActivity(), "Cleared App Data!", Toast.LENGTH_LONG).show();
 							
 							// Restart the app...
 							Intent restartIntent = new Intent(getActivity(), ActivityMain.class);
@@ -258,5 +260,32 @@ public class FragmentSettings extends Fragment
 		dialog.setCancelable(true);
 		
 		dialog.show();
+	}
+	
+	private void deleteCache()
+	{
+		try
+		{
+			File dir = getActivity().getCacheDir();
+			if (dir != null && dir.isDirectory())
+				deleteDir(dir);
+		}
+		catch (Exception e)
+		{
+		}
+	}
+	
+	private boolean deleteDir(File dir)
+	{
+		if (dir != null && dir.isDirectory())
+		{
+			String[] children = dir.list();
+			for (int i = 0; i < children.length; i++)
+			{
+				if (!deleteDir(new File(dir, children[i])))
+					return false;
+			}
+		}
+		return dir.delete();
 	}
 }
