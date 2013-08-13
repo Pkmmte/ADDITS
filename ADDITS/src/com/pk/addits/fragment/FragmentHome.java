@@ -64,6 +64,8 @@ public class FragmentHome extends Fragment
 	
 	private static int returnCount; // To prevent a StackOverflowError
 	
+	private Drawable mActionBarBackgroundDrawable;
+	
 	public static FragmentHome newInstance(int lastScrollPosition, int lastTopOffset)
 	{
 		FragmentHome f = new FragmentHome();
@@ -88,6 +90,8 @@ public class FragmentHome extends Fragment
 		isLandscape = getActivity().getResources().getBoolean(R.bool.isLandscape);
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
 		ad = (LinearLayout) view.findViewById(R.id.ad);
+		 mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.ab_background);
+		 mActionBarBackgroundDrawable.setAlpha(0);
 		
 		if (isLandscape)
 		{
@@ -104,7 +108,24 @@ public class FragmentHome extends Fragment
 			list.addHeaderView(header, null, true);
 			header.setLayoutParams(layoutParams);
 			list.setAdapter(adapter);
-		}
+			list.setOnScrollListener(this);
+			
+			@Override
+    				public void onScroll(AbsListView view, int firstVisibleItem,int visibleItemCount, int totalItemCount) {
+         
+					 mCurrentX = view.getScrollX();
+					 mCurrentY = view.getScrollY();
+				final int headerHeight = findViewById(R.id.header).getHeight() - getActionBar().getHeight();
+				final float ratio = (float) Math.min(Math.max(mCurrentY, 0), headerHeight) / headerHeight;
+            			final int newAlpha = (int) (ratio * 255);
+            			mActionBarBackgroundDrawable.setAlpha(newAlpha);
+					 
+    			}
+
+		        @Override
+    				public void onScrollStateChanged(AbsListView view, int scrollState) {}
+	
+			}
 		
 		currentSlide = 1;
 		currentSlideID = 1;
