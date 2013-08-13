@@ -191,6 +191,9 @@ public class FragmentHome extends Fragment
 		inflater.inflate(R.menu.home, menu);
 		
 		SearchView searchView = (SearchView) menu.findItem(R.id.Search_Label);.getActionView();
+		int searchIconId = searchView.getContext().getResources().getIdentifier("android:id/search_mag_icon", null, null);
+		View searchIcon = searchView.findViewById(R.id.searchIconId);
+		searchIcon.setImageResource(R.drawable.search);
 		
 		
 	}
