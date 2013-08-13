@@ -190,8 +190,9 @@ public class FragmentHome extends Fragment
 		menu.clear();
 		inflater.inflate(R.menu.home, menu);
 		
-		MenuItem searchItem = menu.findItem(R.id.Search_Label);
-		SearchView searchView = (SearchView) searchItem.getActionView();
+		SearchView searchView = (SearchView) menu.findItem(R.id.Search_Label);.getActionView();
+		
+		
 	}
 	
 	@Override
