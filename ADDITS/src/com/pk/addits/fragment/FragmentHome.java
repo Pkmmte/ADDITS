@@ -192,7 +192,7 @@ public class FragmentHome extends Fragment
 		
 		SearchView searchView = (SearchView) menu.findItem(R.id.Search_Label);.getActionView();
 		int searchIconId = searchView.getContext().getResources().getIdentifier("android:id/search_mag_icon", null, null);
-		View searchIcon = searchView.findViewById(R.id.searchIconId);
+		ImageView searchIcon = searchView.findViewById(R.id.searchIconId);
 		searchIcon.setImageResource(R.drawable.search);
 		
 		
