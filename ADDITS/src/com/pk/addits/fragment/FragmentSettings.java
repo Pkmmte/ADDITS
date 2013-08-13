@@ -144,6 +144,7 @@ public class FragmentSettings extends Fragment
 					{
 						public void onClick(DialogInterface dialog, int id)
 						{
+							// Clear preferences, databases, and cache...
 							getActivity().getSharedPreferences(Data.PREFS_TAG, 0).edit().clear().commit();
 							ActivityMain.db.removeAll();
 							deleteCache();
@@ -237,7 +238,7 @@ public class FragmentSettings extends Fragment
 		list.addHeaderView(header, null, false);
 		
 		final List<ChangelogItem> changes = new ArrayList<ChangelogItem>();
-		changes.add(new ChangelogItem("Version 1.0 (Build 1)", "04-20-1984", "� Initial Release"));
+		changes.add(new ChangelogItem("Version 1.0 (Build 1)", "04-20-1984", "\u2022 Initial Release"));
 		list.setAdapter(new ChangelogAdapter(getActivity(), changes));
 		
 		btnClose.setOnClickListener(new View.OnClickListener()
