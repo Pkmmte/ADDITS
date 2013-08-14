@@ -26,7 +26,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -106,7 +105,7 @@ public class FragmentHome extends Fragment
 			list.addHeaderView(header, null, true);
 			header.setLayoutParams(layoutParams);
 			list.setAdapter(adapter);
-		
+		}
 		
 		currentSlide = 1;
 		currentSlideID = 1;
