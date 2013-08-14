@@ -6,7 +6,7 @@
         android:actionViewClass="android.widget.SearchView"
         android:hint="Search Articles"
         android:icon="@drawable/search"
-        android:showAsAction="ifRoom|withText"
+        android:showAsAction="ifRoom|withText|collapseActionView"
         android:title="Search"
         android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>
     <item
