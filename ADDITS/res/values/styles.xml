@@ -21,8 +21,6 @@
         <item name="android:maxHeight">20dip</item>
     </style>
     
-    <style name="Widget.ActionBar.Transparent">
-        <item name="android:background">@android:color/transparent</item>
-    </style>
+    
 
 </resources>
