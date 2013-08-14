@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -252,50 +253,57 @@ public class FragmentHome extends Fragment
 	
 	public static void populateSlide()
 	{
-		int sID = 0;
-		String sTitle = "";
-		String sAuthor = "";
-		String sDate = "";
-		String sImage = "";
-		String sCategory = "";
-		
-		if (ActivityMain.articleList != null && ActivityMain.articleList.size() > 0)
+		try
 		{
-			Random generator = new Random();
-			int r = generator.nextInt(ActivityMain.articleList.size());
-			sID = r;
-			sTitle = ActivityMain.articleList.get(r).getTitle();
-			sAuthor = ActivityMain.articleList.get(r).getAuthor();
-			sDate = Data.parseDate(cntxt, ActivityMain.articleList.get(r).getDate());
-			sImage = ActivityMain.articleList.get(r).getImage();
-			sCategory = ActivityMain.articleList.get(r).getCategory();
-			currentSlideID = ActivityMain.articleList.get(r).getID();
+			int sID = 0;
+			String sTitle = "";
+			String sAuthor = "";
+			String sDate = "";
+			String sImage = "";
+			String sCategory = "";
 			
-			if (sImage.length() < 1 && returnCount < 5)
+			if (ActivityMain.articleList != null && ActivityMain.articleList.size() > 0)
+			{
+				Random generator = new Random();
+				int r = generator.nextInt(ActivityMain.articleList.size());
+				sID = r;
+				sTitle = ActivityMain.articleList.get(r).getTitle();
+				sAuthor = ActivityMain.articleList.get(r).getAuthor();
+				sDate = Data.parseDate(cntxt, ActivityMain.articleList.get(r).getDate());
+				sImage = ActivityMain.articleList.get(r).getImage();
+				sCategory = ActivityMain.articleList.get(r).getCategory();
+				currentSlideID = ActivityMain.articleList.get(r).getID();
+				
+				if (sImage.length() < 1 && returnCount < 5)
+				{
+					returnCount++;
+					populateSlide();
+					return;
+				}
+			}
+			
+			if (!sCategory.equalsIgnoreCase("DAILY SAVER"))
+				fragSlide = FragmentSlider.newInstance(sID, sTitle, sAuthor, sDate, sImage);
+			else if (returnCount < 5)
 			{
 				returnCount++;
 				populateSlide();
 				return;
 			}
+			
+			returnCount = 0;
+			
+			if (!isLandscape)
+			{
+				FragmentTransaction trans = fm.beginTransaction();
+				trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
+				trans.replace(R.id.slider_content, fragSlide);
+				trans.commit();
+			}
 		}
-		
-		if (!sCategory.equalsIgnoreCase("DAILY SAVER"))
-			fragSlide = FragmentSlider.newInstance(sID, sTitle, sAuthor, sDate, sImage);
-		else if (returnCount < 5)
+		catch (Exception e)
 		{
-			returnCount++;
-			populateSlide();
-			return;
-		}
-		
-		returnCount = 0;
-		
-		if (!isLandscape)
-		{
-			FragmentTransaction trans = fm.beginTransaction();
-			trans.setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_out, R.anim.fade_in);
-			trans.replace(R.id.slider_content, fragSlide);
-			trans.commit();
+			//Log.v("Log TAG", "IllegalStateException");
 		}
 	}
 	

@@ -288,7 +288,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				
 				return true;
 			}
-			else if (currentFragment.equals("Settings"))
+			else if (currentFragment.equals("Settings") || currentFragment.equals("Search"))
 			{
 				Fragment fragment = new FragmentHome();
 				mTitle = "Home";

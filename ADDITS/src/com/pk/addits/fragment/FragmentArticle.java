@@ -55,12 +55,12 @@ public class FragmentArticle extends Fragment
 	private ArticleContentAdapter contentAdapter;
 	
 	/** Comments have been disabled until it's fixed on the server side! **/
-	//FrameLayout commentCard;
-	//TextView txtLoadComments;
-	//ProgressBar progressBar;
-	//ListView comments;
-	//private List<CommentFeed> commentList;
-	//private CommentsAdapter commentAdapter;
+	// FrameLayout commentCard;
+	// TextView txtLoadComments;
+	// ProgressBar progressBar;
+	// ListView comments;
+	// private List<CommentFeed> commentList;
+	// private CommentsAdapter commentAdapter;
 	
 	private Typeface fontRegular;
 	private Typeface fontBold;
@@ -134,25 +134,20 @@ public class FragmentArticle extends Fragment
 		mHandler = new Handler();
 		
 		actionBar.setTitle(Article.getTitle());
-		Picasso.with(getActivity()).load(Article.getImage()).fit().skipCache().into(imgHeader);
-		imgHeader.setOnClickListener(new View.OnClickListener()
+		if (Article.getImage().length() > 0)
 		{
-			@Override
-			public void onClick(View view)
+			Picasso.with(getActivity()).load(Article.getImage()).fit().skipCache().into(imgHeader);
+			imgHeader.setOnClickListener(new View.OnClickListener()
 			{
-				Data.zoomImageFromThumb(imgHeader, Article.getImage(), getActivity());
-			}
-		});
-		// imgHeader.setAdjustViewBounds(false);
-		// imgHeader.setScaleType(ScaleType.CENTER_CROP);
-		// if (Article.getImage().length() > 0)
-		// {
-		// initializeLoadHeaderImageThread();
-		// loadHeaderImageThread.start();
-		//
-		// }
-		// else
-		// Picasso.with(getActivity()).load(R.drawable.loading_image_error).fit().into(imgHeader);
+				@Override
+				public void onClick(View view)
+				{
+					Data.zoomImageFromThumb(imgHeader, Article.getImage(), getActivity());
+				}
+			});
+		}
+		else
+			imgHeader.setVisibility(View.GONE);
 		
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
@@ -174,27 +169,14 @@ public class FragmentArticle extends Fragment
 			txtContent.setMovementMethod(new CustomMovementMethod());
 		}
 		
-		/*commentCard.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				progressBar.setVisibility(View.VISIBLE);
-				txtLoadComments.setText("Loading Comments...");
-				commentCard.setClickable(false);
-				
-				if (loadCommentsThread == null)
-				{
-					initializeLoadCommentsThread();
-					loadCommentsThread.start();
-				}
-				else if (!loadCommentsThread.isAlive())
-				{
-					initializeLoadCommentsThread();
-					loadCommentsThread.start();
-				}
-			}
-		});*/
+		/*
+		 * commentCard.setOnClickListener(new View.OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { progressBar.setVisibility(View.VISIBLE); txtLoadComments.setText("Loading Comments..."); commentCard.setClickable(false);
+		 * 
+		 * if (loadCommentsThread == null) { initializeLoadCommentsThread(); loadCommentsThread.start(); } else if (!loadCommentsThread.isAlive()) { initializeLoadCommentsThread();
+		 * loadCommentsThread.start(); } } });
+		 */
 		
 		if (!Article.isRead())
 			markRead();
