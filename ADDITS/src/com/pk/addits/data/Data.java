@@ -5,9 +5,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
@@ -466,7 +468,7 @@ public class Data
 				{
 					Log.v("HAX", "xrp.next() error");
 					
-					if(errorRetry > 50)
+					if (errorRetry > 50)
 						break;
 					
 					errorRetry++;
@@ -777,32 +779,6 @@ public class Data
 			return false;
 	}
 	
-	/*
-	 * public static void overwriteFeedXML(Feed[] Feeeeedz) { File sdCard = Environment.getExternalStorageDirectory(); File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
-	 * dir.mkdirs(); File file = new File(dir, FEED_TAG);
-	 * 
-	 * try { StringBuilder XMLbuilder = new StringBuilder(); XMLbuilder.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + "<feed>\n");
-	 * 
-	 * for (int x = 0; x < Feeeeedz.length; x++) { int sID = Feeeeedz[x].getID(); String sTitle = Feeeeedz[x].getTitle(); String sDescription = Feeeeedz[x].getDescription(); String sContent =
-	 * Feeeeedz[x].getContent(); String sCommentFeed = Feeeeedz[x].getCommentFeed(); String sAuthor = Feeeeedz[x].getAuthor(); String sDate = Feeeeedz[x].getDate(); String sCategory =
-	 * Feeeeedz[x].getCategory(); String sImage = Feeeeedz[x].getImage(); String sURL = Feeeeedz[x].getURL(); boolean sFavorite = Feeeeedz[x].isFavorite(); boolean sRead = Feeeeedz[x].isRead();
-	 * 
-	 * // Fix "&" Sign sTitle = sTitle.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sDescription = sDescription.replace("&", "&amp;").replace("\"",
-	 * "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sContent = sContent.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sCommentFeed =
-	 * sCommentFeed.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sAuthor = sAuthor.replace("&", "&amp;").replace("\"", "&quot;").replace("<",
-	 * "&lt;").replace(">", "&gt;"); sDate = sDate.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sCategory = sCategory.replace("&", "&amp;").replace("\"",
-	 * "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sImage = sImage.replace("&", "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;"); sURL = sURL.replace("&",
-	 * "&amp;").replace("\"", "&quot;").replace("<", "&lt;").replace(">", "&gt;");
-	 * 
-	 * XMLbuilder.append("	<article\n" + "		id=\"" + sID + "\"\n" + "		title=\"" + sTitle + "\"\n" + "		description=\"" + sDescription + "\"\n" + "		content=\"" + sContent + "\"\n" +
-	 * "		commentfeed=\"" + sCommentFeed + "\"\n" + "		author=\"" + sAuthor + "\"\n" + "		date=\"" + sDate + "\"\n" + "		category=\"" + sCategory + "\"\n" + "		image=\"" + sImage + "\"\n" + "		url=\""
-	 * + sURL + "\"\n" + "		favorite=\"" + sFavorite + "\"\n" + "		read=\"" + sRead + "\" />\n\n"); }
-	 * 
-	 * XMLbuilder.append("</feed>"); String XML = XMLbuilder.toString();
-	 * 
-	 * FileOutputStream f = new FileOutputStream(file); f.write(XML.getBytes()); f.close(); } catch (Exception e) { Log.w("XML Write Error", e); } }
-	 */
-	
 	public static boolean isNetworkConnected(Context context)
 	{
 		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -813,6 +789,31 @@ public class Data
 		}
 		else
 			return true;
+	}
+	
+	public static boolean hasActiveInternetConnection(Context context)
+	{
+		if (isNetworkConnected(context))
+		{
+			try
+			{
+				HttpURLConnection urlc = (HttpURLConnection) (new URL(MAIN_URL).openConnection());
+				urlc.setRequestProperty("User-Agent", "Test");
+				urlc.setRequestProperty("Connection", "close");
+				urlc.setConnectTimeout(1000);
+				urlc.connect();
+				return (urlc.getResponseCode() == 200);
+			}
+			catch (IOException e)
+			{
+				Log.e("LOG_TAG", "Error checking internet connection", e);
+			}
+		}
+		else
+		{
+			Log.d("LOG_TAG", "No network available!");
+		}
+		return false;
 	}
 	
 	public static void deleteTempFile()

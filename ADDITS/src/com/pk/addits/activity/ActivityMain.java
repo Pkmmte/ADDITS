@@ -476,7 +476,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private void ask4Money()
 	{
 		supportFragmentActive = true;
-		//Toast.makeText(ActivityMain.this, "Spare Change?", Toast.LENGTH_SHORT).show();
+		// Toast.makeText(ActivityMain.this, "Spare Change?", Toast.LENGTH_SHORT).show();
 		Fragment fragSupport = new FragmentSupport();
 		mTitle = "Android Dissected";
 		actionBar.setTitle(mTitle);
@@ -525,23 +525,30 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
 	{
-		List<XmlDom> entries = xml.tags("item");
-		int count = 0;
-		
-		for (XmlDom item : entries)
+		try
 		{
-			String Title = item.text("title");
-			String Description = Html.fromHtml(item.text("description").replaceAll("<img.+?>", "")).toString();
-			String Content = item.text("content:encoded");
-			String CommentFeed = item.text("wfw:commentRss");
-			String Author = item.text("dc:creator");
-			String Date = item.text("pubDate");
-			String Category = item.text("category");
-			String Image = Data.pullLinks(item.text("description"));
-			String URL = item.text("link");
+			List<XmlDom> entries = xml.tags("item");
+			int count = 0;
 			
-			articleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
-			count++;
+			for (XmlDom item : entries)
+			{
+				String Title = item.text("title");
+				String Description = Html.fromHtml(item.text("description").replaceAll("<img.+?>", "")).toString();
+				String Content = item.text("content:encoded");
+				String CommentFeed = item.text("wfw:commentRss");
+				String Author = item.text("dc:creator");
+				String Date = item.text("pubDate");
+				String Category = item.text("category");
+				String Image = Data.pullLinks(item.text("description"));
+				String URL = item.text("link");
+				
+				articleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
+				count++;
+			}
+		}
+		catch (Exception e)
+		{
+			Log.v("Error downloading feed.", "Unstable internet connection.");
 		}
 		
 		return;
@@ -577,7 +584,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			{
 				try
 				{
-					if (Data.isNetworkConnected(ActivityMain.this))
+					if (Data.hasActiveInternetConnection(ActivityMain.this))
 					{
 						if (!inBackground && !supportFragmentActive)
 							mHandler.post(new showProgress2("Downloading content..."));
@@ -606,9 +613,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								mHandler.post(new showProgress2("Error downloading feed!"));
 						}
 					}
+					else if (Data.isNetworkConnected(ActivityMain.this) && !inBackground && !supportFragmentActive)
+						mHandler.post(new showProgress2("Error connecting to AndroidDissected.com!"));
 					else if (!inBackground && !supportFragmentActive)
-						mHandler.post(new showProgress2("An internet connection is required!"));
-					
+						mHandler.post(new showProgress2("An internet connection is required!!!"));
 				}
 				catch (Exception e)
 				{
@@ -649,7 +657,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						mHandler.post(new showHome());
 					/** Fetch Website Data **/
 					
-					if (updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.isNetworkConnected(ActivityMain.this))
+					if (updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.hasActiveInternetConnection(ActivityMain.this))
 					{
 						lastUpdateCheckTime = System.currentTimeMillis();
 						Editor editor = prefs.edit();
