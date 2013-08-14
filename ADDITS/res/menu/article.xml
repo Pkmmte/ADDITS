@@ -7,5 +7,13 @@
         android:icon="@drawable/share"
         android:showAsAction="ifRoom|withText"
         android:title="@string/share"/>
+    <item
+        android:id="@+id/Browser_Label"
+        android:showAsAction="never"
+        android:title="View in Browser"/>
+    <item
+        android:id="@+id/Settings_Label"
+        android:showAsAction="never"
+        android:title="Settings"/>
 
 </menu>

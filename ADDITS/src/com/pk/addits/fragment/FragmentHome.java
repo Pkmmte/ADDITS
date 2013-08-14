@@ -14,9 +14,9 @@ import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -136,7 +136,7 @@ public class FragmentHome extends Fragment
 	{
 		super.onStart();
 		fm = getChildFragmentManager();
-		imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+		imm = (InputMethodManager) getActivity().getSystemService(FragmentActivity.INPUT_METHOD_SERVICE);
 		
 		timer = new Timer();
 		timeHandler = new Handler(new Callback()
@@ -233,7 +233,6 @@ public class FragmentHome extends Fragment
 				ActivityMain.callSettings();
 				return true;
 			default:
-				
 				return super.onOptionsItemSelected(item);
 		}
 	}

@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pk.addits.R;
+import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ArticleContentAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.misc.CustomMovementMethod;
@@ -193,6 +195,24 @@ public class FragmentArticle extends Fragment
 		
 		shareItem = menu.findItem(R.id.Share_Label);
 		mShareActionProvider = (ShareActionProvider) shareItem.getActionProvider();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.Browser_Label:
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(Article.getURL()));
+				startActivity(i);
+				return true;
+			case R.id.Settings_Label:
+				ActivityMain.callSettings();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 	
 	public static void menuVisibility(boolean drawerOpen)

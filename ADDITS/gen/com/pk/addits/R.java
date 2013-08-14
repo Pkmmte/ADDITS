@@ -210,6 +210,7 @@ public final class R {
         public static final int App_Banner=0x7f0d002c;
         public static final int App_Icon=0x7f0d002d;
         public static final int ArticleContent=0x7f0d0024;
+        public static final int Browser_Label=0x7f0d0050;
         public static final int Card=0x7f0d0019;
         public static final int CheckText=0x7f0d003d;
         public static final int Close=0x7f0d0014;
@@ -222,15 +223,15 @@ public final class R {
         public static final int ListView=0x7f0d0013;
         public static final int Name=0x7f0d003e;
         public static final int Parent=0x7f0d0032;
-        public static final int Search_Label=0x7f0d0050;
+        public static final int Search_Label=0x7f0d0052;
         public static final int Searching=0x7f0d0035;
         public static final int Setting=0x7f0d003c;
-        public static final int Settings_Label=0x7f0d0052;
+        public static final int Settings_Label=0x7f0d0051;
         public static final int Share_Label=0x7f0d004f;
         public static final int Text=0x7f0d0028;
         public static final int Video=0x7f0d0029;
         public static final int VideoPreview=0x7f0d002a;
-        public static final int Website_Label=0x7f0d0051;
+        public static final int Website_Label=0x7f0d0053;
         public static final int ad=0x7f0d002f;
         public static final int adView=0x7f0d0030;
         public static final int appButton=0x7f0d0042;
