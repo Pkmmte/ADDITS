@@ -47,7 +47,6 @@ import android.util.Log;
 import android.util.Xml;
 import android.view.Display;
 
-import com.pk.addits.model.Article;
 import com.pk.addits.model.ArticleContent;
 import com.pk.addits.model.CommentFeed;
 
@@ -148,140 +147,6 @@ public class Data
 		}
 		
 		return jObject;
-	}
-	
-	public static void downloadFeed()
-	{
-		File sdCard = Environment.getExternalStorageDirectory();
-		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
-		dir.mkdirs();
-		File file = new File(dir, TEMP_TAG);
-		
-		// Establish Connection
-		try
-		{
-			URL updateURL = new URL(FEED_URL);
-			URLConnection conn = updateURL.openConnection();
-			InputStream is = conn.getInputStream();
-			is = conn.getInputStream();
-			BufferedInputStream bis = new BufferedInputStream(is);
-			ByteArrayBuffer baf = new ByteArrayBuffer(50);
-			
-			int current = 0;
-			while ((current = bis.read()) != -1)
-			{
-				baf.append((byte) current);
-			}
-			
-			final String s = new String(baf.toByteArray());
-			
-			FileOutputStream f = new FileOutputStream(file);
-			f.write(s.getBytes());
-			f.close();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public static void writeFeed()
-	{
-		File sdCard = Environment.getExternalStorageDirectory();
-		File dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG);
-		dir.mkdirs();
-		File tempFile = new File(dir, TEMP_TAG);
-		
-		dir.mkdirs();
-		File file = new File(dir, FEED_TAG);
-		tempFile.renameTo(file);
-	}
-	
-	public static Article[] retrieveFeed()
-	{
-		int count = 0;
-		
-		try
-		{
-			File sdCard = Environment.getExternalStorageDirectory();
-			File dir = null;
-			dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
-			FileInputStream istr = new FileInputStream(dir);
-			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			factory.setNamespaceAware(false);
-			
-			XmlPullParser xrp = factory.newPullParser();
-			xrp.setInput(istr, "UTF-8");
-			xrp.next();
-			int eventType = xrp.getEventType();
-			
-			while (eventType != XmlPullParser.END_DOCUMENT)
-			{
-				if (eventType == XmlPullParser.START_TAG)
-				{
-					String elemName = xrp.getName();
-					if (elemName.equals("article"))
-						count++;
-				}
-				eventType = xrp.next();
-			}
-		}
-		catch (Exception e)
-		{
-			Log.w("[Feed Count] XML Parse Error", e);
-		}
-		
-		Article[] Feeeeedz = new Article[count];
-		
-		try
-		{
-			File sdCard = Environment.getExternalStorageDirectory();
-			File dir = null;
-			dir = new File(sdCard.getAbsolutePath() + "/Android/data/" + PACKAGE_TAG + "/" + FEED_TAG);
-			FileInputStream istr = new FileInputStream(dir);
-			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-			factory.setNamespaceAware(false);
-			
-			XmlPullParser xrp = factory.newPullParser();
-			xrp.setInput(istr, "UTF-8");
-			xrp.next();
-			int eventType = xrp.getEventType();
-			
-			int feedCount = 0;
-			while (eventType != XmlPullParser.END_DOCUMENT)
-			{
-				if (eventType == XmlPullParser.START_TAG)
-				{
-					String elemName = xrp.getName();
-					if (elemName.equals("article"))
-					{
-						// Attributes
-						String Title = xrp.getAttributeValue(null, "title");
-						String Description = xrp.getAttributeValue(null, "description");
-						String Content = xrp.getAttributeValue(null, "content");
-						String CommentFeed = xrp.getAttributeValue(null, "commentfeed");
-						String Author = xrp.getAttributeValue(null, "author");
-						String Date = xrp.getAttributeValue(null, "date");
-						String Category = xrp.getAttributeValue(null, "category");
-						String Image = xrp.getAttributeValue(null, "image");
-						String URL = xrp.getAttributeValue(null, "url");
-						boolean Favorite = Boolean.parseBoolean(xrp.getAttributeValue(null, "favorite"));
-						boolean Read = Boolean.parseBoolean(xrp.getAttributeValue(null, "read"));
-						
-						Feeeeedz[feedCount] = new Article(feedCount, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, Favorite, Read);
-						feedCount++;
-					}
-				}
-				eventType = xrp.next();
-			}
-			
-		}
-		catch (Exception e)
-		{
-			Log.w("[Feed] XML Parse Error", e);
-		}
-		
-		return Feeeeedz;
 	}
 	
 	public static void downloadCommentFeed(String feedURL)
@@ -402,6 +267,7 @@ public class Data
 			boolean p_active = false;
 			boolean h4_active = false;
 			boolean img_active = false;
+			int errorRetry = 0;
 			
 			while (eventType != XmlPullParser.END_DOCUMENT)
 			{
@@ -599,6 +465,11 @@ public class Data
 				catch (Exception e)
 				{
 					Log.v("HAX", "xrp.next() error");
+					
+					if(errorRetry > 50)
+						break;
+					
+					errorRetry++;
 				}
 			}
 		}
