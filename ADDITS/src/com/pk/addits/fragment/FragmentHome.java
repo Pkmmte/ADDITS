@@ -1,5 +1,6 @@
 package com.pk.addits.fragment;
 
+import java.util.Locale;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -29,6 +31,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
@@ -50,6 +53,8 @@ public class FragmentHome extends Fragment
 	static int scrollPosition;
 	static int topOffset;
 	
+	private InputMethodManager imm;
+	
 	static int currentSlide;
 	static Timer timer;
 	Handler timeHandler;
@@ -60,9 +65,9 @@ public class FragmentHome extends Fragment
 	static Integer currentSlideID;
 	
 	private static boolean isLandscape;
-	
+	private OnQueryTextListener queryListener;
+	private SearchView searchView;
 	private static int returnCount; // To prevent a StackOverflowError
-	
 	
 	public static FragmentHome newInstance(int lastScrollPosition, int lastTopOffset)
 	{
@@ -88,7 +93,6 @@ public class FragmentHome extends Fragment
 		isLandscape = getActivity().getResources().getBoolean(R.bool.isLandscape);
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
 		ad = (LinearLayout) view.findViewById(R.id.ad);
-		 
 		
 		if (isLandscape)
 		{
@@ -131,6 +135,7 @@ public class FragmentHome extends Fragment
 	{
 		super.onStart();
 		fm = getChildFragmentManager();
+		imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
 		
 		timer = new Timer();
 		timeHandler = new Handler(new Callback()
@@ -174,6 +179,24 @@ public class FragmentHome extends Fragment
 				}
 			});
 		}
+		
+		queryListener = new OnQueryTextListener()
+		{
+			@Override
+			public boolean onQueryTextChange(String newText)
+			{
+				return false;
+			}
+			
+			@Override
+			public boolean onQueryTextSubmit(String query)
+			{
+				imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+				ActivityMain.callSearch(query.toLowerCase(Locale.US));
+				
+				return false;
+			}
+		};
 	}
 	
 	@Override
@@ -191,10 +214,8 @@ public class FragmentHome extends Fragment
 		menu.clear();
 		inflater.inflate(R.menu.home, menu);
 		
-		SearchView searchView = (SearchView) menu.findItem(R.id.Search_Label).getActionView();
-	
-		
-		
+		searchView = (SearchView) menu.findItem(R.id.Search_Label).getActionView();
+		searchView.setOnQueryTextListener(queryListener);
 	}
 	
 	@Override

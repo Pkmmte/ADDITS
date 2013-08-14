@@ -50,6 +50,7 @@ import com.pk.addits.fragment.FragmentHome;
 import com.pk.addits.fragment.FragmentLoading;
 import com.pk.addits.fragment.FragmentMerchandise;
 import com.pk.addits.fragment.FragmentReviews;
+import com.pk.addits.fragment.FragmentSearch;
 import com.pk.addits.fragment.FragmentSettings;
 import com.pk.addits.fragment.FragmentSupport;
 import com.pk.addits.fragment.FragmentTutorials;
@@ -457,6 +458,21 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		mTitle = "Settings";
 		actionBar.setTitle(mTitle);
 		currentFragment = "Settings";
+		articleShowing = false;
+		backPress = 0;
+		
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+		transaction.setCustomAnimations(R.anim.in_from_down, R.anim.out_to_up);
+		transaction.replace(R.id.content_frame, fragment);
+		transaction.commit();
+	}
+	
+	public static void callSearch(String query)
+	{
+		Fragment fragment = FragmentSearch.newInstance(query);
+		mTitle = "Search";
+		actionBar.setTitle(mTitle);
+		currentFragment = "Search";
 		articleShowing = false;
 		backPress = 0;
 		
