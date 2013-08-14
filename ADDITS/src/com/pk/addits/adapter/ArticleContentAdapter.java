@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pk.addits.R;
-import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.data.Data;
 import com.pk.addits.misc.CustomMovementMethod;
 import com.pk.addits.model.ArticleContent;
@@ -101,7 +100,7 @@ public class ArticleContentAdapter extends BaseAdapter
 				@Override
 				public void onClick(View view)
 				{
-					ActivityMain.zoomImageFromThumb(holder.Image, Content, context);
+					Data.zoomImageFromThumb(holder.Image, Content, context);
 				}
 			});
 		}

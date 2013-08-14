@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pk.addits.R;
-import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ArticleContentAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.misc.CustomMovementMethod;
@@ -141,7 +140,7 @@ public class FragmentArticle extends Fragment
 			@Override
 			public void onClick(View view)
 			{
-				ActivityMain.zoomImageFromThumb(imgHeader, Article.getImage(), getActivity());
+				Data.zoomImageFromThumb(imgHeader, Article.getImage(), getActivity());
 			}
 		});
 		// imgHeader.setAdjustViewBounds(false);
