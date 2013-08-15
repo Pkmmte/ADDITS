@@ -5,10 +5,13 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
@@ -40,7 +43,7 @@ import com.pk.addits.adapter.FeedAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.model.Article;
 
-public class FragmentHome extends Fragment
+public class FragmentHome extends Fragment implements PullToRefreshAttacher.OnRefreshListener
 {
 	private SharedPreferences prefs;
 	private boolean adsEnabled;
@@ -53,6 +56,7 @@ public class FragmentHome extends Fragment
 	static Context cntxt;
 	static int scrollPosition;
 	static int topOffset;
+	private PullToRefreshAttacher mPullToRefreshAttacher;
 	
 	private InputMethodManager imm;
 	
@@ -94,11 +98,13 @@ public class FragmentHome extends Fragment
 		isLandscape = getActivity().getResources().getBoolean(R.bool.isLandscape);
 		adapter = new FeedAdapter(getActivity(), ActivityMain.articleList);
 		ad = (LinearLayout) view.findViewById(R.id.ad);
+		mPullToRefreshAttacher = ((ActivityMain) getActivity()).getPullToRefreshAttacher();
 		
 		if (isLandscape)
 		{
 			grid = (GridView) view.findViewById(R.id.GridView);
 			grid.setAdapter(adapter);
+			mPullToRefreshAttacher.addRefreshableView(grid, this);
 		}
 		else
 		{
@@ -110,6 +116,7 @@ public class FragmentHome extends Fragment
 			list.addHeaderView(header, null, true);
 			header.setLayoutParams(layoutParams);
 			list.setAdapter(adapter);
+			mPullToRefreshAttacher.addRefreshableView(list, this);
 		}
 		
 		currentSlide = 1;
@@ -302,7 +309,7 @@ public class FragmentHome extends Fragment
 		}
 		catch (Exception e)
 		{
-			//Log.v("Log TAG", "IllegalStateException");
+			// Log.v("Log TAG", "IllegalStateException");
 		}
 	}
 	
@@ -313,5 +320,36 @@ public class FragmentHome extends Fragment
 		{
 			timeHandler.sendEmptyMessage(0);
 		}
+	}
+	
+	@Override
+	public void onRefreshStarted(View view)
+	{
+		new AsyncTask<Void, Void, Void>()
+		{
+			
+			@Override
+			protected Void doInBackground(Void... params)
+			{
+				try
+				{
+					Thread.sleep(4000);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void result)
+			{
+				super.onPostExecute(result);
+				
+				// Notify PullToRefreshAttacher that the refresh has finished
+				mPullToRefreshAttacher.setRefreshComplete();
+			}
+		}.execute();
 	};
 }

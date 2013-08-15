@@ -3,6 +3,8 @@ package com.pk.addits.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+
 import android.animation.Animator;
 import android.app.ActionBar;
 import android.content.Context;
@@ -109,6 +111,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private int savedBuild;
 	private static boolean supportFragmentActive;
 	private int numNewFound;
+	private PullToRefreshAttacher mPullToRefreshAttacher;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -130,6 +133,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		savedBuild = prefs.getInt(Data.PREF_TAG_SAVED_BUILD, 0);
 		lastUpdateCheckTime = prefs.getLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, 0);
 		fragmentManager = getSupportFragmentManager();
+		mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
 		if (savedInstanceState == null)
 		{
 			emptyFeed = false;
@@ -554,6 +558,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 		
 		return;
+	}
+	
+	public PullToRefreshAttacher getPullToRefreshAttacher()
+	{
+		return mPullToRefreshAttacher;
 	}
 	
 	public void updateFeed(String url, XmlDom xml, AjaxStatus status)
