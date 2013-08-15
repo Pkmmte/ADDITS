@@ -108,6 +108,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	private int savedBuild;
 	private static boolean supportFragmentActive;
+	private int numNewFound;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -139,6 +140,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			currentFragment = "Loading";
 			fragmentLoaded = false;
 			fromWidget = false;
+			numNewFound = 0;
 		}
 		
 		String UpdateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
@@ -336,21 +338,12 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	private void initializeNavigationDrawer()
 	{
-		// Set up custom shadow overlay
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		
-		// Set up drawer content & listener
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mListNames));
 		mDrawerList.setOnItemClickListener(this);
 		
-		// ActionBarDrawerToggle ties together the the proper interactions
-		// between the sliding drawer and the action bar app icon
-		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-		R.string.drawer_open, /* "open drawer" description for accessibility */
-		R.string.drawer_close /* "close drawer" description for accessibility */
-		)
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close)
 		{
 			public void onDrawerClosed(View view)
 			{
@@ -563,6 +556,37 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		return;
 	}
 	
+	public void updateFeed(String url, XmlDom xml, AjaxStatus status)
+	{
+		try
+		{
+			List<XmlDom> entries = xml.tags("item");
+			int count = 0;
+			
+			for (XmlDom item : entries)
+			{
+				String Title = item.text("title");
+				String Description = Html.fromHtml(item.text("description").replaceAll("<img.+?>", "")).toString();
+				String Content = item.text("content:encoded");
+				String CommentFeed = item.text("wfw:commentRss");
+				String Author = item.text("dc:creator");
+				String Date = item.text("pubDate");
+				String Category = item.text("category");
+				String Image = Data.pullLinks(item.text("description"));
+				String URL = item.text("link");
+				
+				articleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
+				count++;
+			}
+		}
+		catch (Exception e)
+		{
+			Log.v("Error updating feed.", "Unstable internet connection.");
+		}
+		
+		return;
+	}
+	
 	public void checkNewContent(String url, XmlDom xml, AjaxStatus status)
 	{
 		Log.v("RAWR", "DID THIS WORK?!?!");
@@ -571,17 +595,28 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	public void checkNew(String url, XmlDom xml, AjaxStatus status)
 	{
-		List<XmlDom> entries = xml.tags("item");
-		
-		for (XmlDom item : entries)
+		try
 		{
-			String date = item.text("pubDate");
-			if (Data.isNewerDate(date, articleList.get(0).getDate()))
+			List<XmlDom> entries = xml.tags("item");
+			
+			int count = 0;
+			for (XmlDom item : entries)
 			{
-				newFound = true;
-				Toast.makeText(ActivityMain.this, "I found a new guy! :D", Toast.LENGTH_SHORT).show();
-				break;
+				String date = item.text("pubDate");
+				if (Data.isNewerDate(date, articleList.get(0).getDate()))
+				{
+					newFound = true;
+					count++;
+					numNewFound = count;
+					Toast.makeText(ActivityMain.this, "I found a new guy! :D", Toast.LENGTH_SHORT).show();
+				}
+				else
+					break;
 			}
+		}
+		catch (Exception e)
+		{
+			
 		}
 	}
 	
@@ -623,7 +658,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						}
 					}
 					else if (Data.isNetworkConnected(ActivityMain.this) && !inBackground && !supportFragmentActive)
-						mHandler.post(new showProgress2("Error connecting to AndroidDissected.com!"));
+						mHandler.post(new showProgress2("Error connecting to Android Dissected!\nTry checking your internet connection."));
 					else if (!inBackground && !supportFragmentActive)
 						mHandler.post(new showProgress2("An internet connection is required!!!"));
 				}
@@ -689,7 +724,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 								
 								// TODO Make sure read/favorite params don't get overwritten
 								AjaxCallback<XmlDom> cbs = new AjaxCallback<XmlDom>();
-								cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
+								cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "updateFeed");
 								aq.sync(cbs);
 								
 								if (!inBackground)

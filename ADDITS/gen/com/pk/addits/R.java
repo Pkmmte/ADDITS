@@ -210,7 +210,7 @@ public final class R {
         public static final int App_Banner=0x7f0d002c;
         public static final int App_Icon=0x7f0d002d;
         public static final int ArticleContent=0x7f0d0024;
-        public static final int Browser_Label=0x7f0d0050;
+        public static final int Browser_Label=0x7f0d0051;
         public static final int Card=0x7f0d0019;
         public static final int CheckText=0x7f0d003d;
         public static final int Close=0x7f0d0014;
@@ -223,22 +223,23 @@ public final class R {
         public static final int ListView=0x7f0d0013;
         public static final int Name=0x7f0d003e;
         public static final int Parent=0x7f0d0032;
-        public static final int Search_Label=0x7f0d0052;
+        public static final int Search_Label=0x7f0d0053;
         public static final int Searching=0x7f0d0035;
         public static final int Setting=0x7f0d003c;
-        public static final int Settings_Label=0x7f0d0051;
-        public static final int Share_Label=0x7f0d004f;
+        public static final int Settings_Label=0x7f0d0052;
+        public static final int Share_Label=0x7f0d0050;
         public static final int Text=0x7f0d0028;
         public static final int Video=0x7f0d0029;
         public static final int VideoPreview=0x7f0d002a;
-        public static final int Website_Label=0x7f0d0053;
+        public static final int Website_Label=0x7f0d0054;
         public static final int ad=0x7f0d002f;
         public static final int adView=0x7f0d0030;
         public static final int appButton=0x7f0d0042;
         public static final int articlePreview=0x7f0d0041;
         public static final int articles=0x7f0d0044;
-        public static final int background=0x7f0d004c;
+        public static final int background=0x7f0d004d;
         public static final int btnDone=0x7f0d0036;
+        public static final int btnStart=0x7f0d0049;
         public static final int checkBox=0x7f0d003b;
         public static final int commentCard=0x7f0d0026;
         public static final int container=0x7f0d0006;
@@ -259,7 +260,7 @@ public final class R {
         public static final int loadingImage=0x7f0d0033;
         public static final int loadingText=0x7f0d000c;
         public static final int playLogo=0x7f0d002e;
-        public static final int progress=0x7f0d004e;
+        public static final int progress=0x7f0d004f;
         public static final int progressBar=0x7f0d000a;
         public static final int progressBar1=0x7f0d0048;
         public static final int progressFinished=0x7f0d000b;
@@ -268,7 +269,7 @@ public final class R {
         public static final int radio_enable=0x7f0d0003;
         public static final int refreshButton=0x7f0d0043;
         public static final int row_item=0x7f0d0045;
-        public static final int secondaryProgress=0x7f0d004d;
+        public static final int secondaryProgress=0x7f0d004e;
         public static final int slider_content=0x7f0d0000;
         public static final int stack_view=0x7f0d0046;
         public static final int textLoading=0x7f0d0034;
@@ -287,9 +288,9 @@ public final class R {
         public static final int txtValue=0x7f0d0018;
         public static final int valueContainer=0x7f0d003a;
         public static final int video_fragment=0x7f0d0002;
-        public static final int widget_image=0x7f0d004a;
-        public static final int widget_item=0x7f0d004b;
-        public static final int widget_parent=0x7f0d0049;
+        public static final int widget_image=0x7f0d004b;
+        public static final int widget_item=0x7f0d004c;
+        public static final int widget_parent=0x7f0d004a;
     }
     public static final class integer {
         public static final int card_flip_time_full=0x7f0e0001;
@@ -331,7 +332,8 @@ public final class R {
         public static final int widget_list=0x7f04001b;
         public static final int widget_list_item=0x7f04001c;
         public static final int widget_stack=0x7f04001d;
-        public static final int widget_stack_item=0x7f04001e;
+        public static final int widget_stack_empty=0x7f04001e;
+        public static final int widget_stack_item=0x7f04001f;
     }
     public static final class menu {
         public static final int article=0x7f110000;

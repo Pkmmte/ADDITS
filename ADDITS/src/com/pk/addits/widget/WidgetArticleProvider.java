@@ -55,7 +55,7 @@ public class WidgetArticleProvider extends AppWidgetProvider
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
-		db = new DatabaseHelper(context);
+		db = DatabaseHelper.getInstance(context);
 		articleList = db.getAllArticles();
 		
 		Timer timer = new Timer();

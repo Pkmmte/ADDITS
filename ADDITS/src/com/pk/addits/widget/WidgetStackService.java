@@ -38,7 +38,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory
 	{
 		mContext = context;
 		//mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-		db = new DatabaseHelper(context);
+		db = DatabaseHelper.getInstance(context);
 	}
 	
 	public void onCreate()

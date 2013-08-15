@@ -25,7 +25,7 @@ public class WidgetListViewsFactory implements RemoteViewsService.RemoteViewsFac
 	public WidgetListViewsFactory(Context context, Intent intent)
 	{
 		this.cntxt = context;
-		db = new DatabaseHelper(context);
+		db = DatabaseHelper.getInstance(context);
 	}
 	
 	@Override
