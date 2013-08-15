@@ -192,18 +192,16 @@ public final class R {
         public static final int refresh=0x7f020047;
         public static final int search=0x7f020048;
         public static final int shadow_article_widget=0x7f020049;
-        public static final int shadow_author=0x7f02004a;
-        public static final int shadow_loading=0x7f02004b;
-        public static final int shadow_vertical_270=0x7f02004c;
-        public static final int shadow_vertical_90=0x7f02004d;
-        public static final int share=0x7f02004e;
-        public static final int slider_loading=0x7f02004f;
-        public static final int transparent_selector=0x7f020050;
-        public static final int transparent_selector2=0x7f020051;
-        public static final int widget_article_preview=0x7f020052;
-        public static final int widget_list_preview=0x7f020053;
-        public static final int widget_stack_preview=0x7f020054;
-        public static final int yellow_bg=0x7f020055;
+        public static final int shadow_vertical_270=0x7f02004a;
+        public static final int shadow_vertical_90=0x7f02004b;
+        public static final int share=0x7f02004c;
+        public static final int slider_loading=0x7f02004d;
+        public static final int transparent_selector=0x7f02004e;
+        public static final int transparent_selector2=0x7f02004f;
+        public static final int widget_article_preview=0x7f020050;
+        public static final int widget_list_preview=0x7f020051;
+        public static final int widget_stack_preview=0x7f020052;
+        public static final int yellow_bg=0x7f020053;
     }
     public static final class id {
         public static final int App=0x7f0d002b;
@@ -358,6 +356,7 @@ public final class R {
         public static final int dummy_desc=0x7f0f0007;
         public static final int dummy_title=0x7f0f0008;
         public static final int get_it_on_google_play=0x7f0f000d;
+        public static final int loading=0x7f0f0014;
         public static final int loren_ipsum=0x7f0f0006;
         public static final int note=0x7f0f0012;
         public static final int placeholder=0x7f0f0004;
