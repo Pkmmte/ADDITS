@@ -7,4 +7,10 @@
     <item name="radio_enable" type="id"/>
     <item name="radio_disable" type="id"/>
 
+    <!-- Pull To Refresh -->
+    <item name="ptr_content" type="id"/>
+    <item name="ptr_text_opaque_bg" type="id"/>
+    <item name="ptr_text" type="id"/>
+    <item name="ptr_progress" type="id"/>
+
 </resources>

@@ -28,4 +28,9 @@
     <string name="changelog_note"><![CDATA[If you are experiencing any issues with this app, please <a href="mailto:support@pkmmte.com">contact support</a> so we can fix your problem and earn a 5-star rating!]]></string>
     <string name="loading">Loading...</string>
 
+    <!-- Pull To Refresh -->
+    <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
+    <string name="pull_to_refresh_release_label">Release to refresh…</string>
+    <string name="pull_to_refresh_refreshing_label">Loading…</string>
+
 </resources>

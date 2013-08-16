@@ -5,8 +5,6 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,8 +34,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
+import android.widget.Toast;
 
 import com.pk.addits.R;
+import com.pk.addits.actionbarpulltorefresh.PullToRefreshAttacher;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.FeedAdapter;
 import com.pk.addits.data.Data;
@@ -333,7 +333,7 @@ public class FragmentHome extends Fragment implements PullToRefreshAttacher.OnRe
 			{
 				try
 				{
-					Thread.sleep(4000);
+					Thread.sleep(8000);
 				}
 				catch (InterruptedException e)
 				{
@@ -349,6 +349,7 @@ public class FragmentHome extends Fragment implements PullToRefreshAttacher.OnRe
 				
 				// Notify PullToRefreshAttacher that the refresh has finished
 				mPullToRefreshAttacher.setRefreshComplete();
+				Toast.makeText(getActivity(), "Refresh complete!!", Toast.LENGTH_SHORT).show();
 			}
 		}.execute();
 	};

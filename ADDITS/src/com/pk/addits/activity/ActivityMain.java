@@ -3,8 +3,6 @@ package com.pk.addits.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
-
 import android.animation.Animator;
 import android.app.ActionBar;
 import android.content.Context;
@@ -43,6 +41,7 @@ import com.androidquery.callback.AjaxCallback;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.XmlDom;
 import com.pk.addits.R;
+import com.pk.addits.actionbarpulltorefresh.PullToRefreshAttacher;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
 import com.pk.addits.fragment.FragmentArticle;
