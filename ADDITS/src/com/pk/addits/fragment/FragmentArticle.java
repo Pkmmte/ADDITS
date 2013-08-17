@@ -54,7 +54,7 @@ public class FragmentArticle extends Fragment
 	TextView txtContent;
 	PkListView lstContent;
 	private List<ArticleContent> contentList;
-	public ArticleContentAdapter contentAdapter;
+	public static ArticleContentAdapter contentAdapter;
 	
 	/** Comments have been disabled until it's fixed on the server side! **/
 	// FrameLayout commentCard;

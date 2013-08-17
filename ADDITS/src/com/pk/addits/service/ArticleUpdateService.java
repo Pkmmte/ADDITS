@@ -8,6 +8,7 @@ import com.androidquery.util.XmlDom;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
+import com.pk.addits.fragment.FragmentArticle;
 import com.pk.addits.model.Article;
 
 import android.app.Activity;
@@ -57,6 +58,7 @@ public class ArticleUpdateService extends IntentService {
 					false, 
 					false));
 		}
+		FragmentArticle.contentAdapter.notifyDataSetChanged();
 	}
 
 }
