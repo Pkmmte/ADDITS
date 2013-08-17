@@ -79,7 +79,7 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         
         <service
-            android:name="com.pk.addits.daydream.ArticleDaydream"
+            android:name="com.pk.addits.widget.service.ArticleDaydream"
             android:exported="true"
             android:label="@string/daydream_name" >
             <intent-filter>

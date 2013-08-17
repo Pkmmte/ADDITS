@@ -1,4 +1,4 @@
-package com.pk.addits.daydream;
+package com.pk.addits.widget.service;
 
 import android.annotation.TargetApi;
 import android.content.Context;
