@@ -1,4 +1,4 @@
-package com.pk.addits.widget.service;
+package com.pk.addits.service;
 
 import com.pk.addits.widget.WidgetListViewsFactory;
 

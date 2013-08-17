@@ -1,4 +1,4 @@
-package com.pk.addits.widget.service;
+package com.pk.addits.service;
 
 import android.annotation.TargetApi;
 import android.content.Context;

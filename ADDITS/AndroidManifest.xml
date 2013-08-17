@@ -75,11 +75,11 @@
         </receiver>
 
         <service
-            android:name="com.pk.addits.widget.service.WidgetListService"
+            android:name="com.pk.addits.service.WidgetListService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         
         <service
-            android:name="com.pk.addits.widget.service.ArticleDaydream"
+            android:name="com.pk.addits.service.ArticleDaydream"
             android:exported="true"
             android:label="@string/daydream_name" >
             <intent-filter>
