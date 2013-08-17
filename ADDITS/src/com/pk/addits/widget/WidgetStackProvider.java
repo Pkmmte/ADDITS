@@ -12,6 +12,7 @@ import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
+import com.pk.addits.service.WidgetStackService;
 
 public class WidgetStackProvider extends AppWidgetProvider
 {

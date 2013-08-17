@@ -1,4 +1,4 @@
-package com.pk.addits.widget;
+package com.pk.addits.service;
 
 import java.util.ArrayList;
 import java.util.List;

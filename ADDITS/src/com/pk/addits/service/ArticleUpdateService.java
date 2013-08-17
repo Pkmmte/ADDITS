@@ -15,18 +15,36 @@ import android.app.Activity;
 import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.text.Html;
 
 public class ArticleUpdateService extends IntentService {
 	
 	private final Activity context = (Activity) getApplicationContext();
+	private final IBinder mBinder = new MyBinder();
 	private int result = Activity.RESULT_CANCELED;
 	private DatabaseHelper db;
 	private AQuery aq;
 
 	public ArticleUpdateService() {
 		super("ArticleUpdateService");
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+	  return Service.START_NOT_STICKY;
+	}
+
+	@Override
+	public IBinder onBind(Intent arg0) {
+	  return mBinder;
+	}
+	
+	public class MyBinder extends Binder {
+		ArticleUpdateService getService() {
+	  return ArticleUpdateService.this;
+	  }
 	}
 
 	@Override
@@ -42,21 +60,13 @@ public class ArticleUpdateService extends IntentService {
 	@SuppressWarnings({ "null", "unused" })
 	private void saveFeed(String url, XmlDom xml, AjaxStatus status) {
 		List<XmlDom> entries = xml.tags("item");
-		
 		for (XmlDom item : entries) { 
-			db.addArticle(new Article(
-					(Integer) null,
-					item.text("title"), 
+			db.addArticle(new Article((Integer) null, item.text("title"), 
 					Html.fromHtml(item.text("description")).toString(),
-					item.text("content:encoded"),
-					item.text("wfw:commentRss"),
-					item.text("dc:creator"),
-					item.text("pubDate"),
-					item.text("category"),
-					Data.pullLinks(item.text("description")),
-					item.text("link"), 
-					false, 
-					false));
+					item.text("content:encoded"), item.text("wfw:commentRss"),
+					item.text("dc:creator"), item.text("pubDate"),
+					item.text("category"), Data.pullLinks(item.text("description")),
+					item.text("link"), false, false));
 		}
 		FragmentArticle.contentAdapter.notifyDataSetChanged();
 	}
