@@ -1,4 +1,6 @@
-package com.pk.addits.widget;
+package com.pk.addits.widget.service;
+
+import com.pk.addits.widget.WidgetListViewsFactory;
 
 import android.content.Intent;
 import android.widget.RemoteViewsService;
