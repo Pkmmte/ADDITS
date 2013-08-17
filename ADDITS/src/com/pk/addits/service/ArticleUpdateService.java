@@ -42,7 +42,7 @@ public class ArticleUpdateService extends IntentService {
 	}
 	
 	public class MyBinder extends Binder {
-		ArticleUpdateService getService() {
+		public ArticleUpdateService getService() {
 	  return ArticleUpdateService.this;
 	  }
 	}

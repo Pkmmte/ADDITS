@@ -5,12 +5,16 @@ import java.util.List;
 
 import android.animation.Animator;
 import android.app.ActionBar;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -56,6 +60,7 @@ import com.pk.addits.fragment.FragmentSettings;
 import com.pk.addits.fragment.FragmentSupport;
 import com.pk.addits.fragment.FragmentTutorials;
 import com.pk.addits.model.Article;
+import com.pk.addits.service.ArticleUpdateService;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
 {
@@ -111,6 +116,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private static boolean supportFragmentActive;
 	private int numNewFound;
 	private PullToRefreshAttacher mPullToRefreshAttacher;
+	
+	private ArticleUpdateService aus;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -236,6 +243,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	protected void onPause()
 	{
 		super.onPause();
+		unbindService(mConnection);
 		inBackground = true;
 	}
 	
@@ -243,6 +251,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	protected void onResume()
 	{
 		super.onResume();
+		bindService(new Intent(this, ArticleUpdateService.class), mConnection,
+		        Context.BIND_AUTO_CREATE);
 		inBackground = false;
 	}
 	
@@ -895,4 +905,17 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			fragmentLoaded = true;
 		}
 	}
+	
+	private ServiceConnection mConnection = new ServiceConnection() {
+
+		public void onServiceConnected(ComponentName className, IBinder binder) {
+			aus = ((ArticleUpdateService.MyBinder) binder).getService();
+			Toast.makeText(ActivityMain.this, "Connected", Toast.LENGTH_SHORT)
+					.show();
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			aus = null;
+		}
+	};
 }
