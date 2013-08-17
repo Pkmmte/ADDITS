@@ -230,6 +230,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			
 			saveCurrentBuild();
 		}
+		Intent intent = new Intent(this, ArticleUpdateService.class);
+		startService(intent);
 	}
 	
 	@Override
@@ -243,7 +245,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	protected void onPause()
 	{
 		super.onPause();
-		unbindService(mConnection);
 		inBackground = true;
 	}
 	
@@ -251,8 +252,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	protected void onResume()
 	{
 		super.onResume();
-		bindService(new Intent(this, ArticleUpdateService.class), mConnection,
-		        Context.BIND_AUTO_CREATE);
 		inBackground = false;
 	}
 	
@@ -906,16 +905,4 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 	}
 	
-	private ServiceConnection mConnection = new ServiceConnection() {
-
-		public void onServiceConnected(ComponentName className, IBinder binder) {
-			aus = ((ArticleUpdateService.MyBinder) binder).getService();
-			Toast.makeText(ActivityMain.this, "Connected", Toast.LENGTH_SHORT)
-					.show();
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			aus = null;
-		}
-	};
 }

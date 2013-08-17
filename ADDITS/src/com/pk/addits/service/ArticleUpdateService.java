@@ -18,10 +18,11 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.text.Html;
+import android.widget.Toast;
 
 public class ArticleUpdateService extends IntentService {
 	
-	private final Activity context = (Activity) getApplicationContext();
+//	private final Activity context;
 	private final IBinder mBinder = new MyBinder();
 	private int result = Activity.RESULT_CANCELED;
 	private DatabaseHelper db;
@@ -29,6 +30,7 @@ public class ArticleUpdateService extends IntentService {
 
 	public ArticleUpdateService() {
 		super("ArticleUpdateService");
+//		context = ;
 	}
 	
 	@Override
@@ -49,7 +51,7 @@ public class ArticleUpdateService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		aq = new AQuery(context);
+		aq = new AQuery(getApplicationContext());
 		getFeed();
 	}
 	
