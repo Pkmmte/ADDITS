@@ -90,8 +90,17 @@
         
         <service
 		  android:name="com.pk.addits.service.ArticleUpdateService"
+		  android:process=":article_update_process" 
 		  android:icon="@mipmap/ic_launcher"
 		  android:label="@string/article_update_service" />
+        
+        <receiver android:name="UpdateScheduleReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="UpdateServiceReceiver" >
+        </receiver>
 		
     </application>
 
