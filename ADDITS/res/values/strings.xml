@@ -33,5 +33,7 @@
     <string name="pull_to_refresh_pull_label">Pull to refresh…</string>
     <string name="pull_to_refresh_release_label">Release to refresh…</string>
     <string name="pull_to_refresh_refreshing_label">Loading…</string>
+    
+    <string name="article_update_service">Article Update Service</string>
 
 </resources>

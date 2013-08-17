@@ -87,6 +87,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+        
+        <service
+		  android:name="com.pk.addits.service.ArticleUpdateService"
+		  android:icon="@mipmap/ic_launcher"
+		  android:label="@string/article_update_service" />
+		
     </application>
 
 </manifest>

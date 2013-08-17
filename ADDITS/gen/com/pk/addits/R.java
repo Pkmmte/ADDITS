@@ -362,6 +362,7 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f0f0000;
+        public static final int article_update_service=0x7f0f0019;
         public static final int changelog_note=0x7f0f0013;
         public static final int choose_item=0x7f0f0003;
         public static final int close=0x7f0f0011;
