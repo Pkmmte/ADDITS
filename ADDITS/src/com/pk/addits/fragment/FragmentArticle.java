@@ -1,8 +1,6 @@
 package com.pk.addits.fragment;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -20,16 +18,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ArticleContentAdapter;
-import com.pk.addits.adapter.FeedAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.misc.CustomMovementMethod;
 import com.pk.addits.misc.URLImageParser;
@@ -60,6 +56,7 @@ public class FragmentArticle extends Fragment
 	PkListView lstContent;
 	private List<ArticleContent> contentList;
 	public static ArticleContentAdapter contentAdapter;
+	private LinearLayout loading;
 	
 	/** Comments have been disabled until it's fixed on the server side! **/
 	// FrameLayout commentCard;
@@ -110,6 +107,7 @@ public class FragmentArticle extends Fragment
 		txtDate = (TextView) view.findViewById(R.id.txtDate);
 		txtContent = (TextView) view.findViewById(R.id.txtContent);
 		lstContent = (PkListView) view.findViewById(R.id.ArticleContent);
+		loading = (LinearLayout) view.findViewById(R.id.Loading);
 		p = new URLImageParser(txtContent, getActivity());
 		
 		// commentCard = (FrameLayout) view.findViewById(R.id.commentCard);
@@ -161,14 +159,9 @@ public class FragmentArticle extends Fragment
 		txtDate.setText(Data.parseRelativeDate(Article.getDate()));
 		
 		if (parseContent)
-		{
-			lstContent.setVisibility(View.VISIBLE);
-			txtContent.setVisibility(View.GONE);
 			new LoadContentAsyncTask().execute();
-		}
 		else
 		{
-			lstContent.setVisibility(View.GONE);
 			txtContent.setVisibility(View.VISIBLE);
 			
 			txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
@@ -315,6 +308,8 @@ public class FragmentArticle extends Fragment
 		@Override
 		protected void onPostExecute(Void p)
 		{
+			loading.setVisibility(View.GONE);
+			lstContent.setVisibility(View.VISIBLE);
 			lstContent.setAdapter(contentAdapter);
 			contentAdapter.notifyDataSetChanged();
 			lstContent.setExpanded(true);

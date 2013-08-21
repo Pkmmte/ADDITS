@@ -21,6 +21,7 @@ import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.FeedAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.model.Article;
+import com.pk.addits.model.SerializableArticleList;
 
 public class FragmentSearch extends Fragment
 {
@@ -31,6 +32,9 @@ public class FragmentSearch extends Fragment
 	private GridView grid;
 	private LinearLayout ad;
 	private LinearLayout searching;
+
+	private List<Article> list;
+	private FeedAdapter adapter;
 	
 	public static FragmentSearch newInstance(String query)
 	{
@@ -67,14 +71,30 @@ public class FragmentSearch extends Fragment
 		if (!adsEnabled)
 			ad.setVisibility(View.GONE);
 		
-		new SearchAsyncTask().execute();
+		if (!getArguments().getBoolean("Search Complete", false))
+			new SearchAsyncTask().execute();
+		else
+		{
+			searching.setVisibility(View.GONE);
+			grid.setVisibility(View.VISIBLE);
+			
+			SerializableArticleList sal = (SerializableArticleList) getArguments().getSerializable("Search Results");
+			adapter = new FeedAdapter(getActivity(), sal.getList());
+			grid.setAdapter(adapter);
+			grid.setOnItemClickListener(new OnItemClickListener()
+			{
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
+				{
+					Article article = list.get(position);
+					ActivityMain.callArticle(article, 0, 0);
+				}
+			});
+		}
 	}
 	
 	private class SearchAsyncTask extends AsyncTask<Void, Void, Void>
 	{
-		private List<Article> list;
-		private FeedAdapter adapter;
-		
 		@Override
 		protected Void doInBackground(Void... params)
 		{
@@ -82,8 +102,8 @@ public class FragmentSearch extends Fragment
 			for (Article a : ActivityMain.articleList)
 			{
 				if (a.getAuthor().toLowerCase(Locale.US).contains(searchQuery) || 
-					a.getTitle().toLowerCase(Locale.US).contains(searchQuery) ||
-					a.getDescription().toLowerCase(Locale.US).contains(searchQuery) ||
+					a.getTitle().toLowerCase(Locale.US).contains(searchQuery) || 
+					a.getDescription().toLowerCase(Locale.US).contains(searchQuery) || 
 					a.getContent().toLowerCase(Locale.US).contains(searchQuery))
 					list.add(a);
 			}
@@ -109,6 +129,10 @@ public class FragmentSearch extends Fragment
 					ActivityMain.callArticle(article, 0, 0);
 				}
 			});
+			
+			getArguments().putBoolean("Search Complete", true);
+			SerializableArticleList sal = new SerializableArticleList(list);
+			getArguments().putSerializable("Search Results", sal);
 		}
 	}
 }
