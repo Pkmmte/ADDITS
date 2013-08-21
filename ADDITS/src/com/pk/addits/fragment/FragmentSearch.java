@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
@@ -32,9 +33,7 @@ public class FragmentSearch extends Fragment
 	private GridView grid;
 	private LinearLayout ad;
 	private LinearLayout searching;
-
-	private List<Article> list;
-	private FeedAdapter adapter;
+	private TextView noResults;
 	
 	public static FragmentSearch newInstance(String query)
 	{
@@ -55,6 +54,7 @@ public class FragmentSearch extends Fragment
 		grid = (GridView) view.findViewById(R.id.GridView);
 		ad = (LinearLayout) view.findViewById(R.id.ad);
 		searching = (LinearLayout) view.findViewById(R.id.Searching);
+		noResults = (TextView) view.findViewById(R.id.NoResults);
 		
 		return view;
 	}
@@ -79,7 +79,9 @@ public class FragmentSearch extends Fragment
 			grid.setVisibility(View.VISIBLE);
 			
 			SerializableArticleList sal = (SerializableArticleList) getArguments().getSerializable("Search Results");
-			adapter = new FeedAdapter(getActivity(), sal.getList());
+			final List<Article> list = sal.getList();
+			FeedAdapter adapter = new FeedAdapter(getActivity(), list);
+			
 			grid.setAdapter(adapter);
 			grid.setOnItemClickListener(new OnItemClickListener()
 			{
@@ -95,6 +97,10 @@ public class FragmentSearch extends Fragment
 	
 	private class SearchAsyncTask extends AsyncTask<Void, Void, Void>
 	{
+		private List<Article> list;
+		private FeedAdapter adapter;
+		private SerializableArticleList sal;
+		
 		@Override
 		protected Void doInBackground(Void... params)
 		{
@@ -109,6 +115,7 @@ public class FragmentSearch extends Fragment
 			}
 			
 			adapter = new FeedAdapter(getActivity(), list);
+			sal = new SerializableArticleList(list);
 			
 			return null;
 		}
@@ -131,7 +138,6 @@ public class FragmentSearch extends Fragment
 			});
 			
 			getArguments().putBoolean("Search Complete", true);
-			SerializableArticleList sal = new SerializableArticleList(list);
 			getArguments().putSerializable("Search Results", sal);
 		}
 	}
