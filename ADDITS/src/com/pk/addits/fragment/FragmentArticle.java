@@ -1,12 +1,15 @@
 package com.pk.addits.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -17,13 +20,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ArticleContentAdapter;
+import com.pk.addits.adapter.FeedAdapter;
 import com.pk.addits.data.Data;
 import com.pk.addits.misc.CustomMovementMethod;
 import com.pk.addits.misc.URLImageParser;
@@ -40,7 +46,6 @@ public class FragmentArticle extends Fragment
 	static ShareActionProvider mShareActionProvider;
 	static Article Article;
 	private Thread markReadThread;
-	private Thread loadContentThread;
 	// private Thread loadCommentsThread;
 	private Handler mHandler;
 	static MenuItem shareItem;
@@ -159,8 +164,7 @@ public class FragmentArticle extends Fragment
 		{
 			lstContent.setVisibility(View.VISIBLE);
 			txtContent.setVisibility(View.GONE);
-			initializeLoadContentThread();
-			loadContentThread.start();
+			new LoadContentAsyncTask().execute();
 		}
 		else
 		{
@@ -289,19 +293,33 @@ public class FragmentArticle extends Fragment
 		}
 	};
 	
-	private void initializeLoadContentThread()
+	private class LoadContentAsyncTask extends AsyncTask<Void, Void, Void>
 	{
-		loadContentThread = new Thread()
+		@Override
+		protected Void doInBackground(Void... params)
 		{
-			public void run()
+			contentList = Data.generateArticleContent(Article.getContent());
+			contentAdapter = new ArticleContentAdapter(getActivity(), contentList);
+			try
 			{
-				contentList = Data.generateArticleContent(Article.getContent());
-				contentAdapter = new ArticleContentAdapter(getActivity(), contentList);
-				mHandler.postDelayed(loadContent, 500);
-				
-				stopThread(this);
+				Thread.sleep(600);
 			}
-		};
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void p)
+		{
+			lstContent.setAdapter(contentAdapter);
+			contentAdapter.notifyDataSetChanged();
+			lstContent.setExpanded(true);
+			lstContent.setDividerHeight(0);
+		}
 	}
 	
 	/*
@@ -325,16 +343,4 @@ public class FragmentArticle extends Fragment
 	 * 
 	 * txtLoadComments.setVisibility(View.GONE); progressBar.setVisibility(View.GONE); } };
 	 */
-	
-	Runnable loadContent = new Runnable()
-	{
-		public void run()
-		{
-			lstContent.setAdapter(contentAdapter);
-			contentAdapter.notifyDataSetChanged();
-			lstContent.setExpanded(true);
-			lstContent.setDividerHeight(0);
-			
-		}
-	};
 }
