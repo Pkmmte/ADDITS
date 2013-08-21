@@ -125,6 +125,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		// With service now in place, prior update functionality
+		// is mostly irrelevant. Base all updates on the service
+		// from this point on in the development process.
+		startService(new Intent(this, ArticleUpdateService.class));
+		
 		db = DatabaseHelper.getInstance(ActivityMain.this);
 		cntxt = ActivityMain.this;
 		
@@ -230,8 +235,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			
 			saveCurrentBuild();
 		}
-		Intent intent = new Intent(this, ArticleUpdateService.class);
-		startService(intent);
+		
 	}
 	
 	@Override

@@ -5,62 +5,52 @@ import java.util.List;
 import com.androidquery.AQuery;
 import com.androidquery.callback.AjaxStatus;
 import com.androidquery.util.XmlDom;
-import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.data.Data;
 import com.pk.addits.data.DatabaseHelper;
-import com.pk.addits.fragment.FragmentArticle;
 import com.pk.addits.model.Article;
 
-import android.app.Activity;
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.IBinder;
 import android.text.Html;
-import android.widget.Toast;
+import android.util.Log;
 
-public class ArticleUpdateService extends IntentService {
+/*
+ * This service runs in its own thread process
+ * and grabs the feed asycronuosly. The service
+ * starts when the application starts and can be
+ * set to start at device boot. Being that the 
+ * service starts at device boot and application start.
+ * There is no need to have all the other update functionality.
+ * All article updating for the app should be based on this service
+ * moving forward in development.
+*/
+public class ArticleUpdateService extends Service {
 	
-//	private final Activity context;
-	private final IBinder mBinder = new MyBinder();
-	private int result = Activity.RESULT_CANCELED;
-	private DatabaseHelper db;
 	private AQuery aq;
 
 	public ArticleUpdateService() {
-		super("ArticleUpdateService");
-//		context = ;
 	}
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.v("Update Service.", "Service is fully opperational.");
+		aq = new AQuery(getApplicationContext());
+		aq.ajax(Data.FEED_URL, XmlDom.class, this, "saveFeed");
 	  return Service.START_NOT_STICKY;
 	}
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-	  return mBinder;
-	}
-	
-	public class MyBinder extends Binder {
-		public ArticleUpdateService getService() {
-	  return ArticleUpdateService.this;
-	  }
-	}
-
-	@Override
-	protected void onHandleIntent(Intent intent) {
-		aq = new AQuery(getApplicationContext());
-		getFeed();
-	}
-	
-	private void getFeed() {
-		aq.ajax(Data.FEED_URL, XmlDom.class, this, "saveFeed");
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	@SuppressWarnings({ "null", "unused" })
 	private void saveFeed(String url, XmlDom xml, AjaxStatus status) {
+		DatabaseHelper db = new DatabaseHelper(this);
+		int precount = db.getArticleCount();
+		int postCount;
 		List<XmlDom> entries = xml.tags("item");
 		for (XmlDom item : entries) { 
 			db.addArticle(new Article((Integer) null, item.text("title"), 
@@ -70,7 +60,12 @@ public class ArticleUpdateService extends IntentService {
 					item.text("category"), Data.pullLinks(item.text("description")),
 					item.text("link"), false, false));
 		}
-		FragmentArticle.contentAdapter.notifyDataSetChanged();
+		postCount = db.getArticleCount();
+		if (postCount > precount) {
+			// TODO: Fire off notification here!
+			
+			// Im still working out the notification functionality.
+		}
 	}
 
 }
