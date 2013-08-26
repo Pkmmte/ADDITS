@@ -145,6 +145,9 @@ public class FragmentHome extends Fragment implements PullToRefreshAttacher.OnRe
 		fm = getChildFragmentManager();
 		imm = (InputMethodManager) getActivity().getSystemService(FragmentActivity.INPUT_METHOD_SERVICE);
 		
+		myTracker = EasyTracker.getInstance().setContext(this);
+		EasyTracker.getTracker().trackPageView("/Settings");
+		
 		timer = new Timer();
 		timeHandler = new Handler(new Callback()
 		{
