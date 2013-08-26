@@ -145,8 +145,17 @@ public class FragmentHome extends Fragment implements PullToRefreshAttacher.OnRe
 		fm = getChildFragmentManager();
 		imm = (InputMethodManager) getActivity().getSystemService(FragmentActivity.INPUT_METHOD_SERVICE);
 		
-		myTracker = EasyTracker.getInstance().setContext(this);
-		EasyTracker.getTracker().trackPageView("/Settings");
+		Tracker easyTracker = EasyTracker.getInstance(getActivity());
+
+		// This screen name value will remain set on the tracker and sent with
+		// hits until it is set to a new value or to null.
+		easyTracker.set(Fields.SCREEN_NAME, "Home Screen");
+
+		easyTracker.send(MapBuilder
+		    .createAppView()
+		    .build()
+		);
+		
 		
 		timer = new Timer();
 		timeHandler = new Handler(new Callback()
