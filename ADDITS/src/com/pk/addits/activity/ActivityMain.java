@@ -114,8 +114,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private int numNewFound;
 	private PullToRefreshAttacher mPullToRefreshAttacher;
 	
-	private ArticleUpdateService aus;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{

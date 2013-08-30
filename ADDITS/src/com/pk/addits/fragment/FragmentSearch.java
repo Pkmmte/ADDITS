@@ -4,17 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.pk.addits.R;
@@ -34,6 +43,10 @@ public class FragmentSearch extends Fragment
 	private LinearLayout ad;
 	private LinearLayout searching;
 	private TextView noResults;
+
+	private InputMethodManager imm;
+	private OnQueryTextListener queryListener;
+	private SearchView searchView;
 	
 	public static FragmentSearch newInstance(String query)
 	{
@@ -50,6 +63,7 @@ public class FragmentSearch extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.fragment_search, container, false);
+		setHasOptionsMenu(true);
 		
 		grid = (GridView) view.findViewById(R.id.GridView);
 		ad = (LinearLayout) view.findViewById(R.id.ad);
@@ -63,7 +77,8 @@ public class FragmentSearch extends Fragment
 	public void onStart()
 	{
 		super.onStart();
-		
+
+		imm = (InputMethodManager) getActivity().getSystemService(FragmentActivity.INPUT_METHOD_SERVICE);
 		prefs = getActivity().getSharedPreferences(Data.PREFS_TAG, 0);
 		adsEnabled = prefs.getBoolean(Data.PREF_TAG_ADS_ENABLED, true);
 		searchQuery = getArguments().getString("Search Query", "");
@@ -99,6 +114,52 @@ public class FragmentSearch extends Fragment
 			}
 			else
 				noResults.setVisibility(View.VISIBLE);
+		}
+		
+		queryListener = new OnQueryTextListener()
+		{
+			@Override
+			public boolean onQueryTextChange(String newText)
+			{
+				return false;
+			}
+			
+			@Override
+			public boolean onQueryTextSubmit(String query)
+			{
+				imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+				ActivityMain.callSearch(query.toLowerCase(Locale.US));
+				
+				return false;
+			}
+		};
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		menu.clear();
+		inflater.inflate(R.menu.home, menu);
+		
+		searchView = (SearchView) menu.findItem(R.id.Search_Label).getActionView();
+		searchView.setOnQueryTextListener(queryListener);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.Website_Label:
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(Data.MAIN_URL));
+				startActivity(i);
+				return true;
+			case R.id.Settings_Label:
+				ActivityMain.callSettings();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 	
