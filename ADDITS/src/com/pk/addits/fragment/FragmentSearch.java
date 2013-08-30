@@ -76,22 +76,29 @@ public class FragmentSearch extends Fragment
 		else
 		{
 			searching.setVisibility(View.GONE);
-			grid.setVisibility(View.VISIBLE);
 			
 			SerializableArticleList sal = (SerializableArticleList) getArguments().getSerializable("Search Results");
 			final List<Article> list = sal.getList();
-			FeedAdapter adapter = new FeedAdapter(getActivity(), list);
 			
-			grid.setAdapter(adapter);
-			grid.setOnItemClickListener(new OnItemClickListener()
+			if (list.size() > 0)
 			{
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
+				grid.setVisibility(View.VISIBLE);
+				
+				FeedAdapter adapter = new FeedAdapter(getActivity(), list);
+				
+				grid.setAdapter(adapter);
+				grid.setOnItemClickListener(new OnItemClickListener()
 				{
-					Article article = list.get(position);
-					ActivityMain.callArticle(article, 0, 0);
-				}
-			});
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
+					{
+						Article article = list.get(position);
+						ActivityMain.callArticle(article, 0, 0);
+					}
+				});
+			}
+			else
+				noResults.setVisibility(View.VISIBLE);
 		}
 	}
 	
@@ -107,10 +114,7 @@ public class FragmentSearch extends Fragment
 			list = new ArrayList<Article>();
 			for (Article a : ActivityMain.articleList)
 			{
-				if (a.getAuthor().toLowerCase(Locale.US).contains(searchQuery) || 
-					a.getTitle().toLowerCase(Locale.US).contains(searchQuery) || 
-					a.getDescription().toLowerCase(Locale.US).contains(searchQuery) || 
-					a.getContent().toLowerCase(Locale.US).contains(searchQuery))
+				if (a.getAuthor().toLowerCase(Locale.US).contains(searchQuery) || a.getTitle().toLowerCase(Locale.US).contains(searchQuery) || a.getDescription().toLowerCase(Locale.US).contains(searchQuery) || a.getContent().toLowerCase(Locale.US).contains(searchQuery))
 					list.add(a);
 			}
 			
@@ -124,18 +128,25 @@ public class FragmentSearch extends Fragment
 		protected void onPostExecute(Void p)
 		{
 			searching.setVisibility(View.GONE);
-			grid.setVisibility(View.VISIBLE);
 			
-			grid.setAdapter(adapter);
-			grid.setOnItemClickListener(new OnItemClickListener()
+			if (list.size() > 0)
 			{
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
+				
+				grid.setVisibility(View.VISIBLE);
+				
+				grid.setAdapter(adapter);
+				grid.setOnItemClickListener(new OnItemClickListener()
 				{
-					Article article = list.get(position);
-					ActivityMain.callArticle(article, 0, 0);
-				}
-			});
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View view, int position, long index)
+					{
+						Article article = list.get(position);
+						ActivityMain.callArticle(article, 0, 0);
+					}
+				});
+			}
+			else
+				noResults.setVisibility(View.VISIBLE);
 			
 			getArguments().putBoolean("Search Complete", true);
 			getArguments().putSerializable("Search Results", sal);

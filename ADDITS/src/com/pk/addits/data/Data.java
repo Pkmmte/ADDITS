@@ -705,8 +705,6 @@ public class Data
 				
 				String resizeCrap = urlStr.substring(urlStr.lastIndexOf("?resize="), urlStr.length());
 				String cleanIMG = urlStr.replace(resizeCrap, "");
-				Log.v("Crap: ", resizeCrap);
-				Log.v("Clean: ", cleanIMG);
 				String format = cleanIMG.substring(cleanIMG.lastIndexOf("."), cleanIMG.length());
 				if (format.equalsIgnoreCase(".png") || format.equalsIgnoreCase(".jpg") || format.equalsIgnoreCase(".jpeg") || format.equalsIgnoreCase(".gif") || format.equalsIgnoreCase(".webp"))
 					links.add(cleanIMG);
