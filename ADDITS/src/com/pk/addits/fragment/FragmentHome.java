@@ -36,6 +36,10 @@ import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
 import com.pk.addits.R;
 import com.pk.addits.actionbarpulltorefresh.PullToRefreshAttacher;
 import com.pk.addits.activity.ActivityMain;
