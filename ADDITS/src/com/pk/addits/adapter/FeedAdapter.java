@@ -91,10 +91,17 @@ public class FeedAdapter extends BaseAdapter
 		holder.txtDate.setText(Data.parseDate(context, entry.getDate()));
 		holder.txtCategory.setText(entry.getCategory());
 		
+		try
+		{
 		if (entry.getImage().length() > 0)
 			Picasso.with(context).load(entry.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().skipCache().into(holder.imgPreview);
 		else
 			holder.imgPreview.setVisibility(View.GONE);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		
 		if (entry.isRead())
 		{

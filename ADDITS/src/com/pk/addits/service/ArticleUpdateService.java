@@ -17,7 +17,7 @@ import android.util.Log;
 
 /*
  * This service runs in its own thread process
- * and grabs the feed asycronuosly. The service
+ * and grabs the feed asynchronously. The service
  * starts when the application starts and can be
  * set to start at device boot. Being that the 
  * service starts at device boot and application start.
@@ -48,7 +48,7 @@ public class ArticleUpdateService extends Service {
 	
 	@SuppressWarnings({ "null", "unused" })
 	private void saveFeed(String url, XmlDom xml, AjaxStatus status) {
-		DatabaseHelper db = new DatabaseHelper(this);
+		DatabaseHelper db = DatabaseHelper.getInstance(this);
 		int precount = db.getArticleCount();
 		int postCount;
 		List<XmlDom> entries = xml.tags("item");

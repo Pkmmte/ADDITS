@@ -38,6 +38,9 @@ import com.squareup.picasso.Picasso;
 public class FragmentArticle extends Fragment
 {
 	private SharedPreferences prefs;
+	private boolean adsEnabled;
+	private LinearLayout ad;
+	
 	ActionBar actionBar;
 	static ShareActionProvider mShareActionProvider;
 	static Article Article;
@@ -108,6 +111,7 @@ public class FragmentArticle extends Fragment
 		txtContent = (TextView) view.findViewById(R.id.txtContent);
 		lstContent = (PkListView) view.findViewById(R.id.ArticleContent);
 		loading = (LinearLayout) view.findViewById(R.id.Loading);
+		ad = (LinearLayout) view.findViewById(R.id.ad);
 		p = new URLImageParser(txtContent, getActivity());
 		
 		// commentCard = (FrameLayout) view.findViewById(R.id.commentCard);
@@ -133,6 +137,7 @@ public class FragmentArticle extends Fragment
 		super.onStart();
 		
 		prefs = getActivity().getSharedPreferences(Data.PREFS_TAG, 0);
+		adsEnabled = prefs.getBoolean(Data.PREF_TAG_ADS_ENABLED, true);
 		parseContent = prefs.getBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, false);
 		actionBar = getActivity().getActionBar();
 		retrieveArguments();
@@ -162,6 +167,7 @@ public class FragmentArticle extends Fragment
 			new LoadContentAsyncTask().execute();
 		else
 		{
+			loading.setVisibility(View.GONE);
 			txtContent.setVisibility(View.VISIBLE);
 			
 			txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
@@ -179,6 +185,8 @@ public class FragmentArticle extends Fragment
 		
 		if (!Article.isRead())
 			markRead();
+		if (!adsEnabled)
+			ad.setVisibility(View.GONE);
 		
 		configureShare();
 	}

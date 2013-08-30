@@ -50,7 +50,8 @@
             android:name="com.pk.addits.service.WidgetStackService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-
+		<!-- Disabled Until Fixed -->
+        <!--
         <receiver
             android:name="com.pk.addits.widget.WidgetArticleProvider"
             android:label="@string/widget_article" >
@@ -62,6 +63,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/article_widget_provider" />
         </receiver>
+        -->
         <receiver
             android:name="com.pk.addits.widget.WidgetListProvider"
             android:label="@string/widget_list" >
@@ -78,7 +80,9 @@
         <service
             android:name="com.pk.addits.service.WidgetListService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        
+
+        <!-- Disabled Until Finished -->
+        <!--
         <service
             android:name="com.pk.addits.service.ArticleDaydream"
             android:exported="true"
@@ -87,14 +91,15 @@
                 <action android:name="android.service.dreams.DreamService" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </service>
-        
+        </service>
+        -->
+
         <service
-		  android:name="com.pk.addits.service.ArticleUpdateService"
-		  android:process=":article_update_process" 
-		  android:icon="@mipmap/ic_launcher"
-		  android:label="@string/article_update_service" />
-        
+            android:name="com.pk.addits.service.ArticleUpdateService"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/article_update_service"
+            android:process=":article_update_process" />
+
         <receiver android:name="com.pk.addits.service.UpdateScheduleReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -102,7 +107,6 @@
         </receiver>
         <receiver android:name="com.pk.addits.service.StartUpdateServiceReceiver" >
         </receiver>
-        
     </application>
 
 </manifest>

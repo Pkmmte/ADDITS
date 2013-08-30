@@ -221,22 +221,22 @@ public final class R {
         public static final int yellow_bg=0x7f02005e;
     }
     public static final class id {
-        public static final int App=0x7f0e0031;
-        public static final int App_Banner=0x7f0e0032;
-        public static final int App_Icon=0x7f0e0033;
-        public static final int ArticleContent=0x7f0e0029;
+        public static final int App=0x7f0e0033;
+        public static final int App_Banner=0x7f0e0034;
+        public static final int App_Icon=0x7f0e0035;
+        public static final int ArticleContent=0x7f0e002a;
         public static final int Browser_Label=0x7f0e0058;
         public static final int Card=0x7f0e001e;
         public static final int CheckText=0x7f0e0044;
         public static final int Close=0x7f0e0019;
-        public static final int Comments=0x7f0e002b;
-        public static final int Content=0x7f0e0028;
+        public static final int Comments=0x7f0e002d;
+        public static final int Content=0x7f0e0029;
         public static final int Description=0x7f0e0046;
         public static final int GridView=0x7f0e0037;
-        public static final int Image=0x7f0e0026;
-        public static final int Info=0x7f0e0027;
+        public static final int Image=0x7f0e0027;
+        public static final int Info=0x7f0e0028;
         public static final int ListView=0x7f0e0018;
-        public static final int Loading=0x7f0e002a;
+        public static final int Loading=0x7f0e002b;
         public static final int Name=0x7f0e0045;
         public static final int NoResults=0x7f0e003c;
         public static final int Parent=0x7f0e0038;
@@ -245,12 +245,12 @@ public final class R {
         public static final int Setting=0x7f0e0043;
         public static final int Settings_Label=0x7f0e0059;
         public static final int Share_Label=0x7f0e0057;
-        public static final int Text=0x7f0e002e;
-        public static final int Video=0x7f0e002f;
-        public static final int VideoPreview=0x7f0e0030;
+        public static final int Text=0x7f0e0030;
+        public static final int Video=0x7f0e0031;
+        public static final int VideoPreview=0x7f0e0032;
         public static final int Website_Label=0x7f0e005b;
-        public static final int ad=0x7f0e0035;
-        public static final int adView=0x7f0e0036;
+        public static final int ad=0x7f0e0026;
+        public static final int adView=0x7f0e002c;
         public static final int appButton=0x7f0e0049;
         public static final int articlePreview=0x7f0e0048;
         public static final int articles=0x7f0e004b;
@@ -258,7 +258,7 @@ public final class R {
         public static final int btnDone=0x7f0e003d;
         public static final int btnStart=0x7f0e0050;
         public static final int checkBox=0x7f0e0042;
-        public static final int commentCard=0x7f0e002c;
+        public static final int commentCard=0x7f0e002e;
         public static final int container=0x7f0e000a;
         public static final int content_frame=0x7f0e000b;
         public static final int content_frame_color=0x7f0e000c;
@@ -276,7 +276,7 @@ public final class R {
         public static final int loading=0x7f0e000d;
         public static final int loadingImage=0x7f0e0039;
         public static final int loadingText=0x7f0e0010;
-        public static final int playLogo=0x7f0e0034;
+        public static final int playLogo=0x7f0e0036;
         public static final int progress=0x7f0e0056;
         public static final int progressBar=0x7f0e000e;
         public static final int progressBar1=0x7f0e004f;
@@ -306,7 +306,7 @@ public final class R {
         public static final int txtCreator=0x7f0e0013;
         public static final int txtDate=0x7f0e0014;
         public static final int txtDescription=0x7f0e0022;
-        public static final int txtLoadComments=0x7f0e002d;
+        public static final int txtLoadComments=0x7f0e002f;
         public static final int txtLog=0x7f0e001c;
         public static final int txtTitle=0x7f0e0021;
         public static final int txtValue=0x7f0e001d;
