@@ -25,6 +25,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
+
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ChangelogAdapter;
@@ -60,6 +65,17 @@ public class FragmentSettings extends Fragment
 	public void onStart()
 	{
 		super.onStart();
+		
+		Tracker easyTracker = EasyTracker.getInstance(getActivity());
+
+		// This screen name value will remain set on the tracker and sent with
+		// hits until it is set to a new value or to null.
+		easyTracker.set(Fields.SCREEN_NAME, "Settings Screen");
+
+		easyTracker.send(MapBuilder
+		    .createAppView()
+		    .build()
+		);
 		
 		prefs = getActivity().getSharedPreferences(Data.PREFS_TAG, 0);
 		parseContent = prefs.getBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, false);
