@@ -6,6 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
+
 import com.pk.addits.R;
 
 public class FragmentDeveloperFocus extends Fragment
