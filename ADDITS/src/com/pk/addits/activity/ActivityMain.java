@@ -624,11 +624,11 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					newFound = true;
 					count++;
 					numNewFound = count;
-					Toast.makeText(ActivityMain.this, "I found a new guy! :D", Toast.LENGTH_SHORT).show();
 				}
 				else
 					break;
 			}
+			Toast.makeText(ActivityMain.this, String.valueOf(count) + " new articles found.", Toast.LENGTH_SHORT).show();
 		}
 		catch (Exception e)
 		{
