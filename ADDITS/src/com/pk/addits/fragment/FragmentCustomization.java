@@ -22,5 +22,16 @@ public class FragmentCustomization extends Fragment
 	public void onStart()
 	{
 		super.onStart();
+		Tracker easyTracker = EasyTracker.getInstance(getActivity());
+
+		// This screen name value will remain set on the tracker and sent with
+		// hits until it is set to a new value or to null.
+		easyTracker.set(Fields.SCREEN_NAME, "Customization Screen");
+
+		easyTracker.send(MapBuilder
+		    .createAppView()
+		    .build()
+		);
+
 	}
 }
