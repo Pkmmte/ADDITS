@@ -136,6 +136,12 @@ public class FragmentArticle extends Fragment
 	{
 		super.onStart();
 		
+		Tracker easyTracker = EasyTracker.getInstance(getActivity());
+
+		// This screen name value will remain set on the tracker and sent with
+		// hits until it is set to a new value or to null.
+	
+		
 		prefs = getActivity().getSharedPreferences(Data.PREFS_TAG, 0);
 		adsEnabled = prefs.getBoolean(Data.PREF_TAG_ADS_ENABLED, true);
 		parseContent = prefs.getBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, false);
@@ -162,6 +168,13 @@ public class FragmentArticle extends Fragment
 		txtTitle.setText(Article.getTitle());
 		txtAuthor.setText("Posted by " + Article.getAuthor());
 		txtDate.setText(Data.parseRelativeDate(Article.getDate()));
+		
+		easyTracker.set(Fields.SCREEN_NAME, "Article Screen : "+Article.getTitle());
+			
+		easyTracker.send(MapBuilder
+		    .createAppView()
+		    .build()
+		);
 		
 		if (parseContent)
 			new LoadContentAsyncTask().execute();
