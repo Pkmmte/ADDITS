@@ -34,6 +34,10 @@ import com.pk.addits.model.ArticleContent;
 import com.pk.addits.view.PkListView;
 import com.pk.addits.view.ZoomImageView;
 import com.squareup.picasso.Picasso;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
 
 public class FragmentArticle extends Fragment
 {
