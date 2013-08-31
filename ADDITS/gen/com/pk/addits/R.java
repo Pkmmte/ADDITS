@@ -25,6 +25,8 @@ public final class R {
         public static final int plus_page_in_right=0x7f05000d;
         public static final int plus_page_out_left=0x7f05000e;
         public static final int plus_page_out_right=0x7f05000f;
+        public static final int quick_fade_out=0x7f050010;
+        public static final int quick_in_from_up=0x7f050011;
     }
     public static final class animator {
         public static final int now_left_in=0x7f060000;
