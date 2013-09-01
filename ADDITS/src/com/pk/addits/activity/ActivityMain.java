@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.animation.Animator;
 import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -65,7 +64,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public static DatabaseHelper db = null;
 	public static List<Article> articleList;
 	
-	private static Context cntxt;
 	private RefreshAsyncTask refreshTask;
 	
 	private static ActionBar actionBar;
@@ -125,7 +123,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		startService(new Intent(this, ArticleUpdateService.class));
 		
 		db = DatabaseHelper.getInstance(ActivityMain.this);
-		cntxt = ActivityMain.this;
 		
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -410,7 +407,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setTitle(mTitle);
 	}
 	
-	private void refreshFeed()
+	public void refreshFeed()
 	{
 		if (refreshTask != null || refreshTask.getStatus() != AsyncTask.Status.RUNNING)
 		{
@@ -424,18 +421,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		Editor editor = prefs.edit();
 		editor.putInt(Data.PREF_TAG_SAVED_BUILD, Data.BUILD_TAG);
 		editor.commit();
-	}
-	
-	public static void checkNewContent(Context context)
-	{
-		if (Data.isNetworkConnected(context))
-		{
-			AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
-			cb.url(Data.FEED_URL).type(XmlDom.class).handler(cntxt, "checkNewContent");
-			aq.ajax(cb);
-		}
-		else
-			Toast.makeText(context, "Unable to establish a network connection!", Toast.LENGTH_SHORT).show();
 	}
 	
 	public static void callArticle(Article article, int scrollPosition, int topOffset)
@@ -761,7 +746,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 							LoadingText.setText("Loading feed...");
 							Loading.setVisibility(View.VISIBLE);
 							Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_up));
-							// TODO mPullToRefreshAttacher.setRefreshing(true);
 						}
 					});
 				
@@ -833,6 +817,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					public void run()
 					{
 						LoadingText.setText("Checking for new content...");
+						mPullToRefreshAttacher.setRefreshing(true);
 					}
 				});
 			
@@ -952,6 +937,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			}
 			
 			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			super.onPostExecute(result);
+			
+			// Notify PullToRefreshAttacher that the refresh has finished
+			mPullToRefreshAttacher.setRefreshComplete();
 		}
 	}
 }

@@ -341,32 +341,7 @@ public class FragmentHome extends Fragment implements PullToRefreshAttacher.OnRe
 	@Override
 	public void onRefreshStarted(View view)
 	{
-		new AsyncTask<Void, Void, Void>()
-		{
-			
-			@Override
-			protected Void doInBackground(Void... params)
-			{
-				try
-				{
-					Thread.sleep(8000);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-				return null;
-			}
-			
-			@Override
-			protected void onPostExecute(Void result)
-			{
-				super.onPostExecute(result);
-				
-				// Notify PullToRefreshAttacher that the refresh has finished
-				mPullToRefreshAttacher.setRefreshComplete();
-				Toast.makeText(getActivity(), "Refresh complete!!", Toast.LENGTH_SHORT).show();
-			}
-		}.execute();
+		// Call the refresh method from the main activity
+		((ActivityMain) getActivity()).refreshFeed();
 	};
 }

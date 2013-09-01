@@ -105,10 +105,6 @@ public class FragmentSettings extends Fragment
 				{
 					callUpdateIntervalDialog(position);
 				}
-				else if (ID.equals("Check New"))
-				{
-					ActivityMain.checkNewContent(getActivity());
-				}
 				else if (ID.equals("Parse Content [Experimental]"))
 				{
 					parseContent = !parseContent;
