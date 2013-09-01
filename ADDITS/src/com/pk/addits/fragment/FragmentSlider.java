@@ -20,6 +20,8 @@ import com.squareup.picasso.Picasso;
 
 public class FragmentSlider extends Fragment
 {
+	DownloadImageTask task;
+	
 	private int ID;
 	private String Title;
 	private String Author;
@@ -77,6 +79,7 @@ public class FragmentSlider extends Fragment
 		super.onStart();
 		
 		retrieveData();
+		task = new DownloadImageTask();
 		
 		txtTitle.setText(Title);
 		txtAuthor.setText(Author);
@@ -99,6 +102,15 @@ public class FragmentSlider extends Fragment
 		});
 	}
 	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		
+		// Cancel if the next slide is called
+		task.cancel(true);
+	}
+	
 	public void retrieveData()
 	{
 		Bundle args = getArguments();
@@ -111,14 +123,13 @@ public class FragmentSlider extends Fragment
 	
 	public void setImage()
 	{
-		DownloadImage task = new DownloadImage();
 		if (ImageURL.length() > 0)
 			task.execute(ImageURL);
 		else
 			Picasso.with(getActivity()).load(R.drawable.loading_image_banner).fit().into(imgImage);
 	}
 	
-	private class DownloadImage extends AsyncTask<String, Void, Bitmap>
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap>
 	{
 		@Override
 		protected Bitmap doInBackground(String... param)
