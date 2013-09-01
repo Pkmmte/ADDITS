@@ -46,7 +46,7 @@ public class ArticleUpdateService extends Service {
 		return null;
 	}
 	
-	@SuppressWarnings({ "null", "unused" })
+	@SuppressWarnings({ "unused" })
 	private void saveFeed(String url, XmlDom xml, AjaxStatus status) {
 		DatabaseHelper db = DatabaseHelper.getInstance(this);
 		int precount = db.getArticleCount();

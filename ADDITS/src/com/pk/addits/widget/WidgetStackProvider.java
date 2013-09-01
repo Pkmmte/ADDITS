@@ -59,7 +59,7 @@ public class WidgetStackProvider extends AppWidgetProvider
 		{
 			RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_stack_empty);
 			
-			if (db.getArticleCount() > 0)
+			if (db != null && db.getArticleCount() > 0)
 			{
 				// Here we setup the intent which points to the StackViewService which will
 				// provide the views for this collection.

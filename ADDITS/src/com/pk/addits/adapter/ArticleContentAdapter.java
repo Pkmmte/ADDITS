@@ -21,7 +21,6 @@ import com.pk.addits.data.Data;
 import com.pk.addits.misc.CustomMovementMethod;
 import com.pk.addits.model.ArticleContent;
 import com.pk.addits.view.ZoomImageView;
-import com.pk.addits.viewholder.ContentViewHolder;
 import com.squareup.picasso.Picasso;
 
 public class ArticleContentAdapter extends BaseAdapter
@@ -54,14 +53,14 @@ public class ArticleContentAdapter extends BaseAdapter
 	
 	public View getView(int position, View view, ViewGroup viewGroup)
 	{
-		final ContentViewHolder holder;
+		final ViewHolder holder;
 		ArticleContent entry = listItem.get(position);
 		if (view == null)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.fragment_article_content, null);
 			
-			holder = new ContentViewHolder();
+			holder = new ViewHolder();
 			holder.Text = (TextView) view.findViewById(R.id.Text);
 			holder.Text.setTypeface(fontRegular);
 			holder.Text.setMovementMethod(new CustomMovementMethod());
@@ -73,7 +72,7 @@ public class ArticleContentAdapter extends BaseAdapter
 			view.setTag(holder);
 		}
 		else
-			holder = (ContentViewHolder) view.getTag();
+			holder = (ViewHolder) view.getTag();
 		
 		final int Type = entry.getType();
 		final String Content = entry.getContent();
@@ -140,5 +139,14 @@ public class ArticleContentAdapter extends BaseAdapter
 		}
 		
 		return view;
+	}
+	
+	private class ViewHolder
+	{
+		public TextView Text;
+		public ZoomImageView Image;
+		public FrameLayout Video;
+		public ImageView VideoPreview;
+		public RelativeLayout App;
 	}
 }

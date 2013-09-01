@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.pk.addits.R;
 import com.pk.addits.model.ChangelogItem;
-import com.pk.addits.viewholder.ChangelogViewHolder;
 
 public class ChangelogAdapter extends BaseAdapter
 {
@@ -41,14 +40,14 @@ public class ChangelogAdapter extends BaseAdapter
 	
 	public View getView(int position, View view, ViewGroup viewGroup)
 	{
-		ChangelogViewHolder holder;
+		ViewHolder holder;
 		ChangelogItem entry = listItem.get(position);
 		if (view == null)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.dialog_changelog_list_item, null);
 			
-			holder = new ChangelogViewHolder();
+			holder = new ViewHolder();
 			holder.txtBuild = (TextView) view.findViewById(R.id.txtBuild);
 			holder.txtDate = (TextView) view.findViewById(R.id.txtDate);
 			holder.txtLog = (TextView) view.findViewById(R.id.txtLog);
@@ -56,12 +55,19 @@ public class ChangelogAdapter extends BaseAdapter
 			view.setTag(holder);
 		}
 		else
-			holder = (ChangelogViewHolder) view.getTag();
+			holder = (ViewHolder) view.getTag();
 		
 		holder.txtBuild.setText(entry.getBuild());
 		holder.txtDate.setText(entry.getDate());
 		holder.txtLog.setText(entry.getLog());
 		
 		return view;
+	}
+	
+	private class ViewHolder
+	{
+		public TextView txtBuild;
+		public TextView txtDate;
+		public TextView txtLog;
 	}
 }

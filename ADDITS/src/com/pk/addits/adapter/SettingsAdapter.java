@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.pk.addits.R;
 import com.pk.addits.model.SettingsItem;
-import com.pk.addits.viewholder.SettingsViewHolder;
 
 public class SettingsAdapter extends BaseAdapter
 {
@@ -44,14 +43,14 @@ public class SettingsAdapter extends BaseAdapter
 	public View getView(int position, View view, ViewGroup viewGroup)
 	{
 		SettingsItem entry = listItem.get(position);
-		SettingsViewHolder holder;
+		ViewHolder holder;
 		
 		if (view == null)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.settings_item, null);
 			
-			holder = new SettingsViewHolder();
+			holder = new ViewHolder();
 			holder.txtTitle = (TextView) view.findViewById(R.id.txtTitle);
 			holder.txtDescription = (TextView) view.findViewById(R.id.txtDescription);
 			holder.txtValue = (TextView) view.findViewById(R.id.txtValue);
@@ -59,7 +58,7 @@ public class SettingsAdapter extends BaseAdapter
 			view.setTag(holder);
 		}
 		else
-			holder = (SettingsViewHolder) view.getTag();
+			holder = (ViewHolder) view.getTag();
 		
 		holder.txtTitle.setText(entry.getName());
 		holder.txtDescription.setText(entry.getDescription());
@@ -86,5 +85,13 @@ public class SettingsAdapter extends BaseAdapter
 		}
 		
 		return view;
+	}
+	
+	public class ViewHolder
+	{
+		public TextView txtTitle;
+		public TextView txtDescription;
+		public TextView txtValue;
+		public ImageView checkBox;
 	}
 }

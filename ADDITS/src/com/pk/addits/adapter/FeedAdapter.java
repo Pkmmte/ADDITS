@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.pk.addits.R;
 import com.pk.addits.data.Data;
 import com.pk.addits.model.Article;
-import com.pk.addits.viewholder.ArticleContentViewHolder;
 import com.squareup.picasso.Picasso;
 
 public class FeedAdapter extends BaseAdapter
@@ -56,14 +55,14 @@ public class FeedAdapter extends BaseAdapter
 	
 	public View getView(int position, View view, ViewGroup viewGroup)
 	{
-		final ArticleContentViewHolder holder;
+		final ViewHolder holder;
 		Article entry = listItem.get(position);
 		if (view == null)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.feed_item, null);
 			
-			holder = new ArticleContentViewHolder();
+			holder = new ViewHolder();
 			holder.Card = (LinearLayout) view.findViewById(R.id.Card);
 			holder.lblUnread = view.findViewById(R.id.lblUnread);
 			holder.drkRead = (FrameLayout) view.findViewById(R.id.drkRead);
@@ -83,7 +82,7 @@ public class FeedAdapter extends BaseAdapter
 			view.setTag(holder);
 		}
 		else
-			holder = (ArticleContentViewHolder) view.getTag();
+			holder = (ViewHolder) view.getTag();
 		
 		holder.txtTitle.setText(entry.getTitle());
 		holder.txtDescription.setText(entry.getDescription());
@@ -93,10 +92,10 @@ public class FeedAdapter extends BaseAdapter
 		
 		try
 		{
-		if (entry.getImage().length() > 0)
-			Picasso.with(context).load(entry.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().skipCache().into(holder.imgPreview);
-		else
-			holder.imgPreview.setVisibility(View.GONE);
+			if (entry.getImage().length() > 0)
+				Picasso.with(context).load(entry.getImage()).placeholder(R.drawable.loading_image_banner).error(R.drawable.loading_image_error).fit().skipCache().into(holder.imgPreview);
+			else
+				holder.imgPreview.setVisibility(View.GONE);
 		}
 		catch (Exception e)
 		{
@@ -120,4 +119,18 @@ public class FeedAdapter extends BaseAdapter
 		
 		return view;
 	}
+	
+	public class ViewHolder
+	{
+		public LinearLayout Card;
+		public View lblUnread;
+		public FrameLayout drkRead;
+		public TextView txtTitle;
+		public TextView txtDescription;
+		public TextView txtAuthor;
+		public TextView txtDate;
+		public TextView txtCategory;
+		public ImageView imgPreview;
+	}
+	
 }
