@@ -86,8 +86,6 @@ public class FragmentSettings extends Fragment
 		settingList = new ArrayList<SettingsItem>();
 		settingList.add(new SettingsItem("Parse Content [Experimental]", "Parse article content to show dynamic content. May cause issues.", String.valueOf(parseContent), Data.SETTING_TYPE_CHECKBOX));
 		settingList.add(new SettingsItem("Update Interval", "How often to check for new content.", updateInterval, Data.SETTING_TYPE_TEXT));
-		if (updateInterval.equals("Manual"))
-			settingList.add(new SettingsItem("Check New", "Check for new content.\nWill update automatically if found.", "", Data.SETTING_TYPE_OTHER));
 		settingList.add(new SettingsItem("Support Android Dissected", "If you would like to help support Android Dissected, please enable ads.", String.valueOf(adsEnabled), Data.SETTING_TYPE_CHECKBOX));
 		settingList.add(new SettingsItem("Changelog", "View recent changes.\nCurrent build: " + currentBuild, "", Data.SETTING_TYPE_OTHER));
 		settingList.add(new SettingsItem("About", "Learn more about Android Dissected and the developers of this app. ", "", Data.SETTING_TYPE_OTHER));
@@ -206,9 +204,6 @@ public class FragmentSettings extends Fragment
 			{
 				String ID = listOfChoices.get(position);
 				
-				boolean isManual = false;
-				if (updateInterval.equals("Manual"))
-					isManual = true;
 				updateInterval = ID;
 				Editor editor = prefs.edit();
 				editor.putString(Data.PREF_TAG_UPDATE_INTERVAL, updateInterval);
@@ -218,16 +213,8 @@ public class FragmentSettings extends Fragment
 				settingList.add(Pos, new SettingsItem("Update Interval", "How often to check for new content.", updateInterval, Data.SETTING_TYPE_TEXT));
 				adapter.notifyDataSetChanged();
 				
-				if (ID.equals("Manual") && !isManual)
-				{
-					settingList.add(Pos + 1, new SettingsItem("Check New", "Check for new content.\nWill update automatically if found.", "", Data.SETTING_TYPE_OTHER));
-					adapter.notifyDataSetChanged();
-				}
-				else if (!ID.equals("Manual") && isManual)
-				{
-					settingList.remove(Pos + 1);
-					adapter.notifyDataSetChanged();
-				}
+				if (ID.equals("Manual"))
+					Toast.makeText(getActivity(), "Pull down from the home section to refresh.", Toast.LENGTH_LONG).show();
 				
 				dialog.dismiss();
 			}
@@ -254,7 +241,7 @@ public class FragmentSettings extends Fragment
 		list.addHeaderView(header, null, false);
 		
 		final List<ChangelogItem> changes = new ArrayList<ChangelogItem>();
-		changes.add(new ChangelogItem("Version 1.0 (Build 1)", "04-20-1984", "\u2022 Initial Release"));
+		changes.add(new ChangelogItem("Version 1.0 (Build 1)", "September 2, 2013", "\u2022 Initial Release"));
 		list.setAdapter(new ChangelogAdapter(getActivity(), changes));
 		
 		btnClose.setOnClickListener(new View.OnClickListener()

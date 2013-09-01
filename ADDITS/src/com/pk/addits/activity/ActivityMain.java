@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -65,11 +66,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public static List<Article> articleList;
 	
 	private static Context cntxt;
+	private RefreshAsyncTask refreshTask;
 	
 	private static ActionBar actionBar;
 	private SharedPreferences prefs;
-	private Thread feedThread;
-	private Thread emptyFeedThread;
 	private Handler mHandler;
 	private static AQuery aq;
 	private static boolean emptyFeed;
@@ -82,7 +82,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	
-	// public static Article[] NewsFeed;
 	public static String currentFragment;
 	public static boolean articleShowing;
 	
@@ -196,6 +195,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 		if (savedInstanceState == null)
 		{
+			refreshTask = new RefreshAsyncTask();
 			mHandler = new Handler();
 			
 			if (!fromWidget && !supportFragmentActive)
@@ -204,30 +204,19 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			if (savedBuild < 1)
 				ask4Money();
 			
+			// Load Content
 			if (db.getArticleCount() < 5)
+			{
 				emptyFeed = true;
+				new FirstLoadAsyncTask().execute();
+			}
 			else
+			{
 				emptyFeed = false;
-			
-			if (!emptyFeed)
-			{
-				if (feedThread == null)
-				{
-					initializeFeedThread();
-					feedThread.start();
-				}
-				else if (!feedThread.isAlive())
-				{
-					initializeFeedThread();
-					feedThread.start();
-				}
-			}
-			else
-			{
-				initializeEmptyFeedThread();
-				emptyFeedThread.start();
+				new LoadAsyncTask().execute();
 			}
 			
+			// Save Build Number for update purposes
 			saveCurrentBuild();
 		}
 		
@@ -421,6 +410,14 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		actionBar.setTitle(mTitle);
 	}
 	
+	private void refreshFeed()
+	{
+		if (refreshTask != null || refreshTask.getStatus() != AsyncTask.Status.RUNNING)
+		{
+			refreshTask.execute();
+		}
+	}
+	
 	/** Needed for update purposes **/
 	private void saveCurrentBuild()
 	{
@@ -603,12 +600,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		return;
 	}
 	
-	public void checkNewContent(String url, XmlDom xml, AjaxStatus status)
-	{
-		Log.v("RAWR", "DID THIS WORK?!?!");
-		mHandler.post(new showProgress("Checking for new content...", true, true, false));
-	}
-	
 	public void checkNew(String url, XmlDom xml, AjaxStatus status)
 	{
 		try
@@ -636,272 +627,331 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		}
 	}
 	
-	private void initializeEmptyFeedThread()
+	private class FirstLoadAsyncTask extends AsyncTask<Void, Void, Void>
 	{
-		emptyFeedThread = new Thread()
+		@Override
+		protected Void doInBackground(Void... params)
 		{
-			public void run()
+			try
 			{
-				try
+				if (Data.hasActiveInternetConnection(ActivityMain.this))
 				{
-					if (Data.hasActiveInternetConnection(ActivityMain.this))
-					{
-						if (!inBackground && !supportFragmentActive)
-							mHandler.post(new showProgress2("Downloading content..."));
-						
-						try
+					if (!inBackground && !supportFragmentActive)
+						mHandler.post(new Runnable()
 						{
-							articleList = new ArrayList<Article>();
-							AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
-							cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
-							aq.sync(cb);
-							
-							if (!inBackground && !supportFragmentActive)
-								mHandler.post(new showProgress2("Writing content..."));
-							for (int x = 0; x < articleList.size(); x++)
-								db.addArticle(articleList.get(x));
-							
-							if (!inBackground && !supportFragmentActive)
+							@Override
+							public void run()
 							{
-								mHandler.post(new showProgress2("Everything is up to date!"));
-								mHandler.postDelayed(new showProgress2(""), 3500);
+								FragmentLoading.setLoadingText("Downloading content...");
 							}
-						}
-						catch (Exception e)
-						{
-							if (!inBackground && !supportFragmentActive)
-								mHandler.post(new showProgress2("Error downloading feed!"));
-						}
-					}
-					else if (Data.isNetworkConnected(ActivityMain.this) && !inBackground && !supportFragmentActive)
-						mHandler.post(new showProgress2("Error connecting to Android Dissected!\nTry checking your internet connection."));
-					else if (!inBackground && !supportFragmentActive)
-						mHandler.post(new showProgress2("An internet connection is required!!!"));
-				}
-				catch (Exception e)
-				{
-					Log.v("DownloadFile", "ERROR: " + e.getMessage());
+						});
 					
 					try
 					{
+						articleList = new ArrayList<Article>();
+						AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
+						cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "downloadFeed");
+						aq.sync(cb);
+						
 						if (!inBackground && !supportFragmentActive)
-							mHandler.post(new showProgress2("Oh noez!\nAn unknown error occurred!!!"));
+							mHandler.post(new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									FragmentLoading.setLoadingText("Writing content...");
+								}
+							});
+						for (int x = 0; x < articleList.size(); x++)
+							db.addArticle(articleList.get(x));
+						
+						if (!inBackground && !supportFragmentActive)
+						{
+							mHandler.post(new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									FragmentLoading.setLoadingText("Everything is up to date!");
+								}
+							});
+							mHandler.postDelayed(new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									fragmentLoaded = true;
+									emptyFeed = false;
+									selectItem(0);
+								}
+							}, 2500);
+						}
 					}
-					catch (Exception ee)
+					catch (Exception e)
 					{
-						Log.v("Show Message", "ERROR: " + e.getMessage());
+						if (!inBackground && !supportFragmentActive)
+							mHandler.post(new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									FragmentLoading.setLoadingText("Error downloading feed!");
+								}
+							});
 					}
 				}
-				
-				stopThread(this);
+				else if (Data.isNetworkConnected(ActivityMain.this) && !inBackground && !supportFragmentActive)
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							FragmentLoading.setLoadingText("Error connecting to Android Dissected!\nTry checking your internet connection.");
+						}
+					});
+				else if (!inBackground && !supportFragmentActive)
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							FragmentLoading.setLoadingText("An internet connection is required!!!");
+						}
+					});
 			}
-		};
-	}
-	
-	private void initializeFeedThread()
-	{
-		feedThread = new Thread()
-		{
-			public void run()
+			catch (Exception e)
 			{
+				Log.v("FIRSTLOAD_TASK", "Error: " + e.getMessage());
+				
 				try
 				{
-					Log.v("Loading Feed!", "");
-					if (!inBackground)
-						mHandler.post(new showProgress("Loading feed...", true, true, false));
-					
-					articleList = db.getAllArticles();
-					Log.v("Feed Loaded! ", "" + articleList.size());
-					
-					if (!fromWidget && !inBackground)
-						mHandler.post(new showHome());
-					/** Fetch Website Data **/
-					
-					if (updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.hasActiveInternetConnection(ActivityMain.this))
-					{
-						lastUpdateCheckTime = System.currentTimeMillis();
-						Editor editor = prefs.edit();
-						editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
-						editor.commit();
-						
-						if (!inBackground)
-							mHandler.post(new showProgress("Checking for new content...", true, false, false));
-						
-						try
+					if (!inBackground && !supportFragmentActive)
+						mHandler.post(new Runnable()
 						{
-							AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
-							cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "checkNew");
-							aq.sync(cb);
-							
-							if (newFound)
+							@Override
+							public void run()
 							{
-								if (!inBackground)
-									mHandler.post(new showProgress("Updating content...", true, false, false));
-								
-								// TODO Make sure read/favorite params don't get overwritten
-								AjaxCallback<XmlDom> cbs = new AjaxCallback<XmlDom>();
-								cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "updateFeed");
-								aq.sync(cbs);
-								
-								if (!inBackground)
-									mHandler.post(new showProgress("Writing content...", true, false, false));
-								
-								for (int x = 0; x < articleList.size(); x++)
-								{
-									db.addArticle(articleList.get(x));
-								}
-								Log.v("Happy Face", " New stuff found!");
+								FragmentLoading.setLoadingText("Oh noez!\nAn unknown error occurred!!!");
 							}
-							else
-								Log.v("Sad Face", " No new found...");
-							
-							if (!inBackground)
-								mHandler.post(new showProgress("Everything is up to date!", true, false, true));
-							
-							if (newFound)
-							{
-								while (true)
-								{
-									if (fragmentLoaded)
-									{
-										if (!inBackground)
-											mHandler.post(new showProgress("", false, false, false));
-										break;
-									}
-								}
-							}
-							
-							if (!inBackground)
-								mHandler.postDelayed(new showProgress("Everything is up to date!", false, true, true), 4000);
-						}
-						catch (Exception e)
-						{
-							if (!inBackground)
-							{
-								mHandler.post(new showProgress("Error updating feed!", true, false, true));
-								mHandler.postDelayed(new showProgress("Error updating feed!", false, true, true), 2500);
-							}
-						}
-					}
-					else if (!inBackground)
-					{
-						mHandler.post(new showProgress("Loading feed...", true, false, true));
-						mHandler.postDelayed(new showProgress("Loading feed...", false, true, true), 2500);
-					}
+						});
 				}
-				catch (Exception e)
+				catch (Exception ee)
 				{
-					Log.v("DownloadFile", "ERROR: " + e.getMessage());
+					Log.v("FIRSTLOAD_TASK", "Errorception: " + e.getMessage());
 				}
-				
-				stopThread(this);
 			}
-		};
-	}
-	
-	private synchronized void stopThread(Thread theThread)
-	{
-		if (theThread != null)
-		{
-			theThread = null;
+			
+			return null;
 		}
 	}
 	
-	public class showProgress implements Runnable
+	private class LoadAsyncTask extends AsyncTask<Void, Void, Void>
 	{
-		boolean Active;
-		boolean Animate;
-		boolean Finished;
-		String Progress;
-		
-		public showProgress(String p, boolean a, boolean aa, boolean f)
-		{
-			this.Active = a;
-			this.Animate = aa;
-			this.Finished = f;
-			this.Progress = p;
-		}
-		
 		@Override
-		public void run()
+		protected Void doInBackground(Void... arg0)
 		{
-			if (Progress.length() > 0)
+			try
 			{
-				LoadingText.setText(Progress);
+				if (!inBackground)
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							LoadingText.setText("Loading feed...");
+							Loading.setVisibility(View.VISIBLE);
+							Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_up));
+							// TODO mPullToRefreshAttacher.setRefreshing(true);
+						}
+					});
 				
-				if (Active)
+				articleList = db.getAllArticles();
+				
+				if (!fromWidget && !inBackground)
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							selectItem(0);
+							fragmentLoaded = true;
+						}
+					});
+				
+				if (updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.hasActiveInternetConnection(ActivityMain.this))
 				{
-					Loading.setVisibility(View.VISIBLE);
-					if (Animate)
+					lastUpdateCheckTime = System.currentTimeMillis();
+					Editor editor = prefs.edit();
+					editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
+					editor.commit();
+					
+					refreshFeed();
+				}
+				else if (!inBackground)
+				{
+					mHandler.post(new Runnable()
 					{
-						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_up);
-						Loading.startAnimation(a);
-					}
-					if (Finished)
+						@Override
+						public void run()
+						{
+							ProgressBar.setVisibility(View.GONE);
+							ProgressFinished.setVisibility(View.VISIBLE);
+						}
+					});
+					mHandler.postDelayed(new Runnable()
 					{
-						ProgressBar.setVisibility(View.GONE);
-						ProgressFinished.setVisibility(View.VISIBLE);
+						@Override
+						public void run()
+						{
+							Loading.setVisibility(View.GONE);
+							Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down);
+							Loading.startAnimation(a);
+							ProgressBar.setVisibility(View.GONE);
+							ProgressFinished.setVisibility(View.VISIBLE);
+						}
+					}, 2500);
+				}
+			}
+			catch (Exception e)
+			{
+				Log.v("LOAD_TASK", "Error Loading: " + e.getMessage());
+			}
+			
+			return null;
+		}
+	}
+	
+	private class RefreshAsyncTask extends AsyncTask<Void, Void, Void>
+	{
+		@Override
+		protected Void doInBackground(Void... arg0)
+		{
+			if (!inBackground)
+				mHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						LoadingText.setText("Checking for new content...");
 					}
+				});
+			
+			try
+			{
+				AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
+				cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "checkNew");
+				aq.sync(cb);
+				
+				if (newFound)
+				{
+					if (!inBackground)
+						mHandler.post(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								LoadingText.setText("Updating content...");
+							}
+						});
+					
+					// TODO Make sure read/favorite params don't get overwritten
+					AjaxCallback<XmlDom> cbs = new AjaxCallback<XmlDom>();
+					cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "updateFeed");
+					aq.sync(cbs);
+					
+					if (!inBackground)
+						mHandler.post(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								LoadingText.setText("Writing content...");
+							}
+						});
+					
+					for (int x = 0; x < articleList.size(); x++)
+					{
+						db.addArticle(articleList.get(x));
+					}
+					Log.v("Happy Face", " New stuff found!");
 				}
 				else
+					Log.v("Sad Face", " No new found...");
+				
+				if (!inBackground)
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							LoadingText.setText("Everything is up to date!");
+							ProgressBar.setVisibility(View.GONE);
+							ProgressFinished.setVisibility(View.VISIBLE);
+						}
+					});
+				
+				if (newFound)
 				{
-					Loading.setVisibility(View.GONE);
-					if (Animate)
+					while (true)
 					{
-						Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down);
-						Loading.startAnimation(a);
-					}
-					if (Finished)
-					{
-						ProgressBar.setVisibility(View.GONE);
-						ProgressFinished.setVisibility(View.VISIBLE);
+						if (fragmentLoaded)
+						{
+							if (!inBackground && currentFragment.equals("Home") && !articleShowing && !fromWidget)
+								mHandler.post(new Runnable()
+								{
+									@Override
+									public void run()
+									{
+										FragmentHome.updateState();
+									}
+								});
+							break;
+						}
 					}
 				}
+				
+				if (!inBackground)
+					mHandler.postDelayed(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							Loading.setVisibility(View.GONE);
+							Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down));
+							ProgressBar.setVisibility(View.GONE);
+							ProgressFinished.setVisibility(View.VISIBLE);
+						}
+					}, 3500);
 			}
-			else
+			catch (Exception e)
 			{
-				if (currentFragment.equals("Home") && !articleShowing && !fromWidget)
+				if (!inBackground)
 				{
-					if (!inBackground)
-						FragmentHome.updateState();
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							LoadingText.setText("Error updating feed!");
+							ProgressBar.setVisibility(View.GONE);
+							ProgressFinished.setVisibility(View.VISIBLE);
+						}
+					});
+					mHandler.postDelayed(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							Loading.setVisibility(View.GONE);
+							Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down));
+							ProgressBar.setVisibility(View.GONE);
+							ProgressFinished.setVisibility(View.VISIBLE);
+						}
+					}, 2500);
 				}
 			}
+			
+			return null;
 		}
 	}
-	
-	public class showProgress2 implements Runnable
-	{
-		String Progress;
-		
-		public showProgress2(String p)
-		{
-			this.Progress = p;
-		}
-		
-		@Override
-		public void run()
-		{
-			if (Progress.length() > 0)
-			{
-				FragmentLoading.setLoadingText(Progress);
-			}
-			else
-			{
-				fragmentLoaded = true;
-				emptyFeed = false;
-				selectItem(0);
-			}
-		}
-	}
-	
-	public class showHome implements Runnable
-	{
-		@Override
-		public void run()
-		{
-			selectItem(0);
-			fragmentLoaded = true;
-		}
-	}
-	
 }
