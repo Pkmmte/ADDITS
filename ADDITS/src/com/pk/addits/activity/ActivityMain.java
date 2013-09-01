@@ -25,7 +25,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -106,6 +105,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	public static Animator mCurrentAnimator;
 	public static int mShortAnimationDuration;
 	
+	private boolean refreshActive;
 	private int savedBuild;
 	private static boolean supportFragmentActive;
 	private int numNewFound;
@@ -147,6 +147,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			fragmentLoaded = false;
 			fromWidget = false;
 			numNewFound = 0;
+			refreshActive = false;
 		}
 		
 		String UpdateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
@@ -409,10 +410,142 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	public void refreshFeed()
 	{
-		if (refreshTask != null || refreshTask.getStatus() != AsyncTask.Status.RUNNING)
-		{
+		if (!refreshActive && refreshTask != null && refreshTask.getStatus() != AsyncTask.Status.RUNNING)
 			refreshTask.execute();
+	}
+	
+	/** Call only from thread **/
+	private void executeRefresh()
+	{
+		refreshActive = true;
+		
+		if (!inBackground)
+			mHandler.post(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					LoadingText.setText("Checking for new content...");
+					mPullToRefreshAttacher.setRefreshing(true);
+				}
+			});
+		
+		try
+		{
+			AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
+			cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "checkNew");
+			aq.sync(cb);
+			
+			if (newFound)
+			{
+				if (!inBackground)
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							LoadingText.setText("Updating content...");
+						}
+					});
+				
+				// TODO Make sure read/favorite params don't get overwritten
+				AjaxCallback<XmlDom> cbs = new AjaxCallback<XmlDom>();
+				cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "updateFeed");
+				aq.sync(cbs);
+				
+				if (!inBackground)
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							LoadingText.setText("Writing content...");
+						}
+					});
+				
+				for (int x = 0; x < articleList.size(); x++)
+				{
+					db.addArticle(articleList.get(x));
+				}
+				Log.v("Happy Face", " New stuff found!");
+			}
+			else
+				Log.v("Sad Face", " No new found...");
+			
+			if (!inBackground)
+				mHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						LoadingText.setText("Everything is up to date!");
+						ProgressBar.setVisibility(View.GONE);
+						ProgressFinished.setVisibility(View.VISIBLE);
+					}
+				});
+			
+			if (newFound)
+			{
+				while (true)
+				{
+					if (fragmentLoaded)
+					{
+						if (!inBackground && currentFragment.equals("Home") && !articleShowing && !fromWidget)
+							mHandler.post(new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									FragmentHome.updateState();
+								}
+							});
+						break;
+					}
+				}
+			}
+			
+			if (!inBackground)
+				mHandler.postDelayed(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						Loading.setVisibility(View.GONE);
+						Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down));
+						ProgressBar.setVisibility(View.GONE);
+						ProgressFinished.setVisibility(View.VISIBLE);
+					}
+				}, 3500);
 		}
+		catch (Exception e)
+		{
+			if (!inBackground)
+			{
+				mHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						LoadingText.setText("Error updating feed!");
+						ProgressBar.setVisibility(View.GONE);
+						ProgressFinished.setVisibility(View.VISIBLE);
+					}
+				});
+				mHandler.postDelayed(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						Loading.setVisibility(View.GONE);
+						Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down));
+						ProgressBar.setVisibility(View.GONE);
+						ProgressFinished.setVisibility(View.VISIBLE);
+					}
+				}, 2500);
+			}
+		}
+		
+		refreshActive = false;
 	}
 	
 	/** Needed for update purposes **/
@@ -762,13 +895,14 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						}
 					});
 				
-				if (updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.hasActiveInternetConnection(ActivityMain.this))
+				if (!refreshActive && updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.hasActiveInternetConnection(ActivityMain.this))
 				{
 					lastUpdateCheckTime = System.currentTimeMillis();
 					Editor editor = prefs.edit();
 					editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
 					editor.commit();
 					
+					executeRefresh();
 					refreshFeed();
 				}
 				else if (!inBackground)
@@ -788,8 +922,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						public void run()
 						{
 							Loading.setVisibility(View.GONE);
-							Animation a = AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down);
-							Loading.startAnimation(a);
+							Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down));
 							ProgressBar.setVisibility(View.GONE);
 							ProgressFinished.setVisibility(View.VISIBLE);
 						}
@@ -810,131 +943,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		@Override
 		protected Void doInBackground(Void... arg0)
 		{
-			if (!inBackground)
-				mHandler.post(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						LoadingText.setText("Checking for new content...");
-						mPullToRefreshAttacher.setRefreshing(true);
-					}
-				});
-			
-			try
-			{
-				AjaxCallback<XmlDom> cb = new AjaxCallback<XmlDom>();
-				cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "checkNew");
-				aq.sync(cb);
-				
-				if (newFound)
-				{
-					if (!inBackground)
-						mHandler.post(new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								LoadingText.setText("Updating content...");
-							}
-						});
-					
-					// TODO Make sure read/favorite params don't get overwritten
-					AjaxCallback<XmlDom> cbs = new AjaxCallback<XmlDom>();
-					cbs.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "updateFeed");
-					aq.sync(cbs);
-					
-					if (!inBackground)
-						mHandler.post(new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								LoadingText.setText("Writing content...");
-							}
-						});
-					
-					for (int x = 0; x < articleList.size(); x++)
-					{
-						db.addArticle(articleList.get(x));
-					}
-					Log.v("Happy Face", " New stuff found!");
-				}
-				else
-					Log.v("Sad Face", " No new found...");
-				
-				if (!inBackground)
-					mHandler.post(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							LoadingText.setText("Everything is up to date!");
-							ProgressBar.setVisibility(View.GONE);
-							ProgressFinished.setVisibility(View.VISIBLE);
-						}
-					});
-				
-				if (newFound)
-				{
-					while (true)
-					{
-						if (fragmentLoaded)
-						{
-							if (!inBackground && currentFragment.equals("Home") && !articleShowing && !fromWidget)
-								mHandler.post(new Runnable()
-								{
-									@Override
-									public void run()
-									{
-										FragmentHome.updateState();
-									}
-								});
-							break;
-						}
-					}
-				}
-				
-				if (!inBackground)
-					mHandler.postDelayed(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							Loading.setVisibility(View.GONE);
-							Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down));
-							ProgressBar.setVisibility(View.GONE);
-							ProgressFinished.setVisibility(View.VISIBLE);
-						}
-					}, 3500);
-			}
-			catch (Exception e)
-			{
-				if (!inBackground)
-				{
-					mHandler.post(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							LoadingText.setText("Error updating feed!");
-							ProgressBar.setVisibility(View.GONE);
-							ProgressFinished.setVisibility(View.VISIBLE);
-						}
-					});
-					mHandler.postDelayed(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							Loading.setVisibility(View.GONE);
-							Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_down));
-							ProgressBar.setVisibility(View.GONE);
-							ProgressFinished.setVisibility(View.VISIBLE);
-						}
-					}, 2500);
-				}
-			}
+			executeRefresh();
 			
 			return null;
 		}

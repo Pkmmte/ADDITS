@@ -71,7 +71,7 @@ public class WidgetListViewsFactory implements RemoteViewsService.RemoteViewsFac
 				
 				Bitmap bm = Picasso.with(cntxt).load(imgURL).resize(150, 150).get();
 				row.setImageViewBitmap(R.id.imgPreview, bm);
-				Thread.sleep(500);
+				//Thread.sleep(500);
 			}
 			catch (Exception e)
 			{
