@@ -62,6 +62,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 {
 	public static DatabaseHelper db = null;
 	public static List<Article> articleList;
+	private List<Article> newArticleList; // Used for updating
 	
 	private RefreshAsyncTask refreshTask;
 	
@@ -419,6 +420,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		{
 			// This happens every once in a while for some odd unknown reason...
 			e.printStackTrace();
+			
+			mPullToRefreshAttacher.setRefreshComplete();
 		}
 	}
 	
@@ -460,10 +463,15 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						}
 					});
 				
-				for (int x = 0; x < articleList.size(); x++)
+				// Write them to database and current list
+				int numNew = (newArticleList.size() - 1);
+				while(numNew >= 0)
 				{
-					db.addArticle(articleList.get(x));
+					articleList.add(0, newArticleList.get(numNew));
+					db.addArticle(newArticleList.get(numNew));
+					numNew--;
 				}
+				
 				Log.v("Happy Face", " New stuff found!");
 			}
 			else
@@ -643,11 +651,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		transaction.commit();
 	}
 	
-	/*
-	 * public void downloadFeed() { JSONObject jObject = Data.getJSON(); try { JSONArray jArray = jObject.getJSONArray("item"); } catch (JSONException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); } }
-	 */
-	
 	public void downloadFeed(String url, XmlDom xml, AjaxStatus status)
 	{
 		try
@@ -688,24 +691,33 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		try
 		{
+			newArticleList = new ArrayList<Article>();
 			List<XmlDom> entries = xml.tags("item");
 			int count = 0;
 			
 			for (XmlDom item : entries)
 			{
-				String Title = item.text("title");
-				String Description = Html.fromHtml(item.text("description").replaceAll("<img.+?>", "")).toString();
-				String Content = item.text("content:encoded");
-				String CommentFeed = item.text("wfw:commentRss");
-				String Author = item.text("dc:creator");
 				String Date = item.text("pubDate");
-				String Category = item.text("category");
-				String Image = Data.pullLinks(item.text("description"));
-				String URL = item.text("link");
+				if (Data.isNewerDate(Date, articleList.get(0).getDate()))
+				{
+					String Title = item.text("title");
+					String Description = Html.fromHtml(item.text("description").replaceAll("<img.+?>", "")).toString();
+					String Content = item.text("content:encoded");
+					String CommentFeed = item.text("wfw:commentRss");
+					String Author = item.text("dc:creator");
+					String Category = item.text("category");
+					String Image = Data.pullLinks(item.text("description"));
+					String URL = item.text("link");
+					
+					newArticleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
+					count++;
+				}
+				else
+					break;
 				
-				articleList.add(new Article(count, Title, Description, Content, CommentFeed, Author, Date, Category, Image, URL, false, false));
-				count++;
 			}
+			
+			Toast.makeText(ActivityMain.this, "Updated " + count + " articles", Toast.LENGTH_SHORT).show();
 		}
 		catch (Exception e)
 		{
@@ -900,7 +912,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					Editor editor = prefs.edit();
 					editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
 					editor.commit();
-
+					
 					if (!inBackground)
 						mHandler.post(new Runnable()
 						{
@@ -976,6 +988,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			
 			// Notify PullToRefreshAttacher that the refresh has finished
 			mPullToRefreshAttacher.setRefreshComplete();
+			
+			// Create new task instance or you'll get the evil 
+			// "Task can only be executed once" message.
+			refreshTask = new RefreshAsyncTask();
 		}
 	}
 }

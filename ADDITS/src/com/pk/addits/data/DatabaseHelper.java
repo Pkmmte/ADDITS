@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	private static DatabaseHelper mInstance = null;
 	private static final int MAX_ARTICLE_LIMIT = 50;
 	
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "db.addits.article";
 	private static final String TABLE_ARTICLES = "articles";
 	
@@ -132,7 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		
 		// Insert all articles... backwards
 		int articleCount = (articleList.size() - 1);
-		while (articleCount > 0)
+		while (articleCount >= 0)
 		{
 			ContentValues values = new ContentValues();
 			values.put(KEY_TITLE, articleList.get(articleCount).getTitle());
