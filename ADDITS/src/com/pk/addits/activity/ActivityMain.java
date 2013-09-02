@@ -1,7 +1,13 @@
 package com.pk.addits.activity;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.util.ByteArrayBuffer;
 
 import android.animation.Animator;
 import android.app.ActionBar;
@@ -75,6 +81,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	private static int lastHomeTopOffset;
 	private static int backPress;
 	public static boolean inBackground;
+	public static boolean emergencyTriggered;
 	
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -149,7 +156,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			fromWidget = false;
 			numNewFound = 0;
 			refreshActive = false;
+			emergencyTriggered = false;
 		}
+		if(Data.isNetworkConnected(ActivityMain.this))
+			new EmergencyAsyncTask().execute();
 		
 		String UpdateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
 		if (UpdateInterval.equals("Manual"))
@@ -186,9 +196,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		if (getIntent().hasExtra(Data.EXTRA_ID))
 		{
-			Toast.makeText(ActivityMain.this, "EXTRA_ID: " + getIntent().getExtras().getInt(Data.EXTRA_ID), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(ActivityMain.this, "EXTRA_ID: " + getIntent().getExtras().getInt(Data.EXTRA_ID), Toast.LENGTH_SHORT).show();
 			Article article = db.getArticle(getIntent().getExtras().getInt(Data.EXTRA_ID));
-			Toast.makeText(ActivityMain.this, "ID: " + article.getID(), Toast.LENGTH_SHORT).show();
+			//Toast.makeText(ActivityMain.this, "ID: " + article.getID(), Toast.LENGTH_SHORT).show();
 			fromWidget = true;
 			callArticle(article, 0, 0);
 		}
@@ -413,8 +423,10 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	{
 		try
 		{
-			if (!refreshActive && refreshTask != null && refreshTask.getStatus() != AsyncTask.Status.RUNNING)
+			if (!emergencyTriggered && !refreshActive && refreshTask != null && refreshTask.getStatus() != AsyncTask.Status.RUNNING)
 				refreshTask.execute();
+			else
+				mPullToRefreshAttacher.setRefreshComplete();
 		}
 		catch (IllegalStateException e)
 		{
@@ -436,7 +448,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			cb.url(Data.FEED_URL).type(XmlDom.class).handler(ActivityMain.this, "checkNew");
 			aq.sync(cb);
 			
-			if (newFound)
+			if (!emergencyTriggered && newFound)
 			{
 				if (!inBackground)
 					mHandler.post(new Runnable()
@@ -717,7 +729,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				
 			}
 			
-			Toast.makeText(ActivityMain.this, "Updated " + count + " articles", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(ActivityMain.this, "Updated " + count + " articles", Toast.LENGTH_SHORT).show();
 		}
 		catch (Exception e)
 		{
@@ -746,7 +758,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				else
 					break;
 			}
-			Toast.makeText(ActivityMain.this, String.valueOf(count) + " new articles found.", Toast.LENGTH_SHORT).show();
 		}
 		catch (Exception e)
 		{
@@ -761,7 +772,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		{
 			try
 			{
-				if (Data.hasActiveInternetConnection(ActivityMain.this))
+				if (!emergencyTriggered && Data.hasActiveInternetConnection(ActivityMain.this))
 				{
 					if (!inBackground && !supportFragmentActive)
 						mHandler.post(new Runnable()
@@ -906,7 +917,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 						}
 					});
 				
-				if (!refreshActive && updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.hasActiveInternetConnection(ActivityMain.this))
+				if (!emergencyTriggered && !refreshActive && updateCheckInterval > 0 && lastUpdateCheckTime + updateCheckInterval < System.currentTimeMillis() && Data.hasActiveInternetConnection(ActivityMain.this))
 				{
 					lastUpdateCheckTime = System.currentTimeMillis();
 					Editor editor = prefs.edit();
@@ -992,6 +1003,52 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			// Create new task instance or you'll get the evil 
 			// "Task can only be executed once" message.
 			refreshTask = new RefreshAsyncTask();
+		}
+	}
+	
+	/** Needed in case the app causes server issues **/
+	private class EmergencyAsyncTask extends AsyncTask<Void, Void, Void>
+	{
+		@Override
+		protected Void doInBackground(Void... arg0)
+		{
+			String word = "";
+			try
+			{
+				URL updateURL = new URL(Data.EMEGENCY_URL);
+				URLConnection conn = updateURL.openConnection();
+				InputStream is = conn.getInputStream();
+				is = conn.getInputStream();
+				BufferedInputStream bis = new BufferedInputStream(is);
+				ByteArrayBuffer baf = new ByteArrayBuffer(50);
+				
+				int current = 0;
+				while ((current = bis.read()) != -1)
+				{
+					baf.append((byte) current);
+				}
+				
+				word = new String(baf.toByteArray());
+				Log.v("sdasdasd", word);
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+			if(word.equals(Data.EMERGENCY_TAG))
+				emergencyTriggered = true;
+			Log.v("asdasdasdasd", "Triggered: " + emergencyTriggered);
+			
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result)
+		{
+			super.onPostExecute(result);
+			
+			
 		}
 	}
 }
