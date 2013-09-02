@@ -81,7 +81,7 @@ public class Data
 	
 	public static final String PACKAGE_TAG = "com.pk.addits";
 	public static final String FEED_TAG = "feed.xml";
-	public static final String FEED_URL = "http://data.pkmmte.com/feed.xml"; // TODO CHANGE BACK
+	public static final String FEED_URL = "http://www.androiddissected.com/feed/";
 	public static final String MAIN_URL = "http://www.androiddissected.com/";
 	public static final String TEMP_TAG = "temporary.xml";
 	

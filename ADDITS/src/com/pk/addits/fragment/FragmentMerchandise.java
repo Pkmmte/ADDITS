@@ -17,7 +17,7 @@ public class FragmentMerchandise extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View view = inflater.inflate(R.layout.fragment_customization, container, false);
+		View view = inflater.inflate(R.layout.fragment_empty, container, false);
 		
 		return view;
 	}
