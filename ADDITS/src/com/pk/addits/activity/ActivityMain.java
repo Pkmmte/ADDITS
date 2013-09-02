@@ -1028,7 +1028,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				}
 				
 				word = new String(baf.toByteArray());
-				Log.v("sdasdasd", word);
 			}
 			catch (Exception e)
 			{
@@ -1037,7 +1036,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			
 			if (word.equals(Data.EMERGENCY_TAG))
 				emergencyTriggered = true;
-			Log.v("asdasdasdasd", "Triggered: " + emergencyTriggered);
 			
 			return null;
 		}
