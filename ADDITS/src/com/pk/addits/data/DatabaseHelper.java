@@ -110,6 +110,50 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		db.close();
 	}
 	
+	// Add all articles. Use only if database is empty.
+	public void addAllArticles(List<Article> articleList)
+	{
+		SQLiteDatabase db = this.getWritableDatabase();
+		
+		// Get count
+		int count = 0;
+		String countQuery = "SELECT  * FROM " + TABLE_ARTICLES;
+		Cursor cursor = db.rawQuery(countQuery, null);
+		
+		if (cursor != null && !cursor.isClosed())
+		{
+			count = cursor.getCount();
+			cursor.close();
+		}
+		
+		// Clear database if not empty
+		if (count > 0)
+			db.delete(DatabaseHelper.TABLE_ARTICLES, null, null);
+		
+		// Insert all articles... backwards
+		int articleCount = (articleList.size() - 1);
+		while (articleCount > 0)
+		{
+			ContentValues values = new ContentValues();
+			values.put(KEY_TITLE, articleList.get(articleCount).getTitle());
+			values.put(KEY_DESCRIPTION, articleList.get(articleCount).getDescription());
+			values.put(KEY_CONTENT, articleList.get(articleCount).getContent());
+			values.put(KEY_COMMENT_FEED, articleList.get(articleCount).getCommentFeed());
+			values.put(KEY_AUTHOR, articleList.get(articleCount).getAuthor());
+			values.put(KEY_DATE, articleList.get(articleCount).getDate());
+			values.put(KEY_CATEGORY, articleList.get(articleCount).getCategory());
+			values.put(KEY_IMG_URL, articleList.get(articleCount).getImage());
+			values.put(KEY_URL, articleList.get(articleCount).getURL());
+			values.put(KEY_IS_FAV, articleList.get(articleCount).isFavorite());
+			values.put(KEY_IS_READ, articleList.get(articleCount).isRead());
+			
+			db.insert(TABLE_ARTICLES, null, values);
+			articleCount--;
+		}
+		
+		db.close();
+	}
+	
 	public Article getArticle(int id)
 	{
 		SQLiteDatabase db = this.getReadableDatabase();

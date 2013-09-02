@@ -777,8 +777,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 									FragmentLoading.setLoadingText("Writing content...");
 								}
 							});
-						for (int x = 0; x < articleList.size(); x++)
-							db.addArticle(articleList.get(x));
+						
+						// Add all articles to database
+						db.addAllArticles(articleList);
 						
 						if (!inBackground && !supportFragmentActive)
 						{
@@ -804,6 +805,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					}
 					catch (Exception e)
 					{
+						e.printStackTrace();
 						if (!inBackground && !supportFragmentActive)
 							mHandler.post(new Runnable()
 							{
