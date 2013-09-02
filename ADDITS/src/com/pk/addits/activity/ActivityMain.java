@@ -11,7 +11,6 @@ import org.apache.http.util.ByteArrayBuffer;
 
 import android.animation.Animator;
 import android.app.ActionBar;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
@@ -62,7 +61,6 @@ import com.pk.addits.fragment.FragmentSettings;
 import com.pk.addits.fragment.FragmentSupport;
 import com.pk.addits.fragment.FragmentTutorials;
 import com.pk.addits.model.Article;
-import com.pk.addits.service.ArticleUpdateService;
 
 public class ActivityMain extends FragmentActivity implements AdapterView.OnItemClickListener
 {
@@ -128,7 +126,8 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		// With service now in place, prior update functionality
 		// is mostly irrelevant. Base all updates on the service
 		// from this point on in the development process.
-		startService(new Intent(this, ArticleUpdateService.class));
+		/** startService(new Intent(this, ArticleUpdateService.class)); **/
+		/** Disabled until service crashes are fixed **/
 		
 		db = DatabaseHelper.getInstance(ActivityMain.this);
 		
@@ -158,7 +157,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			refreshActive = false;
 			emergencyTriggered = false;
 		}
-		if(Data.isNetworkConnected(ActivityMain.this))
+		if (Data.isNetworkConnected(ActivityMain.this))
 			new EmergencyAsyncTask().execute();
 		
 		String UpdateInterval = prefs.getString(Data.PREF_TAG_UPDATE_INTERVAL, "Hourly");
@@ -196,9 +195,9 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		
 		if (getIntent().hasExtra(Data.EXTRA_ID))
 		{
-			//Toast.makeText(ActivityMain.this, "EXTRA_ID: " + getIntent().getExtras().getInt(Data.EXTRA_ID), Toast.LENGTH_SHORT).show();
+			// Toast.makeText(ActivityMain.this, "EXTRA_ID: " + getIntent().getExtras().getInt(Data.EXTRA_ID), Toast.LENGTH_SHORT).show();
 			Article article = db.getArticle(getIntent().getExtras().getInt(Data.EXTRA_ID));
-			//Toast.makeText(ActivityMain.this, "ID: " + article.getID(), Toast.LENGTH_SHORT).show();
+			// Toast.makeText(ActivityMain.this, "ID: " + article.getID(), Toast.LENGTH_SHORT).show();
 			fromWidget = true;
 			callArticle(article, 0, 0);
 		}
@@ -477,7 +476,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				
 				// Write them to database and current list
 				int numNew = (newArticleList.size() - 1);
-				while(numNew >= 0)
+				while (numNew >= 0)
 				{
 					articleList.add(0, newArticleList.get(numNew));
 					db.addArticle(newArticleList.get(numNew));
@@ -729,7 +728,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				
 			}
 			
-			//Toast.makeText(ActivityMain.this, "Updated " + count + " articles", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(ActivityMain.this, "Updated " + count + " articles", Toast.LENGTH_SHORT).show();
 		}
 		catch (Exception e)
 		{
@@ -1000,7 +999,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 			// Notify PullToRefreshAttacher that the refresh has finished
 			mPullToRefreshAttacher.setRefreshComplete();
 			
-			// Create new task instance or you'll get the evil 
+			// Create new task instance or you'll get the evil
 			// "Task can only be executed once" message.
 			refreshTask = new RefreshAsyncTask();
 		}
@@ -1036,7 +1035,7 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 				e.printStackTrace();
 			}
 			
-			if(word.equals(Data.EMERGENCY_TAG))
+			if (word.equals(Data.EMERGENCY_TAG))
 				emergencyTriggered = true;
 			Log.v("asdasdasdasd", "Triggered: " + emergencyTriggered);
 			
@@ -1047,7 +1046,6 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		protected void onPostExecute(Void result)
 		{
 			super.onPostExecute(result);
-			
 			
 		}
 	}

@@ -94,6 +94,8 @@
         </service>
         -->
 
+		<!-- Disabled Until Crashes Are Fixed -->
+		<!-- 
         <service
             android:name="com.pk.addits.service.ArticleUpdateService"
             android:icon="@mipmap/ic_launcher"
@@ -107,6 +109,7 @@
         </receiver>
         <receiver android:name="com.pk.addits.service.StartUpdateServiceReceiver" >
         </receiver>
+         -->
     </application>
 
 </manifest>
