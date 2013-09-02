@@ -66,9 +66,9 @@ import com.squareup.picasso.Picasso;
 
 public class Data
 {
-	public static final boolean BETA = false;
+	public static final boolean BETA = true;
 	
-	public static final int BUILD_TAG = 1;
+	public static final int BUILD_TAG = 2;
 	
 	public static final String API_KEY_YOUTUBE = "AIzaSyCkM13XkYpzqEyjRX11F8IoiHLmd1TrKoU";
 	
