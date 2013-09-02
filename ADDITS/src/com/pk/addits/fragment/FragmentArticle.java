@@ -215,7 +215,9 @@ public class FragmentArticle extends Fragment
 	public void onPause()
 	{
 		super.onPause();
-		loadContentTask.cancel(true);
+		
+		if(loadContentTask != null)
+			loadContentTask.cancel(true);
 	}
 	
 	@Override

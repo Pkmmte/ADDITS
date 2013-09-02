@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	private static DatabaseHelper mInstance = null;
 	private static final int MAX_ARTICLE_LIMIT = 50;
 	
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "db.addits.article";
 	private static final String TABLE_ARTICLES = "articles";
 	
