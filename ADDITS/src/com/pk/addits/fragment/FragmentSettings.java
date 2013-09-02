@@ -156,7 +156,7 @@ public class FragmentSettings extends Fragment
 						{
 							// Clear preferences, databases, and cache...
 							getActivity().getSharedPreferences(Data.PREFS_TAG, 0).edit().clear().commit();
-							ActivityMain.db.removeAll();
+							ActivityMain.db.deleteAllArticles();
 							deleteCache();
 							
 							Toast.makeText(getActivity(), "Cleared App Data!", Toast.LENGTH_LONG).show();

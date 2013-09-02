@@ -339,6 +339,8 @@ public class FragmentHome extends Fragment implements PullToRefreshAttacher.OnRe
 	@Override
 	public void onRefreshStarted(View view)
 	{
+		mPullToRefreshAttacher.setRefreshing(true);
+		
 		// Call the refresh method from the main activity
 		((ActivityMain) getActivity()).refreshFeed();
 	};

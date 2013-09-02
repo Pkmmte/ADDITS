@@ -14,6 +14,7 @@ import com.pk.addits.model.Article;
 public class DatabaseHelper extends SQLiteOpenHelper
 {
 	private static DatabaseHelper mInstance = null;
+	private static final int MAX_ARTICLE_LIMIT = 50;
 	
 	private static final int DATABASE_VERSION = 1;
 	private static final String DATABASE_NAME = "db.addits.article";
@@ -58,18 +59,40 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
 	{
-		// Drop older table if existed
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ARTICLES);
 		
-		// Create tables again
 		onCreate(db);
 	}
 	
-	// Adding new article
+	// Add new article
 	public void addArticle(Article article)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		
+		// Get count
+		int count = 0;
+		String countQuery = "SELECT  * FROM " + TABLE_ARTICLES;
+		Cursor cursor = db.rawQuery(countQuery, null);
+		
+		if (cursor != null && !cursor.isClosed())
+		{
+			count = cursor.getCount();
+			cursor.close();
+		}
+		
+		// Delete first if max limit reached
+		if (count >= MAX_ARTICLE_LIMIT)
+		{
+			Cursor delCursor = db.query(TABLE_ARTICLES, null, null, null, null, null, null);
+			if (delCursor.moveToFirst())
+			{
+				String rowId = delCursor.getString(delCursor.getColumnIndex(KEY_ID));
+				
+				db.delete(TABLE_ARTICLES, KEY_ID + "=?", new String[] { rowId });
+			}
+		}
+		
+		// Insert
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE, article.getTitle());
 		values.put(KEY_DESCRIPTION, article.getDescription());
@@ -83,12 +106,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		values.put(KEY_IS_FAV, article.isFavorite());
 		values.put(KEY_IS_READ, article.isRead());
 		
-		// Inserting Row
 		db.insert(TABLE_ARTICLES, null, values);
-		db.close(); // Closing database connection
+		db.close();
 	}
 	
-	// Getting single article
 	public Article getArticle(int id)
 	{
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -113,18 +134,39 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		return article;
 	}
 	
-	// Getting All Articles
+	Article getLastArticle()
+	{
+		SQLiteDatabase db = this.getReadableDatabase();
+		
+		Article article = new Article();
+		String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+		
+		try
+		{
+			if (cursor != null)
+				cursor.moveToLast();
+			
+			article = new Article(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getInt(10) > 0, cursor.getInt(11) > 0);
+		}
+		finally
+		{
+			cursor.close();
+		}
+		
+		db.close();
+		return article;
+	}
+	
 	public List<Article> getAllArticles()
 	{
 		List<Article> articleList = new ArrayList<Article>();
-		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES;
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, null);
 		
-		// looping through all rows and adding to list
-		if (cursor.moveToFirst())
+		if (cursor.moveToLast())
 		{
 			do
 			{
@@ -142,15 +184,13 @@ public class DatabaseHelper extends SQLiteOpenHelper
 				article.setFavorite(cursor.getInt(10) > 0);
 				article.setRead(cursor.getInt(11) > 0);
 				articleList.add(article);
-			} while (cursor.moveToNext());
+			} while (cursor.moveToPrevious());
 		}
 		db.close();
 		
-		// return article list
 		return articleList;
 	}
 	
-	// Updating single article
 	public int updateArticle(Article article)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -159,12 +199,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		values.put(KEY_IS_FAV, article.isFavorite());
 		values.put(KEY_IS_READ, article.isRead());
 		
-		// updating row
 		db.close();
 		return db.update(TABLE_ARTICLES, values, KEY_ID + " = ?", new String[] { String.valueOf(article.getID()) });
 	}
 	
-	// Deleting single Article
 	public void deleteArticle(Article article)
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -172,7 +210,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		db.close();
 	}
 	
-	public void removeAll()
+	public void deleteAllArticles()
 	{
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.delete(DatabaseHelper.TABLE_ARTICLES, null, null);
@@ -194,7 +232,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		}
 		
 		db.close();
-		// return count
 		return count;
 	}
 }

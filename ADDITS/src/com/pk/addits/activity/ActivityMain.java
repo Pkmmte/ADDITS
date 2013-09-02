@@ -410,25 +410,22 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 	
 	public void refreshFeed()
 	{
-		if (!refreshActive && refreshTask != null && refreshTask.getStatus() != AsyncTask.Status.RUNNING)
-			refreshTask.execute();
+		try
+		{
+			if (!refreshActive && refreshTask != null && refreshTask.getStatus() != AsyncTask.Status.RUNNING)
+				refreshTask.execute();
+		}
+		catch (IllegalStateException e)
+		{
+			// This happens every once in a while for some odd unknown reason...
+			e.printStackTrace();
+		}
 	}
 	
 	/** Call only from thread **/
 	private void executeRefresh()
 	{
 		refreshActive = true;
-		
-		if (!inBackground)
-			mHandler.post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					LoadingText.setText("Checking for new content...");
-					mPullToRefreshAttacher.setRefreshing(true);
-				}
-			});
 		
 		try
 		{
@@ -901,9 +898,17 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 					Editor editor = prefs.edit();
 					editor.putLong(Data.PREF_TAG_LAST_UPDATE_CHECK_TIME, lastUpdateCheckTime);
 					editor.commit();
-					
+
+					if (!inBackground)
+						mHandler.post(new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								LoadingText.setText("Checking for new content...");
+							}
+						});
 					executeRefresh();
-					refreshFeed();
 				}
 				else if (!inBackground)
 				{
@@ -943,6 +948,20 @@ public class ActivityMain extends FragmentActivity implements AdapterView.OnItem
 		@Override
 		protected Void doInBackground(Void... arg0)
 		{
+			if (!inBackground)
+				mHandler.post(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						LoadingText.setText("Checking for new content...");
+						Loading.setVisibility(View.VISIBLE);
+						Loading.startAnimation(AnimationUtils.loadAnimation(ActivityMain.this, R.anim.loading_slide_up));
+						ProgressBar.setVisibility(View.VISIBLE);
+						ProgressFinished.setVisibility(View.GONE);
+					}
+				});
+			
 			executeRefresh();
 			
 			return null;
