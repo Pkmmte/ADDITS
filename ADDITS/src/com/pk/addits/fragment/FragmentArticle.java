@@ -9,7 +9,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -23,6 +22,10 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.Tracker;
 import com.pk.addits.R;
 import com.pk.addits.activity.ActivityMain;
 import com.pk.addits.adapter.ArticleContentAdapter;
@@ -34,10 +37,6 @@ import com.pk.addits.model.ArticleContent;
 import com.pk.addits.view.PkListView;
 import com.pk.addits.view.ZoomImageView;
 import com.squareup.picasso.Picasso;
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.Fields;
-import com.google.analytics.tracking.android.MapBuilder;
-import com.google.analytics.tracking.android.Tracker;
 
 public class FragmentArticle extends Fragment
 {
@@ -45,12 +44,14 @@ public class FragmentArticle extends Fragment
 	private boolean adsEnabled;
 	private LinearLayout ad;
 	
+	LoadContentAsyncTask loadContentTask;
+	
 	ActionBar actionBar;
 	static ShareActionProvider mShareActionProvider;
 	static Article Article;
-	private Thread markReadThread;
+	//private Thread markReadThread;
 	// private Thread loadCommentsThread;
-	private Handler mHandler;
+	//private Handler mHandler;
 	static MenuItem shareItem;
 	static Menu optionsMenu;
 	private URLImageParser p;
@@ -141,17 +142,16 @@ public class FragmentArticle extends Fragment
 		super.onStart();
 		
 		Tracker easyTracker = EasyTracker.getInstance(getActivity());
-
+		
 		// This screen name value will remain set on the tracker and sent with
 		// hits until it is set to a new value or to null.
-	
 		
 		prefs = getActivity().getSharedPreferences(Data.PREFS_TAG, 0);
 		adsEnabled = prefs.getBoolean(Data.PREF_TAG_ADS_ENABLED, true);
 		parseContent = prefs.getBoolean(Data.PREF_TAG_PARSE_ARTICLE_CONTENT, false);
 		actionBar = getActivity().getActionBar();
 		retrieveArguments();
-		mHandler = new Handler();
+		//mHandler = new Handler();
 		
 		actionBar.setTitle(Article.getTitle());
 		if (Article.getImage().length() > 0)
@@ -173,21 +173,24 @@ public class FragmentArticle extends Fragment
 		txtAuthor.setText("Posted by " + Article.getAuthor());
 		txtDate.setText(Data.parseRelativeDate(Article.getDate()));
 		
-		easyTracker.set(Fields.SCREEN_NAME, "Article Screen : "+Article.getTitle());
-			
-		easyTracker.send(MapBuilder
-		    .createAppView()
-		    .build()
-		);
+		easyTracker.set(Fields.SCREEN_NAME, "Article Screen : " + Article.getTitle());
+		
+		easyTracker.send(MapBuilder.createAppView().build());
 		
 		if (parseContent)
-			new LoadContentAsyncTask().execute();
+		{
+			loadContentTask = new LoadContentAsyncTask();
+			loadContentTask.execute();
+		}
 		else
 		{
 			loading.setVisibility(View.GONE);
 			txtContent.setVisibility(View.VISIBLE);
 			
-			txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
+			if(Data.isNetworkConnected(getActivity()))
+				txtContent.setText(Html.fromHtml(Article.getContent(), p, null));
+			else
+				txtContent.setText(Html.fromHtml(Article.getContent()));
 			txtContent.setMovementMethod(new CustomMovementMethod());
 		}
 		
@@ -200,12 +203,19 @@ public class FragmentArticle extends Fragment
 		 * loadCommentsThread.start(); } } });
 		 */
 		
-		if (!Article.isRead())
-			markRead();
+		//if (!Article.isRead())
+		//	markRead();
 		if (!adsEnabled)
 			ad.setVisibility(View.GONE);
 		
 		configureShare();
+	}
+	
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		loadContentTask.cancel(true);
 	}
 	
 	@Override
@@ -275,33 +285,16 @@ public class FragmentArticle extends Fragment
 			mShareActionProvider.setShareIntent(shareIntent);
 	}
 	
-	private void markRead()
-	{
-		if (markReadThread == null)
-		{
-			initializeMarkReadThread();
-			markReadThread.start();
-		}
-		else if (!markReadThread.isAlive())
-		{
-			initializeMarkReadThread();
-			markReadThread.start();
-		}
-	}
+	/*
+	 * private void markRead() { if (markReadThread == null) { initializeMarkReadThread(); markReadThread.start(); } else if (!markReadThread.isAlive()) { initializeMarkReadThread();
+	 * markReadThread.start(); } }
+	 */
 	
-	private void initializeMarkReadThread()
-	{
-		markReadThread = new Thread()
-		{
-			public void run()
-			{
-				// ActivityMain.NewsFeed[Article.getID()].setRead(true);
-				// ActivityMain.overwriteFeedXML();
-				
-				stopThread(this);
-			}
-		};
-	}
+	/*
+	 * private void initializeMarkReadThread() { markReadThread = new Thread() { public void run() { // ActivityMain.NewsFeed[Article.getID()].setRead(true); // ActivityMain.overwriteFeedXML();
+	 * 
+	 * stopThread(this); } }; }
+	 */
 	
 	Runnable loadFail = new Runnable()
 	{
@@ -348,14 +341,6 @@ public class FragmentArticle extends Fragment
 	 * 
 	 * stopThread(this); } }; }
 	 */
-	
-	private synchronized void stopThread(Thread theThread)
-	{
-		if (theThread != null)
-		{
-			theThread = null;
-		}
-	}
 	
 	/*
 	 * Runnable loadComments = new Runnable() { public void run() { commentAdapter = new CommentsAdapter(getActivity(), commentList); comments.setAdapter(commentAdapter);

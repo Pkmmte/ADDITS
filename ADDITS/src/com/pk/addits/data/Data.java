@@ -66,7 +66,7 @@ import com.squareup.picasso.Picasso;
 
 public class Data
 {
-	public static final boolean BETA = true;
+	public static final boolean BETA = false;
 	
 	public static final int BUILD_TAG = 1;
 	
