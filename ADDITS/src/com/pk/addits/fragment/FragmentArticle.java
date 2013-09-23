@@ -156,7 +156,7 @@ public class FragmentArticle extends Fragment
 		actionBar.setTitle(Article.getTitle());
 		if (Article.getImage().length() > 0)
 		{
-			Picasso.with(getActivity()).load(Article.getImage()).fit().skipCache().into(imgHeader);
+			Picasso.with(getActivity()).load(Article.getImage()).fit().skipMemoryCache().into(imgHeader);
 			imgHeader.setOnClickListener(new View.OnClickListener()
 			{
 				@Override

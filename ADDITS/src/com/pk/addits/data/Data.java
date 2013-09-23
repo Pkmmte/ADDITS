@@ -909,7 +909,7 @@ public class Data
 		}
 		
 		// Load the high-resolution "zoomed-in" image.
-		Picasso.with(context).load(imgURL).error(R.drawable.loading_image_error).skipCache().into(ActivityMain.expandedImageView);
+		Picasso.with(context).load(imgURL).error(R.drawable.loading_image_error).skipMemoryCache().into(ActivityMain.expandedImageView);
 		
 		// Calculate the starting and ending bounds for the zoomed-in image.
 		// This step involves lots of math. Yay, math.

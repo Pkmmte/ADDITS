@@ -93,7 +93,7 @@ public class ArticleContentAdapter extends BaseAdapter
 			holder.Video.setVisibility(View.GONE);
 			holder.App.setVisibility(View.GONE);
 			
-			Picasso.with(context).load(Content).error(R.drawable.loading_image_error).skipCache().into(holder.Image);
+			Picasso.with(context).load(Content).error(R.drawable.loading_image_error).skipMemoryCache().into(holder.Image);
 			holder.Image.setOnClickListener(new View.OnClickListener()
 			{
 				@Override
@@ -111,7 +111,7 @@ public class ArticleContentAdapter extends BaseAdapter
 			holder.App.setVisibility(View.GONE);
 			
 			String VideoPreviewURL = "http://img.youtube.com/vi/" + Content + "/hqdefault.jpg";
-			Picasso.with(context).load(VideoPreviewURL).error(R.drawable.loading_image_error).skipCache().fit().into(holder.VideoPreview);
+			Picasso.with(context).load(VideoPreviewURL).error(R.drawable.loading_image_error).skipMemoryCache().fit().into(holder.VideoPreview);
 			holder.Video.setOnClickListener(new View.OnClickListener()
 			{
 				@Override

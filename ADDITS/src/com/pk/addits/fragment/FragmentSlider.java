@@ -136,7 +136,7 @@ public class FragmentSlider extends Fragment
 		{
 			try
 			{
-				return Picasso.with(getActivity()).load(param[0]).skipCache().get();
+				return Picasso.with(getActivity()).load(param[0]).skipMemoryCache().get();
 			}
 			catch (Exception e)
 			{

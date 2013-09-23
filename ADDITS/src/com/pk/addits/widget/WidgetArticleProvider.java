@@ -97,7 +97,7 @@ public class WidgetArticleProvider extends AppWidgetProvider
 			remoteViews.setTextViewText(R.id.txtDate, Data.parseRelativeDate(currentArticle.getDate()));
 			try
 			{
-				Bitmap bm = Picasso.with(mContext).load(currentArticle.getImage()).skipCache().get();
+				Bitmap bm = Picasso.with(mContext).load(currentArticle.getImage()).skipMemoryCache().get();
 				remoteViews.setImageViewBitmap(R.id.articlePreview, bm);
 			}
 			catch (IOException e)
